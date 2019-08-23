@@ -1,0 +1,67 @@
+﻿Imports System.ComponentModel.DataAnnotations
+
+Public Class RetraitViewModel
+    Public Property Id As Long
+    '<Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    Public Property CollecteurId As Long
+    Public Overridable Property IDsCollecteur As List(Of SelectListItem)
+    Public Overridable Property Collecteur As Collecteur
+
+    <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    Public Property ClientId As Long
+    Public Overridable Property IDsClient As List(Of SelectListItem)
+    Public Overridable Property Client As Client
+
+    '<Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    '<RegularExpression("^(\d+(((\,))\d+)?)$", ErrorMessageResourceName:="decimalType_error", ErrorMessageResourceType:=GetType(Resource))>
+    'Public Property Montant As Decimal
+
+    <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    <Range(500, Decimal.MaxValue, ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="DecimalMaxValue")>
+    Public Property Montant As Decimal
+
+
+
+    Public Property SoldeApreOperation As Decimal
+    Public Property DateRetrait As Date?
+    Public Property DateCloture As Date?
+
+    Public Property Etat As Boolean = True
+    Public Property DateCreation As DateTime = Now
+
+
+    Public Sub New()
+    End Sub
+
+    Public Sub New(entity As Retrait)
+        With Me
+            .Id = entity.Id
+            .CollecteurId = entity.CollecteurId
+            .ClientId = entity.ClientId
+            .Montant = entity.Montant
+            .Etat = entity.Etat
+            .SoldeApreOperation = entity.SoldeApreOperation
+            .DateRetrait = entity.DateRetrait
+            .DateCloture = entity.DateCloture
+            .DateCreation = entity.DateCreation
+        End With
+    End Sub
+
+    Public Function getEntity() As Retrait
+        Dim entity As New Retrait
+
+        With entity
+            .Id = Me.Id
+            .CollecteurId = Me.CollecteurId
+            .ClientId = Me.ClientId
+            .Montant = Me.Montant
+            .Etat = Me.Etat
+            .SoldeApreOperation = Me.SoldeApreOperation
+            .DateRetrait = Me.DateRetrait
+            .DateCloture = Me.DateCloture
+            .DateCreation = Me.DateCreation
+        End With
+
+        Return entity
+    End Function
+End Class

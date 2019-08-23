@@ -1,0 +1,1110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{90D8FB36-E29E-471C-97A9-06DE102D7F46}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TeamCollect</RootNamespace>
+    <AssemblyName>TeamCollect</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionStrict>Off</OptionStrict>
+    <OptionInfer>On</OptionInfer>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>TeamCollect.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>TeamCollect.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClosedXML">
+      <HintPath>..\packages\ClosedXML.0.87.1\lib\net40\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.5.5631.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.5\lib\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.900.148\lib\net40\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.DataVisualization, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.900.148\lib\net40\Microsoft.ReportViewer.DataVisualization.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.900.148\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.900.148\lib\net40\Microsoft.ReportViewer.ProcessingObjectModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebDesign, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.900.148\lib\net40\Microsoft.ReportViewer.WebDesign.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.900.148\lib\net40\Microsoft.ReportViewer.WebForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.WebForms.150.900.148\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.14.0.314.76\lib\net40\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList">
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
+    <Reference Include="PagedList.Mvc">
+      <HintPath>..\packages\PagedList.Mvc.4.5.0.0\lib\net40\PagedList.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.0.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.1\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.0.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <Private>True</Private>
+      <HintPath>..\packages\Newtonsoft.Json.5.0.6\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.1.0.0\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.1.0.0\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.1.0.0\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.2.0.0\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.0.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.2.0.0\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.2.0.0\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.0.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.2.0.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.2.0.0\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.2.0.0\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.2.0.0\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Collections.Specialized" />
+    <Import Include="System.Configuration" />
+    <Import Include="System.Text" />
+    <Import Include="System.Text.RegularExpressions" />
+    <Import Include="System.Web" />
+    <Import Include="System.Web.Caching" />
+    <Import Include="System.Web.Mvc" />
+    <Import Include="System.Web.Mvc.Ajax" />
+    <Import Include="System.Web.Mvc.Html" />
+    <Import Include="System.Web.Routing" />
+    <Import Include="System.Web.SessionState" />
+    <Import Include="System.Web.Security" />
+    <Import Include="System.Web.Profile" />
+    <Import Include="System.Web.UI" />
+    <Import Include="System.Web.UI.WebControls" />
+    <Import Include="System.Web.UI.WebControls.WebParts" />
+    <Import Include="System.Web.UI.HtmlControls" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\BorneCommissionController.vb" />
+    <Compile Include="Controllers\CalculAjoutController.vb" />
+    <Compile Include="Controllers\CarnetClientController.vb" />
+    <Compile Include="Controllers\ModulePricipale.vb" />
+    <Compile Include="Controllers\RetraitController.vb" />
+    <Compile Include="Controllers\SecteurActiviteController.vb" />
+    <Compile Include="Controllers\TypeCarnetController.vb" />
+    <Compile Include="DAL\Config\DetailsCommissionsCfg.vb" />
+    <Compile Include="DAL\Config\HistoriqueCalculCommissionCfg.vb" />
+    <Compile Include="DAL\Config\CommissionColecteurCfg.vb" />
+    <Compile Include="DAL\Config\TransfertClientPorteFeuilleCfg.vb" />
+    <Compile Include="DAL\Config\AnnulationCfg.vb" />
+    <Compile Include="DAL\Config\AgiosClientCfg.vb" />
+    <Compile Include="DAL\Config\HistoriqueCalculAjoutCfg.vb" />
+    <Compile Include="DAL\Config\SecteurActiviteCfg.vb" />
+    <Compile Include="Infrastructure\SessionExpireFilterAttribute.vb" />
+    <Compile Include="Migrations\201901280858092_ModificationDu28_01_2019_A_09h45.Designer.vb">
+      <DependentUpon>201901280858092_ModificationDu28_01_2019_A_09h45.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901280858092_ModificationDu28_01_2019_A_09h45.vb" />
+    <Compile Include="Migrations\201902210642582_Modif21022019AjoutHistoriqueCalcul.Designer.vb">
+      <DependentUpon>201902210642582_Modif21022019AjoutHistoriqueCalcul.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201902210642582_Modif21022019AjoutHistoriqueCalcul.vb" />
+    <Compile Include="Migrations\201903120847363_AjoutUserIdDansRetraitETCarnetClient12022019.Designer.vb">
+      <DependentUpon>201903120847363_AjoutUserIdDansRetraitETCarnetClient12022019.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201903120847363_AjoutUserIdDansRetraitETCarnetClient12022019.vb" />
+    <Compile Include="Migrations\201904111022232_ModifDu22042019AjoutTableAnnulation.Designer.vb">
+      <DependentUpon>201904111022232_ModifDu22042019AjoutTableAnnulation.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904111022232_ModifDu22042019AjoutTableAnnulation.vb" />
+    <Compile Include="Migrations\201904120935580_ModifDu23042019AjoutChampsExtourner.Designer.vb">
+      <DependentUpon>201904120935580_ModifDu23042019AjoutChampsExtourner.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904120935580_ModifDu23042019AjoutChampsExtourner.vb" />
+    <Compile Include="Migrations\201904161948478_ModifDu16042019AjoutTableAgiosClient.Designer.vb">
+      <DependentUpon>201904161948478_ModifDu16042019AjoutTableAgiosClient.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201904161948478_ModifDu16042019AjoutTableAgiosClient.vb" />
+    <Compile Include="Migrations\201905241419303_Modifdu24052019AjoutTableTransfertPorteFeuille.Designer.vb">
+      <DependentUpon>201905241419303_Modifdu24052019AjoutTableTransfertPorteFeuille.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905241419303_Modifdu24052019AjoutTableTransfertPorteFeuille.vb" />
+    <Compile Include="Migrations\201905250910024_Modifdu25052019AjoutTablesCalculCommission.Designer.vb">
+      <DependentUpon>201905250910024_Modifdu25052019AjoutTablesCalculCommission.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201905250910024_Modifdu25052019AjoutTablesCalculCommission.vb" />
+    <Compile Include="Migrations\201907041446141_Add_Table_DetailsCommissions.Designer.vb">
+      <DependentUpon>201907041446141_Add_Table_DetailsCommissions.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201907041446141_Add_Table_DetailsCommissions.vb" />
+    <Compile Include="Models\CommissionColecteur.vb" />
+    <Compile Include="Models\DetailsCommission.vb" />
+    <Compile Include="Models\HistoriqueCalculCommission.vb" />
+    <Compile Include="Models\TransfertClientPorteFeuille.vb" />
+    <Compile Include="Models\AgiosClient.vb" />
+    <Compile Include="Models\HistoriqueCalculAjout.vb" />
+    <Compile Include="Models\Annulation.vb" />
+    <Compile Include="Models\SecteurActivite.vb" />
+    <Compile Include="TeamCollecteServices.asmx.vb">
+      <DependentUpon>TeamCollecteServices.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ViewModels\BorneCommissionViewModel.vb" />
+    <Compile Include="ViewModels\CarnetClientViewModel.vb" />
+    <Compile Include="ViewModels\ChoixParamAjoutViewModel.vb" />
+    <Compile Include="ViewModels\AnnulationViewModel.vb" />
+    <Compile Include="ViewModels\TransfertViewModel.vb" />
+    <Compile Include="ViewModels\RetraitViewModel.vb" />
+    <Compile Include="ViewModels\SecteurActiviteViewModel.vb" />
+    <Compile Include="ViewModels\TypeCarnetViewModel.vb" />
+    <Content Include="App_Code\IPrincipalExtensionModule.vb" />
+    <Compile Include="App_GlobalResources\Resource.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="App_Start\BundleConfig.vb" />
+    <Compile Include="App_Start\FilterConfig.vb" />
+    <Compile Include="App_Start\RouteConfig.vb" />
+    <Compile Include="App_Start\Startup.Auth.vb" />
+    <Compile Include="Controllers\AccountController.vb" />
+    <Compile Include="Controllers\GrilleController.vb" />
+    <Compile Include="Controllers\BaseController.vb" />
+    <Compile Include="Controllers\ClientController.vb" />
+    <Compile Include="Controllers\CollecteurController.vb" />
+    <Compile Include="Controllers\HistoriqueMouvementController.vb" />
+    <Compile Include="Controllers\InfoCompensationController.vb" />
+    <Compile Include="Controllers\InfoFraisController.vb" />
+    <Compile Include="Controllers\JournalCaisseController.vb" />
+    <Compile Include="Controllers\PersonneController.vb" />
+    <Compile Include="Controllers\AgenceController.vb" />
+    <Compile Include="Controllers\PorteFeuilleController.vb" />
+    <Compile Include="Controllers\SocieteController.vb" />
+    <Compile Include="DAL\ApplicationDbContext.vb" />
+    <Compile Include="DAL\Config\TypeCarnetCfg.vb" />
+    <Compile Include="DAL\Config\CarnetClientCfg.vb" />
+    <Compile Include="DAL\Config\RetraitCfg.vb" />
+    <Compile Include="DAL\Config\BorneCommissionCfg.vb" />
+    <Compile Include="DAL\Config\GrilleCfg.vb" />
+    <Compile Include="DAL\Config\PorteFeuilleCfg.vb" />
+    <Compile Include="DAL\Config\InfoCompensationCfg.vb" />
+    <Compile Include="DAL\Config\InfoFraisCfg.vb" />
+    <Compile Include="DAL\Config\AgenceCfg.vb" />
+    <Compile Include="DAL\Config\SocieteCfg.vb" />
+    <Compile Include="DAL\Config\PersonneCfg.vb" />
+    <Compile Include="DAL\Config\ClientCfg.vb" />
+    <Compile Include="DAL\Config\CollecteurCfg.vb" />
+    <Compile Include="DAL\Config\CoordonneeGeographique.vb" />
+    <Compile Include="DAL\Config\HistoriqueMouvementCfg.vb" />
+    <Compile Include="DAL\Config\JournalCaisseCfg.vb" />
+    <Compile Include="DAL\Config\TraitementCfg.vb" />
+    <Compile Include="Global.asax.vb">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Infrastructure\AppSession.vb" />
+    <Compile Include="Infrastructure\Attribrute\LocalizedAuthorizeAttribute.vb" />
+    <Compile Include="Infrastructure\CultureHelper.vb" />
+    <Compile Include="Infrastructure\NotFoundModel.vb" />
+    <Compile Include="Infrastructure\Utils.vb" />
+    <Compile Include="Migrations\201705191515574_mycol.Designer.vb">
+      <DependentUpon>201705191515574_mycol.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705191515574_mycol.vb" />
+    <Compile Include="Migrations\201705191520025_mycol1.Designer.vb">
+      <DependentUpon>201705191520025_mycol1.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705191520025_mycol1.vb" />
+    <Compile Include="Migrations\201705191523457_mycol2.Designer.vb">
+      <DependentUpon>201705191523457_mycol2.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705191523457_mycol2.vb" />
+    <Compile Include="Migrations\201705191527473_mycol3.Designer.vb">
+      <DependentUpon>201705191527473_mycol3.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201705191527473_mycol3.vb" />
+    <Compile Include="Migrations\201707191218514_mycol4.Designer.vb">
+      <DependentUpon>201707191218514_mycol4.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707191218514_mycol4.vb" />
+    <Compile Include="Migrations\201707240936220_mycol5.Designer.vb">
+      <DependentUpon>201707240936220_mycol5.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201707240936220_mycol5.vb" />
+    <Compile Include="Migrations\201901220751440_ModifDu22012019.Designer.vb">
+      <DependentUpon>201901220751440_ModifDu22012019.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201901220751440_ModifDu22012019.vb" />
+    <Compile Include="Migrations\Configuration.vb" />
+    <Compile Include="Models\AccountViewModels.vb" />
+    <Compile Include="Models\Agence.vb" />
+    <Compile Include="Models\Retrait.vb" />
+    <Compile Include="Models\CarnetClient.vb" />
+    <Compile Include="Models\BorneCommission.vb" />
+    <Compile Include="Models\TypeCarnet.vb" />
+    <Compile Include="Models\StatGenre.vb" />
+    <Compile Include="Models\StatAgence.vb" />
+    <Compile Include="Models\Dashbord.vb" />
+    <Compile Include="Models\StatCollecteur.vb" />
+    <Compile Include="Models\PorteFeuille.vb" />
+    <Compile Include="Models\Societe.vb" />
+    <Compile Include="Models\InfoCompensation.vb" />
+    <Compile Include="Models\Grille.vb" />
+    <Compile Include="Models\InfoFrais.vb" />
+    <Compile Include="Models\Client.vb" />
+    <Compile Include="Models\Collecteur.vb" />
+    <Compile Include="Models\CoordonneeGeographique.vb" />
+    <Compile Include="Models\CoordonneeGeographiqueold.vb" />
+    <Compile Include="Models\HistoriqueMouvement.vb" />
+    <Compile Include="Models\HistoriqueMouvementold.vb" />
+    <Compile Include="Models\IdentityModels.vb" />
+    <Compile Include="Models\JournalCaisse.vb" />
+    <Compile Include="Models\JournalCaisseold.vb" />
+    <Compile Include="Models\Personne.vb" />
+    <Compile Include="Models\Traitement.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Controllers\HomeController.vb" />
+    <Compile Include="Report\NewReport.aspx.designer.vb">
+      <DependentUpon>NewReport.aspx</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Report\NewReport.aspx.vb">
+      <DependentUpon>NewReport.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Startup.vb" />
+    <Compile Include="ViewModels\HistoViewModel.vb" />
+    <Compile Include="ViewModels\GrilleViewModel.vb" />
+    <Compile Include="ViewModels\AgenceViewModel.vb" />
+    <Compile Include="ViewModels\PorteFeuilleViewModel.vb" />
+    <Compile Include="ViewModels\ImportClientViewModel.vb" />
+    <Compile Include="ViewModels\SocieteViewModel.vb" />
+    <Compile Include="ViewModels\InfoCompensationViewModel.vb" />
+    <Compile Include="ViewModels\InfoFraisViewModel.vb" />
+    <Compile Include="ViewModels\ClientViewModel.vb" />
+    <Compile Include="ViewModels\CollecteurViewModel.vb" />
+    <Compile Include="ViewModels\StatViewModel.vb" />
+    <Compile Include="ViewModels\LaCollecteViewModel.vb" />
+    <Compile Include="ViewModels\JournalCaisseViewModel.vb" />
+    <Compile Include="ViewModels\PersonneViewModel.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App_GlobalResources\Resource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.vb</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705191515574_mycol.resx">
+      <DependentUpon>201705191515574_mycol.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705191520025_mycol1.resx">
+      <DependentUpon>201705191520025_mycol1.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705191523457_mycol2.resx">
+      <DependentUpon>201705191523457_mycol2.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705191527473_mycol3.resx">
+      <DependentUpon>201705191527473_mycol3.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707191218514_mycol4.resx">
+      <DependentUpon>201707191218514_mycol4.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201707240936220_mycol5.resx">
+      <DependentUpon>201707240936220_mycol5.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901220751440_ModifDu22012019.resx">
+      <DependentUpon>201901220751440_ModifDu22012019.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201901280858092_ModificationDu28_01_2019_A_09h45.resx">
+      <DependentUpon>201901280858092_ModificationDu28_01_2019_A_09h45.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201902210642582_Modif21022019AjoutHistoriqueCalcul.resx">
+      <DependentUpon>201902210642582_Modif21022019AjoutHistoriqueCalcul.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201903120847363_AjoutUserIdDansRetraitETCarnetClient12022019.resx">
+      <DependentUpon>201903120847363_AjoutUserIdDansRetraitETCarnetClient12022019.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904111022232_ModifDu22042019AjoutTableAnnulation.resx">
+      <DependentUpon>201904111022232_ModifDu22042019AjoutTableAnnulation.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904120935580_ModifDu23042019AjoutChampsExtourner.resx">
+      <DependentUpon>201904120935580_ModifDu23042019AjoutChampsExtourner.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201904161948478_ModifDu16042019AjoutTableAgiosClient.resx">
+      <DependentUpon>201904161948478_ModifDu16042019AjoutTableAgiosClient.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905241419303_Modifdu24052019AjoutTableTransfertPorteFeuille.resx">
+      <DependentUpon>201905241419303_Modifdu24052019AjoutTableTransfertPorteFeuille.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201905250910024_Modifdu25052019AjoutTablesCalculCommission.resx">
+      <DependentUpon>201905250910024_Modifdu25052019AjoutTablesCalculCommission.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201907041446141_Add_Table_DetailsCommissions.resx">
+      <DependentUpon>201907041446141_Add_Table_DetailsCommissions.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Content Include="js\Highcharts\data.js" />
+    <Content Include="js\Highcharts\exporting.js" />
+    <Content Include="js\Highcharts\highcharts.js" />
+    <Content Include="Report\Template\HistoCollectors.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\Template\HistoBank.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\Template\LastOperationOfCustomers.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\Template\HistoCustomersOld.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\Template\IncomeByCollectors.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\Template\IncomeByCustomers.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\Template\HistoCollectorsDetail.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\Template\HistoAgence.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\PagedList.css" />
+    <Content Include="css\bootstrap.css" />
+    <Content Include="css\custom.css" />
+    <Content Include="css\icons.css" />
+    <Content Include="css\main.css" />
+    <Content Include="css\plugins.css" />
+    <Content Include="fonts\broccolidry.svg" />
+    <Content Include="fonts\cuticons.svg" />
+    <Content Include="fonts\ecoico.svg" />
+    <Content Include="fonts\entypo.svg" />
+    <Content Include="fonts\fontawesome-webfont862f.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\icomoon.svg" />
+    <Content Include="fonts\iconic.svg" />
+    <Content Include="fonts\meteocons.svg" />
+    <Content Include="fonts\minia.svg" />
+    <Content Include="fonts\silkcons.svg" />
+    <Content Include="fonts\typicons.svg" />
+    <Content Include="fonts\wpzoom.svg" />
+    <Content Include="img\avatars\Thumbs.db" />
+    <Content Include="img\bnr.png" />
+    <Content Include="img\bootstrap-colorpicker\Thumbs.db" />
+    <Content Include="img\carousel\Thumbs.db" />
+    <Content Include="img\gallery\Thumbs.db" />
+    <Content Include="img\icons\Thumbs.db" />
+    <Content Include="img\patterns\Thumbs.db" />
+    <Content Include="img\Thumbs.db" />
+    <Content Include="fonts\broccolidry.eot" />
+    <Content Include="fonts\broccolidry.ttf" />
+    <Content Include="fonts\broccolidry.woff" />
+    <Content Include="fonts\broccolidryd41d.eot" />
+    <Content Include="fonts\cuticons.eot" />
+    <Content Include="fonts\cuticons.ttf" />
+    <Content Include="fonts\cuticons.woff" />
+    <Content Include="fonts\cuticonsd41d.eot" />
+    <Content Include="fonts\ecoico.eot" />
+    <Content Include="fonts\ecoico.ttf" />
+    <Content Include="fonts\ecoico.woff" />
+    <Content Include="fonts\ecoicod41d.eot" />
+    <Content Include="fonts\entypo.eot" />
+    <Content Include="fonts\entypo.ttf" />
+    <Content Include="fonts\entypo.woff" />
+    <Content Include="fonts\entypod41d.eot" />
+    <Content Include="fonts\fontawesome-webfont862f.eot" />
+    <Content Include="fonts\fontawesome-webfont862f.ttf" />
+    <Content Include="fonts\fontawesome-webfont862f.woff" />
+    <Content Include="fonts\fontawesome-webfontd41d.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regulard41d.eot" />
+    <Content Include="fonts\icomoon.eot" />
+    <Content Include="fonts\icomoon.ttf" />
+    <Content Include="fonts\icomoon.woff" />
+    <Content Include="fonts\icomoond41d.eot" />
+    <Content Include="fonts\iconic.eot" />
+    <Content Include="fonts\iconic.ttf" />
+    <Content Include="fonts\iconic.woff" />
+    <Content Include="fonts\iconicd41d.eot" />
+    <Content Include="fonts\meteocons.eot" />
+    <Content Include="fonts\meteocons.ttf" />
+    <Content Include="fonts\meteocons.woff" />
+    <Content Include="fonts\meteoconsd41d.eot" />
+    <Content Include="fonts\minia.eot" />
+    <Content Include="fonts\minia.ttf" />
+    <Content Include="fonts\minia.woff" />
+    <Content Include="fonts\miniad41d.eot" />
+    <Content Include="fonts\silkcons.eot" />
+    <Content Include="fonts\silkcons.ttf" />
+    <Content Include="fonts\silkcons.woff" />
+    <Content Include="fonts\silkconsd41d.eot" />
+    <Content Include="fonts\typicons.eot" />
+    <Content Include="fonts\typicons.ttf" />
+    <Content Include="fonts\typicons.woff" />
+    <Content Include="fonts\typiconsd41d.eot" />
+    <Content Include="fonts\wpzoom.eot" />
+    <Content Include="fonts\wpzoom.ttf" />
+    <Content Include="fonts\wpzoom.woff" />
+    <Content Include="fonts\wpzoomd41d.eot" />
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+    <Content Include="img\arrowr.png" />
+    <Content Include="img\arrowrDown.png" />
+    <Content Include="img\arrowup.png" />
+    <Content Include="img\avatar.jpg" />
+    <Content Include="img\avatars\1.jpg" />
+    <Content Include="img\avatars\10.jpg" />
+    <Content Include="img\avatars\11.jpg" />
+    <Content Include="img\avatars\128.jpg" />
+    <Content Include="img\avatars\2.jpg" />
+    <Content Include="img\avatars\3.jpg" />
+    <Content Include="img\avatars\4.jpg" />
+    <Content Include="img\avatars\5.jpg" />
+    <Content Include="img\avatars\6.jpg" />
+    <Content Include="img\avatars\7.jpg" />
+    <Content Include="img\avatars\8.jpg" />
+    <Content Include="img\avatars\9.jpg" />
+    <Content Include="img\bootstrap-colorpicker\alpha-horizontal.png" />
+    <Content Include="img\bootstrap-colorpicker\alpha.png" />
+    <Content Include="img\bootstrap-colorpicker\hue-horizontal.png" />
+    <Content Include="img\bootstrap-colorpicker\hue.png" />
+    <Content Include="img\bootstrap-colorpicker\saturation.png" />
+    <Content Include="img\cancel3.png" />
+    <Content Include="img\carousel\1.jpg" />
+    <Content Include="img\carousel\2.jpg" />
+    <Content Include="img\carousel\3.jpg" />
+    <Content Include="img\check.png" />
+    <Content Include="img\cloud-upload.png" />
+    <Content Include="img\gallery\1.jpg" />
+    <Content Include="img\gallery\10.jpg" />
+    <Content Include="img\gallery\11.jpg" />
+    <Content Include="img\gallery\12.jpg" />
+    <Content Include="img\gallery\2.jpg" />
+    <Content Include="img\gallery\3.jpg" />
+    <Content Include="img\gallery\4.jpg" />
+    <Content Include="img\gallery\5.jpg" />
+    <Content Include="img\gallery\6.jpg" />
+    <Content Include="img\gallery\7.jpg" />
+    <Content Include="img\gallery\8.jpg" />
+    <Content Include="img\gallery\9.jpg" />
+    <Content Include="img\handle.png" />
+    <Content Include="img\icons\arrow-left.png" />
+    <Content Include="img\icons\arrow-right.png" />
+    <Content Include="img\icons\external.png" />
+    <Content Include="img\info.png" />
+    <Content Include="img\loader.gif" />
+    <Content Include="img\logo.png" />
+    <Content Include="img\patterns\2.png" />
+    <Content Include="img\patterns\3.png" />
+    <Content Include="img\patterns\31.png" />
+    <Content Include="img\patterns\4.png" />
+    <Content Include="img\patterns\40.png" />
+    <Content Include="img\patterns\41.png" />
+    <Content Include="img\patterns\5.png" />
+    <Content Include="img\patterns\7.png" />
+    <Content Include="img\patterns\sidebarbg1.png" />
+    <Content Include="img\plus.png" />
+    <Content Include="img\search.png" />
+    <Content Include="img\spritemap%402x.png" />
+    <Content Include="img\spritemap.png" />
+    <Content Include="img\ui.totop.png" />
+    <Content Include="js\bootstrap\bootstrap.js" />
+    <Content Include="js\jquery-2.1.1.min.js" />
+    <Content Include="js\jquery-migrate-1.2.1.min.js" />
+    <Content Include="js\jquery.supr.js" />
+    <Content Include="js\jRespond.min.js" />
+    <Content Include="js\libs\date.js" />
+    <Content Include="js\libs\jquery-2.1.1.min.js" />
+    <Content Include="js\libs\jquery-migrate-1.2.1.min.js" />
+    <Content Include="js\libs\jquery-ui-1.10.4.min.js" />
+    <Content Include="js\libs\modernizr.custom.js" />
+    <Content Include="js\libs\moment.js" />
+    <Content Include="js\libs\raphael.js" />
+    <Content Include="js\libs\typeahead.bundle.js" />
+    <Content Include="js\main.js" />
+    <Content Include="js\pages\accordions.js" />
+    <Content Include="js\pages\blank.js" />
+    <Content Include="js\pages\buttons.js" />
+    <Content Include="js\pages\calendar.js" />
+    <Content Include="js\pages\charts-chartjs.js" />
+    <Content Include="js\pages\charts-flot.js" />
+    <Content Include="js\pages\charts-morris.js" />
+    <Content Include="js\pages\charts-other.js" />
+    <Content Include="js\pages\charts-rickshaw.js" />
+    <Content Include="js\pages\code-editor.js" />
+    <Content Include="js\pages\dashboard.js" />
+    <Content Include="js\pages\email-read.js" />
+    <Content Include="js\pages\email-write.js" />
+    <Content Include="js\pages\email.js" />
+    <Content Include="js\pages\faq.js" />
+    <Content Include="js\pages\file.js" />
+    <Content Include="js\pages\forms-advanced.js" />
+    <Content Include="js\pages\forms-basic.js" />
+    <Content Include="js\pages\forms-layouts.js" />
+    <Content Include="js\pages\forms-validation.js" />
+    <Content Include="js\pages\forms-wizard.js" />
+    <Content Include="js\pages\gallery.js" />
+    <Content Include="js\pages\grid.js" />
+    <Content Include="js\pages\icons.js" />
+    <Content Include="js\pages\invoice.js" />
+    <Content Include="js\pages\lists.js" />
+    <Content Include="js\pages\login.js" />
+    <Content Include="js\pages\maps-google.js" />
+    <Content Include="js\pages\maps-vector.js" />
+    <Content Include="js\pages\modals.js" />
+    <Content Include="js\pages\notifications.js" />
+    <Content Include="js\pages\portlets.js" />
+    <Content Include="js\pages\profile.js" />
+    <Content Include="js\pages\progressbars.js" />
+    <Content Include="js\pages\sliders.js" />
+    <Content Include="js\pages\tables-ajax.js" />
+    <Content Include="js\pages\tables-basic.js" />
+    <Content Include="js\pages\tables-data.js" />
+    <Content Include="js\pages\tables-pricing.js" />
+    <Content Include="js\pages\tabs.js" />
+    <Content Include="js\pages\timeline.js" />
+    <Content Include="js\pages\typo.js" />
+    <Content Include="js\pages\ui-other.js" />
+    <Content Include="js\pages\widgets.js" />
+    <Content Include="js\ui\1.10.4\jquery-ui.js" />
+    <Content Include="plugins\charts\canvas-gauge\gauge.js" />
+    <Content Include="plugins\charts\chartjs\Chart.js" />
+    <Content Include="plugins\charts\flot\jquery.flot.categories.js" />
+    <Content Include="plugins\charts\flot\jquery.flot.custom.js" />
+    <Content Include="plugins\charts\flot\jquery.flot.growraf.js" />
+    <Content Include="plugins\charts\flot\jquery.flot.orderBars.js" />
+    <Content Include="plugins\charts\flot\jquery.flot.pie.js" />
+    <Content Include="plugins\charts\flot\jquery.flot.resize.js" />
+    <Content Include="plugins\charts\flot\jquery.flot.stack.js" />
+    <Content Include="plugins\charts\flot\jquery.flot.time.js" />
+    <Content Include="plugins\charts\flot\jquery.flot.tooltip.min.js" />
+    <Content Include="plugins\charts\gauge\gauge.js" />
+    <Content Include="plugins\charts\knob\jquery.knob.js" />
+    <Content Include="plugins\charts\morris\morris.js" />
+    <Content Include="plugins\charts\pie-chart\jquery.easy-pie-chart.js" />
+    <Content Include="plugins\charts\rickshaw\d3.layout.min.js" />
+    <Content Include="plugins\charts\rickshaw\d3.min.js" />
+    <Content Include="plugins\charts\rickshaw\rickshaw.js" />
+    <Content Include="plugins\charts\sparklines\jquery.sparkline.js" />
+    <Content Include="plugins\core\fastclick\fastclick.js" />
+    <Content Include="plugins\core\pace\pace.min.js" />
+    <Content Include="plugins\core\quicksearch\jquery.quicksearch.js" />
+    <Content Include="plugins\core\slimscroll\jquery.slimscroll.horizontal.min.js" />
+    <Content Include="plugins\core\slimscroll\jquery.slimscroll.min.js" />
+    <Content Include="plugins\core\velocity\jquery.velocity.min.js" />
+    <Content Include="plugins\files\plupload\jquery.plupload.queue.min.js" />
+    <Content Include="plugins\files\plupload\plupload.full.min.js" />
+    <Content Include="plugins\forms\autosize\jquery.autosize.js" />
+    <Content Include="plugins\forms\bootstrap-colorpicker\bootstrap-colorpicker.js" />
+    <Content Include="plugins\forms\bootstrap-datepicker\bootstrap-datepicker.js" />
+    <Content Include="plugins\forms\bootstrap-filestyle\bootstrap-filestyle.js" />
+    <Content Include="plugins\forms\bootstrap-markdown\bootstrap-markdown.js" />
+    <Content Include="plugins\forms\bootstrap-tagsinput\bootstrap-tagsinput.js" />
+    <Content Include="plugins\forms\bootstrap-timepicker\bootstrap-timepicker.js" />
+    <Content Include="plugins\forms\bootstrap-wizard\jquery.bootstrap.wizard.js" />
+    <Content Include="plugins\forms\checkall\jquery.checkAll.js" />
+    <Content Include="plugins\forms\codemirror\addons\edit\matchbrackets.js" />
+    <Content Include="plugins\forms\codemirror\addons\selection\active-line.js" />
+    <Content Include="plugins\forms\codemirror\codemirror.js" />
+    <Content Include="plugins\forms\codemirror\lang\css\css.js" />
+    <Content Include="plugins\forms\codemirror\lang\htmlmixed\htmlmixed.js" />
+    <Content Include="plugins\forms\codemirror\lang\javascript\javascript.js" />
+    <Content Include="plugins\forms\codemirror\lang\vbscript\vbscript.js" />
+    <Content Include="plugins\forms\codemirror\lang\xml\xml.js" />
+    <Content Include="plugins\forms\dropzone\dropzone.js" />
+    <Content Include="plugins\forms\dual-list-box\jquery.bootstrap-duallistbox.js" />
+    <Content Include="plugins\forms\fancyselect\fancySelect.js" />
+    <Content Include="plugins\forms\maskedinput\jquery.maskedinput.js" />
+    <Content Include="plugins\forms\maxlength\bootstrap-maxlength.js" />
+    <Content Include="plugins\forms\select2\select2.js" />
+    <Content Include="plugins\forms\spinner\jquery.bootstrap-touchspin.js" />
+    <Content Include="plugins\forms\summernote\summernote.js" />
+    <Content Include="plugins\forms\validation\additional-methods.min.js" />
+    <Content Include="plugins\forms\validation\jquery.validate.js" />
+    <Content Include="plugins\misc\gmaps\gmaps.js" />
+    <Content Include="plugins\misc\prettify\run_prettify.js" />
+    <Content Include="plugins\misc\touchpunch\jquery.ui.touch-punch.js" />
+    <Content Include="plugins\misc\vectormaps\jquery-jvectormap-1.2.2.min.js" />
+    <Content Include="plugins\misc\vectormaps\maps\jquery-jvectormap-world-mill-en.js" />
+    <Content Include="plugins\tables\datatables\dataTables.bootstrap.js" />
+    <Content Include="plugins\tables\datatables\dataTables.responsive.js" />
+    <Content Include="plugins\tables\datatables\dataTables.tableTools.js" />
+    <Content Include="plugins\tables\datatables\jquery.dataTables.js" />
+    <Content Include="plugins\ui\bootbox\bootbox.js" />
+    <Content Include="plugins\ui\bootstrap-slider\bootstrap-slider.js" />
+    <Content Include="plugins\ui\bootstrap-sweetalert\sweet-alert.js" />
+    <Content Include="plugins\ui\calendar\fullcalendar.js" />
+    <Content Include="plugins\ui\lightbox\ekko-lightbox.js" />
+    <Content Include="plugins\ui\nestable\jquery.nestable.js" />
+    <Content Include="plugins\ui\notify\jquery.gritter.js" />
+    <Content Include="plugins\ui\progressbar\jquery.circliful.js" />
+    <Content Include="plugins\ui\tabdrop\bootstrap-tabdrop.js" />
+    <Content Include="plugins\ui\title-notifier\title_notifier.js" />
+    <Content Include="plugins\ui\waypoint\waypoints.js" />
+    <Content Include="Report\NewReport.aspx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Report\Template\CollectorsOLd.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Report\Template\CustomersOld.rdlc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Report\Template\Collectors.rdlc" />
+    <Content Include="Report\Template\Customers.rdlc" />
+    <Content Include="Report\Template\AgiosCustomersOld.rdlc" />
+    <Content Include="Report\Template\AgiosCustomers.rdlc" />
+    <Content Include="Report\Template\HistoCustomersOld3.rdlc" />
+    <Content Include="Report\Template\HistoCustomers.rdlc" />
+    <Content Include="Report\Template\FicheCollecteJournaliere.rdlc" />
+    <Content Include="Report\Template\FicheCollecteJournaliereParPeriode.rdlc" />
+    <Content Include="Report\Template\FicheCommissionsCollecteurs.rdlc" />
+    <Content Include="Report\Template\FicheCommissionsParPorteFeuille.rdlc" />
+    <Content Include="Report\Template\FicheCommissionsParPorteFeuilleSimplifiee.rdlc" />
+    <Content Include="Report\Template\FicheOperationsParPeriode.rdlc" />
+    <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <None Include="Scripts\_references.js" />
+    <Content Include="SqlServerTypes\Loader.cs" />
+    <Content Include="SqlServerTypes\readme.htm" />
+    <Content Include="SqlServerTypes\x64\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x64\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\msvcr120.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\x86\SqlServerSpatial140.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TeamCollecteServices.asmx" />
+    <Content Include="Views\Account\_ChangePasswordPartial.vbhtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.vbhtml" />
+    <Content Include="Views\Account\_RemoveAccountPartial.vbhtml" />
+    <Content Include="Views\Account\_SetPasswordPartial.vbhtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.vbhtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.vbhtml" />
+    <Content Include="Views\Account\Login.vbhtml" />
+    <Content Include="Views\Account\Manage.vbhtml" />
+    <Content Include="Views\Account\Register.vbhtml" />
+    <Content Include="Views\Shared\DisplayTemplates\EnumLineaire.vbhtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Position.vbhtml" />
+    <Content Include="Views\Shared\DisplayTemplates\Sexe.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\Date.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\Date2.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\Decimal.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\Double.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\editorlong.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\EnumLineaire.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\EtatCourant.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\EtatGeneral.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\Html.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\Int64.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\Number.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\Position.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\SelectRoleEditorViewModel.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\Sexe.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\String.vbhtml" />
+    <Content Include="Views\Shared\EditorTemplates\Time.vbhtml" />
+    <Content Include="Views\Shared\Lockout.vbhtml" />
+    <Content Include="Views\Shared\TextBoxTemplates\Date.vbhtml" />
+    <Content Include="Views\Shared\TextBoxTemplates\Date__.vbhtml" />
+    <Content Include="Views\Shared\TextBoxTemplates\Decimal.vbhtml" />
+    <Content Include="Views\Shared\TextBoxTemplates\String.vbhtml" />
+    <Content Include="Views\Shared\_Footer.vbhtml" />
+    <Content Include="Views\Shared\_Header.vbhtml" />
+    <Content Include="Views\Shared\_MenuDeDroite.vbhtml" />
+    <Content Include="Views\Shared\_MenuDeGauche.vbhtml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Views\JournalCaisse\Create.vbhtml" />
+    <Content Include="Views\JournalCaisse\Delete.vbhtml" />
+    <Content Include="Views\JournalCaisse\Details.vbhtml" />
+    <Content Include="Views\JournalCaisse\Edit.vbhtml" />
+    <Content Include="Views\JournalCaisse\Index.vbhtml" />
+    <Content Include="Views\Personne\Create.vbhtml" />
+    <Content Include="Views\Personne\Delete.vbhtml" />
+    <Content Include="Views\Personne\Details.vbhtml" />
+    <Content Include="Views\Personne\Edit.vbhtml" />
+    <Content Include="Views\Personne\Index.vbhtml" />
+    <Content Include="Views\Account\Edit.vbhtml" />
+    <Content Include="Views\Account\Index.vbhtml" />
+    <Content Include="Views\Account\UserRoles.vbhtml" />
+    <Content Include="Views\Collecteur\Create.vbhtml" />
+    <Content Include="Views\Collecteur\Delete.vbhtml" />
+    <Content Include="Views\Collecteur\Edit.vbhtml" />
+    <Content Include="Views\Collecteur\Index.vbhtml" />
+    <Content Include="Views\Client\Create.vbhtml" />
+    <Content Include="Views\Client\Delete.vbhtml" />
+    <Content Include="Views\Client\Edit.vbhtml" />
+    <Content Include="Views\Client\Index.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\Create.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\Delete.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\Details.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\Edit.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\Index.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\Export.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\Import.vbhtml" />
+    <Content Include="Views\Client\ListeClient.vbhtml" />
+    <Content Include="Views\Collecteur\ListeCollecteur.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\HistoriqueClient.vbhtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\HistoriqueMouvement\HistoriqueColParClient.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\HistoriqueCollecteur.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\RecetteClient.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\RecetteCollecteur.vbhtml" />
+    <Content Include="Views\InfoCompensation\Create.vbhtml" />
+    <Content Include="Views\InfoCompensation\Delete.vbhtml" />
+    <Content Include="Views\InfoCompensation\Details.vbhtml" />
+    <Content Include="Views\InfoCompensation\Edit.vbhtml" />
+    <Content Include="Views\InfoCompensation\Index.vbhtml" />
+    <Content Include="Views\Societe\Create.vbhtml" />
+    <Content Include="Views\Societe\Delete.vbhtml" />
+    <Content Include="Views\Societe\Details.vbhtml" />
+    <Content Include="Views\Societe\Edit.vbhtml" />
+    <Content Include="Views\Societe\Index.vbhtml" />
+    <Content Include="Views\Agence\Create.vbhtml" />
+    <Content Include="Views\Agence\Delete.vbhtml" />
+    <Content Include="Views\Agence\Details.vbhtml" />
+    <Content Include="Views\Agence\Edit.vbhtml" />
+    <Content Include="Views\Agence\Index.vbhtml" />
+    <Content Include="Views\Grille\Create.vbhtml" />
+    <Content Include="Views\Grille\Delete.vbhtml" />
+    <Content Include="Views\Grille\Details.vbhtml" />
+    <Content Include="Views\Grille\Edit.vbhtml" />
+    <Content Include="Views\Grille\Index.vbhtml" />
+    <Content Include="Views\InfoFrais\Create.vbhtml" />
+    <Content Include="Views\InfoFrais\Delete.vbhtml" />
+    <Content Include="Views\InfoFrais\Details.vbhtml" />
+    <Content Include="Views\InfoFrais\Edit.vbhtml" />
+    <Content Include="Views\InfoFrais\Index.vbhtml" />
+    <Content Include="Views\PorteFeuille\Create.vbhtml" />
+    <Content Include="Views\PorteFeuille\Delete.vbhtml" />
+    <Content Include="Views\PorteFeuille\Details.vbhtml" />
+    <Content Include="Views\PorteFeuille\Edit.vbhtml" />
+    <Content Include="Views\PorteFeuille\Index.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\HistoriqueAgence.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\HistoriqueBank.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\ClientInactif.vbhtml" />
+    <Content Include="Views\Client\IndexAgence.vbhtml" />
+    <Content Include="Views\Collecteur\IndexAgence.vbhtml" />
+    <Content Include="Views\Client\ListeClientGlobal.vbhtml" />
+    <Content Include="Views\Collecteur\ListeCollecteurGlobal.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\HistoriqueClientGlobal.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\HistoriqueCollecteurGlobal.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\HistoriqueColParClientGlobal.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\RecetteClientGlobal.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\RecetteCollecteurGlobal.vbhtml" />
+    <Content Include="Views\Client\IndexActivite.vbhtml" />
+    <Content Include="Views\Client\Import.vbhtml" />
+    <Content Include="Views\TypeCarnet\Create.vbhtml" />
+    <Content Include="Views\TypeCarnet\Delete.vbhtml" />
+    <Content Include="Views\TypeCarnet\Details.vbhtml" />
+    <Content Include="Views\TypeCarnet\Edit.vbhtml" />
+    <Content Include="Views\TypeCarnet\Index.vbhtml" />
+    <Content Include="Views\CarnetClient\Create.vbhtml" />
+    <Content Include="Views\CarnetClient\Delete.vbhtml" />
+    <Content Include="Views\CarnetClient\Details.vbhtml" />
+    <Content Include="Views\CarnetClient\Edit.vbhtml" />
+    <Content Include="Views\CarnetClient\Index.vbhtml" />
+    <Content Include="Views\BorneCommission\Create.vbhtml" />
+    <Content Include="Views\BorneCommission\Delete.vbhtml" />
+    <Content Include="Views\BorneCommission\Details.vbhtml" />
+    <Content Include="Views\BorneCommission\Edit.vbhtml" />
+    <Content Include="Views\BorneCommission\Index.vbhtml" />
+    <Content Include="Views\Retrait\Create.vbhtml" />
+    <Content Include="Views\Retrait\Delete.vbhtml" />
+    <Content Include="Views\Retrait\Details.vbhtml" />
+    <Content Include="Views\Retrait\Edit.vbhtml" />
+    <Content Include="Views\Retrait\Index.vbhtml" />
+    <Content Include="Views\Account\TimeoutRedirectOld.vbhtml" />
+    <Content Include="Views\Account\TimeoutRedirect.vbhtml" />
+    <Content Include="Views\Shared\_LayoutLogin.vbhtml" />
+    <Content Include="Views\SecteurActivite\Create.vbhtml" />
+    <Content Include="Views\SecteurActivite\Delete.vbhtml" />
+    <Content Include="Views\SecteurActivite\Details.vbhtml" />
+    <Content Include="Views\SecteurActivite\Edit.vbhtml" />
+    <Content Include="Views\SecteurActivite\Index.vbhtml" />
+    <Content Include="Views\CalculAjout\Create.vbhtml" />
+    <Content Include="Views\CalculAjout\Delete.vbhtml" />
+    <Content Include="Views\CalculAjout\Details.vbhtml" />
+    <Content Include="Views\CalculAjout\Edit.vbhtml" />
+    <Content Include="Views\CalculAjout\Index.vbhtml" />
+    <Content Include="Views\Retrait\Annulation.vbhtml" />
+    <Content Include="Views\Retrait\IndexAdmin.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\Annulation.vbhtml" />
+    <Content Include="Views\CalculAjout\CreateByProc.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\AgiosParClient.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\FicheCollecteJournaliere.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\FicheCollecteJournaliereParPeriode.vbhtml" />
+    <Content Include="Views\Client\Transfert.vbhtml" />
+    <Content Include="Views\CalculAjout\IndexCommission.vbhtml" />
+    <Content Include="Views\CalculAjout\CalculCommissionByProc.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\FicheCommissionsCollecteurs.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\FicheCommissionsParPorteFeuille.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\FicheCommissionsParPorteFeuilleSimplifiee.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\FicheOperationsParPeriode.vbhtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Views\Shared\Error.vbhtml" />
+    <Content Include="Views\Shared\_Layout.vbhtml" />
+    <Content Include="Views\Shared\_LoginPartial.vbhtml" />
+    <Content Include="Views\_ViewStart.vbhtml" />
+    <Content Include="Views\Home\About.vbhtml" />
+    <Content Include="Views\Home\Contact.vbhtml" />
+    <Content Include="Views\Home\Index.vbhtml" />
+    <Content Include="Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Importation\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>55120</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:55175/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

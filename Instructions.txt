@@ -1,0 +1,6 @@
+1- Backup BD
+2-Créer la table detailsCommissions avec script sql (201907041446141_Add_Table_DetailsCommissions.SQL)
+3-Ajouter les éléments de la table avec requête "AjoutDataDetail.SQL)
+4-Modifier Procédure Stockée AjoutCommission
+5-Créer la vue pour l'état demandé
+6-Backup de la nouvelle BD
