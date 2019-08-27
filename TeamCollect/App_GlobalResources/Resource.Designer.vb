@@ -314,4 +314,13 @@ Public Class Resource
             Return ResourceManager.GetString("NumericType_error", resourceCulture)
         End Get
     End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Le champ {0} doit être composé au minimum de 8 caractères et avoir des minuscules, majuscules, chiffres et caractères spéciaux (#$^+=!*()@%&amp;)..
+    '''</summary>
+    Public Shared ReadOnly Property PasswordStrength() As String
+        Get
+            Return ResourceManager.GetString("PasswordStrength", resourceCulture)
+        End Get
+    End Property
 End Class

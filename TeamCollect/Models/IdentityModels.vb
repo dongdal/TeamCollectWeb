@@ -1,14 +1,12 @@
 ﻿Imports Microsoft.AspNet.Identity.EntityFramework
 Imports Microsoft.AspNet.Identity
-Imports System.ComponentModel.DataAnnotations
-Imports System.ComponentModel.DataAnnotations.Schema
 
 ' You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
 Public Class ApplicationUser
     Inherits IdentityUser
 
     Public Property CodeSecret As String
-
+    Public Property PasswordExpiredDate As DateTime = DateTime.UtcNow.AddHours(1).AddDays(Util.GetPasswordValidityDays)
 
     Public Property PersonneId As Long
     Public Overridable Property Personne As Personne

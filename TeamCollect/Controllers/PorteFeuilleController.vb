@@ -21,7 +21,7 @@ Namespace TeamCollect
 
         Private db As New ApplicationDbContext
 
-        Private Function getCurrentUser() As ApplicationUser
+        Private Function GetCurrentUser() As ApplicationUser
             Dim id = User.Identity.GetUserId
             Dim aspuser = db.Users.Find(id)
             Return aspuser
@@ -41,7 +41,7 @@ Namespace TeamCollect
             End If
 
             ViewBag.CurrentFilter = searchString
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim entities = db.PorteFeuilles.Include(Function(j) j.Collecteur).Where(Function(e) e.Collecteur.AgenceId = userAgenceId).ToList
 
             'For Each item In entities
@@ -83,7 +83,7 @@ Namespace TeamCollect
         Function Create() As ActionResult
             Dim entityVM As New PorteFeuilleViewModel
 
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listPersonne = db.Personnes.OfType(Of Collecteur).Where(Function(e) e.AgenceId = userAgenceId).ToList
             Dim listPersonne2 As New List(Of SelectListItem)
             For Each item In listPersonne
@@ -100,7 +100,7 @@ Namespace TeamCollect
         <ValidateAntiForgeryToken()>
         <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
         Function Create(ByVal PorteFeuille As PorteFeuilleViewModel) As ActionResult
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim NombrePorteFeuilleCollecteur = (From porteFeuil In db.PorteFeuilles Where porteFeuil.CollecteurId = PorteFeuille.CollecteurId Select porteFeuil).ToList.Count
             If (NombrePorteFeuilleCollecteur > 0) Then
                 ModelState.AddModelError("", "Ce collecteur possède déjà un portefeuille.")
@@ -110,7 +110,7 @@ Namespace TeamCollect
                 Dim jrn = PorteFeuille.getEntity()
                 jrn.DateCreation = Now.Date
                 jrn.Etat = False
-                jrn.UserId = getCurrentUser.Id
+                jrn.UserId = GetCurrentUser.Id
                 db.PorteFeuilles.Add(jrn)
                 Try
                     db.SaveChanges()
@@ -162,7 +162,7 @@ Namespace TeamCollect
             If ModelState.IsValid Then
                 Dim entity = PorteFeuille.getEntity()
                 entity.Etat = 1
-                entity.UserId = getCurrentUser.Id
+                entity.UserId = GetCurrentUser.Id
 
                 db.Entry(entity).State = EntityState.Modified
 
@@ -176,7 +176,7 @@ Namespace TeamCollect
                 End Try
             End If
 
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listPersonne = db.Personnes.OfType(Of Collecteur).Where(Function(e) e.AgenceId = userAgenceId).ToList
             Dim listPersonne2 As New List(Of SelectListItem)
             For Each item In listPersonne

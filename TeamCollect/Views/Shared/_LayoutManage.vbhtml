@@ -4,9 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    @If AppSession.PasswordExpiredDate < DateTime.UtcNow Then
-        Response.Redirect(Url.Action("Manage", "Account", New With {.PasswordExpired = True}))
-    End If
     <title>@ViewBag.Title - TeamCollect.gov</title>
     @Styles.Render("~/css/CssDeBase")
     @Scripts.Render("~/bundles/jquery")

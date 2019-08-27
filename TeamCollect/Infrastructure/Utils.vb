@@ -12,6 +12,15 @@ Public Class Util
         End Get
     End Property
 
+    ''' <summary>
+    ''' The connection string property that pulls from the web.config
+    ''' </summary>
+    Public Shared ReadOnly Property GetPasswordValidityDays() As Integer
+        Get
+            Return Convert.ToInt64(ConfigurationManager.AppSettings("PasswordValidityDays"))
+        End Get
+    End Property
+
     Shared Sub GetError(cex As Exception, modelState As ModelStateDictionary)
         If TypeOf (cex) Is Entity.Validation.DbEntityValidationException Then
             Dim ex = CType(cex, Entity.Validation.DbEntityValidationException)

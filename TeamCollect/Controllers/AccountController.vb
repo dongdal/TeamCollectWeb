@@ -1,14 +1,10 @@
-﻿Imports System.Security.Claims
-Imports System.Threading.Tasks
+﻿Imports System.Threading.Tasks
 Imports Microsoft.AspNet.Identity
 Imports Microsoft.AspNet.Identity.EntityFramework
-Imports Microsoft.AspNet.Identity.Owin
 Imports Microsoft.Owin.Security
-Imports System.Web.SessionState
 Imports System.Net
 Imports PagedList
 Imports System.Data.Entity
-Imports System.IO
 Imports System.Threading
 
 Public Class AccountController
@@ -106,18 +102,24 @@ Public Class AccountController
             ' Valider le mot de passe
             Dim appUser = Await UserManager.FindAsync(model.UserName, model.Password)
             If appUser IsNot Nothing Then
-                Await SignInAsync(appUser, model.RememberMe)
                 'Return RedirectToLocal(returnUrl)
                 'on recupere les infos de sessions
                 AppSession.UserId = appUser.Id
                 AppSession.UserName = appUser.UserName
                 AppSession.PersonneId = appUser.PersonneId
                 AppSession.CodeSecret = appUser.CodeSecret
+                AppSession.PasswordExpiredDate = appUser.PasswordExpiredDate
+                Await SignInAsync(appUser, model.RememberMe)
+
+                If AppSession.PasswordExpiredDate < DateTime.UtcNow Then
+                    Return RedirectToAction("Manage", "Account")
+                End If
+
 
                 'My.Computer.Audio.Play("K:\Alarm.wav", AudioPlayMode.BackgroundLoop)
                 Return RedirectToAction("Index", "Home")
-            Else
-                ModelState.AddModelError("", "Invalid username or password.")
+                Else
+                    ModelState.AddModelError("", "Invalid username or password.")
             End If
         End If
 
@@ -170,12 +172,12 @@ Public Class AccountController
 
                     Dim result = UserManager.AddPassword(model.Id, model.Password)
                     If result.Succeeded Then
-                        Return RedirectToAction("UserRoles", "Account", New With {.id = user.Id})
+                        Return RedirectToAction("UserRoles", "Account", New With {user.Id})
                     Else
                         AddErrors(result)
                     End If
                 Else
-                    Return RedirectToAction("UserRoles", "Account", New With {.id = user.Id})
+                    Return RedirectToAction("UserRoles", "Account", New With {user.Id})
                 End If
 
             Catch ex As Exception
@@ -271,6 +273,8 @@ Public Class AccountController
     <ValidateAntiForgeryToken>
     <LocalizedAuthorize(Roles:="ADMINISTRATEUR")>
     Public Async Function Register(model As RegisterViewModel) As Task(Of ActionResult)
+        model.PasswordExpiredDate = DateTime.UtcNow.AddHours(1).AddDays(Util.GetPasswordValidityDays)
+
         If ModelState.IsValid Then
 
             ' Créer un identifiant local avant de connecter l'utilisateur
@@ -278,7 +282,7 @@ Public Class AccountController
             Try
                 Dim result = Await UserManager.CreateAsync(user, model.Password)
                 If result.Succeeded Then
-                    Return RedirectToAction("UserRoles", "Account", New With {.id = user.Id})
+                    Return RedirectToAction("UserRoles", "Account", New With {user.Id})
                 Else
                     AddErrors(result)
                 End If
@@ -314,7 +318,7 @@ Public Class AccountController
         End If
 
         Return RedirectToAction("Manage", New With {
-            .Message = message
+            message
         })
     End Function
 
@@ -328,6 +332,7 @@ Public Class AccountController
                     If(message = ManageMessageId.RemoveLoginSuccess, "La connexion externe a été supprimée.",
                         If(message = ManageMessageId.UnknownError, "Une erreur s'est produite.",
                         ""))))
+
         ViewBag.HasLocalPassword = HasPassword()
         ViewBag.ReturnUrl = Url.Action("Manage")
         Return View()
@@ -344,8 +349,18 @@ Public Class AccountController
         ViewBag.ReturnUrl = Url.Action("Manage")
         If hasLocalLogin Then
             If ModelState.IsValid Then
-                Dim result As IdentityResult = Await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword)
+                Dim appUser = db.Users.Find(User.Identity.GetUserId)
+
+                Dim result As IdentityResult = Await UserManager.ChangePasswordAsync(appUser.Id, model.OldPassword, model.NewPassword)
                 If result.Succeeded Then
+                    appUser.PasswordExpiredDate = DateTime.UtcNow.AddDays(Util.GetPasswordValidityDays)
+                    db.Entry(appUser).State = EntityState.Modified
+                    Try
+                        Await db.SaveChangesAsync()
+                        AppSession.PasswordExpiredDate = appUser.PasswordExpiredDate
+                    Catch ex As Exception
+                        Util.GetError(ex, ModelState)
+                    End Try
                     Return RedirectToAction("Manage", New With {
                         .Message = ManageMessageId.ChangePasswordSuccess
                     })
@@ -384,7 +399,7 @@ Public Class AccountController
     <LocalizedAuthorize(Roles:="ADMINISTRATEUR")>
     Public Function ExternalLogin(provider As String, returnUrl As String) As ActionResult
         ' Demandez une redirection vers le fournisseur de connexions externe
-        Return New ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", New With {.ReturnUrl = returnUrl}))
+        Return New ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", New With {returnUrl}))
     End Function
 
     '

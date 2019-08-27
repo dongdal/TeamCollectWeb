@@ -9,6 +9,15 @@
         End Set
     End Property
 
+    Shared Property PasswordExpiredDate As DateTime
+        Get
+            Return HttpContext.Current.Session("PasswordExpiredDate")
+        End Get
+        Set(value As DateTime)
+            HttpContext.Current.Session("PasswordExpiredDate") = value
+        End Set
+    End Property
+
     Shared Property UserName As String
         Get
             Return HttpContext.Current.Session("UserName")

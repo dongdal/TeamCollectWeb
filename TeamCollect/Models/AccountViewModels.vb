@@ -11,11 +11,12 @@ End Class
 Public Class ManageUserViewModel
     <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")> _
     <DataType(DataType.Password)>
-    <Display(Name:="Acien Mot de passe ")>
+    <Display(Name:="Ancien Mot de passe ")>
     Public Property OldPassword As String
 
-    <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")> _
-    <StringLength(100, ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="GestUserPwdLength", MinimumLength:=6)>
+    <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    <RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$", ErrorMessageResourceName:="PasswordStrength", ErrorMessageResourceType:=GetType(Resource))>
+    <StringLength(100, ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="GestUserPwdLength", MinimumLength:=8)>
     <DataType(DataType.Password)>
    <Display(Name:="Nouveau Mot de passe")>
     Public Property NewPassword As String
@@ -46,8 +47,9 @@ Public Class RegisterViewModel
     <Display(Name:="Nom utilisateur")> _
     Public Property UserName As String
 
-    <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")> _
-    <StringLength(100, ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="GestUserPwdLength", MinimumLength:=6)>
+    <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    <RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$", ErrorMessageResourceName:="PasswordStrength", ErrorMessageResourceType:=GetType(Resource))>
+    <StringLength(100, ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="GestUserPwdLength", MinimumLength:=8)>
     <DataType(DataType.Password)>
    <Display(Name:="Mot de passe")> _
     Public Property Password As String
@@ -66,6 +68,10 @@ Public Class RegisterViewModel
     Public Overridable Property Personne As Personne
     Public Overridable Property IDspersonne As ICollection(Of SelectListItem)
 
+    <Display(Name:="Date d'expiration du mot de passe")>
+    <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    Public Property PasswordExpiredDate As DateTime = DateTime.UtcNow.AddHours(1).AddDays(45)
+
     'niveau d'accès attribut système
     'Public Property niveau As String
 
@@ -74,7 +80,8 @@ Public Class RegisterViewModel
         Dim user As New ApplicationUser With {
         .UserName = UserName,
         .CodeSecret = CodeSecret,
-        .PersonneId = PersonneId
+        .PersonneId = PersonneId,
+        .PasswordExpiredDate = PasswordExpiredDate
             }
         Return user
     End Function
@@ -91,16 +98,18 @@ Public Class EditUserViewModel
             UserName = .UserName
             CodeSecret = .CodeSecret
             PersonneId = .PersonneId
+            PasswordExpiredDate = .PasswordExpiredDate
         End With
     End Sub
 
-    Public Function getEntity(user As ApplicationUser, db As ApplicationDbContext) As ApplicationUser
+    Public Function GetEntity(user As ApplicationUser, db As ApplicationDbContext) As ApplicationUser
 
         With user
             Id = .Id
             .UserName = Me.UserName
             .CodeSecret = Me.CodeSecret
             .PersonneId = Me.PersonneId
+            .PasswordExpiredDate = Me.PasswordExpiredDate
         End With
 
         Return user
@@ -132,6 +141,10 @@ Public Class EditUserViewModel
     Public Overridable Property IDspersonne As ICollection(Of SelectListItem)
 
 
+    <Display(Name:="Date d'expiration du mot de passe")>
+    <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    Public Property PasswordExpiredDate As DateTime = DateTime.UtcNow.AddHours(1).AddDays(45)
+
 
 End Class
 
@@ -148,6 +161,7 @@ Public Class SelectUserRolesViewModel
         Me.UserName = user.UserName
         Me.CodeSecret = user.CodeSecret
         Me.PersonneId = user.PersonneId
+        Me.PasswordExpiredDate = user.PasswordExpiredDate
         Dim Db = New ApplicationDbContext()
 
         ' Add all available roles to the list of EditorViewModels:
@@ -211,6 +225,7 @@ Public Class SelectUserRolesViewModel
     Public Property PersonneId As Long
     Property UserName As String
     Property CodeSecret As String
+    Property PasswordExpiredDate As DateTime
 
     Public Property Roles() As List(Of SelectRoleEditorViewModel)
         Get

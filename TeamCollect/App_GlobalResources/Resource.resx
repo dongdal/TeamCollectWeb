@@ -201,4 +201,7 @@
   <data name="DecimalMaxValue" xml:space="preserve">
     <value>La valeur saisie est hors limite et ne peut être enregistrée!</value>
   </data>
+  <data name="PasswordStrength" xml:space="preserve">
+    <value>Le champ {0} doit être composé au minimum de 8 caractères et avoir des minuscules, majuscules, chiffres et caractères spéciaux (#$^+=!*()@%&amp;).</value>
+  </data>
 </root>

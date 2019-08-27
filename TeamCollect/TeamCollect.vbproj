@@ -287,6 +287,10 @@
       <DependentUpon>201907041446141_Add_Table_DetailsCommissions.vb</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201907041446141_Add_Table_DetailsCommissions.vb" />
+    <Compile Include="Migrations\201908231606185_Control_Sur_Le_Mot_De_Passe.Designer.vb">
+      <DependentUpon>201908231606185_Control_Sur_Le_Mot_De_Passe.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201908231606185_Control_Sur_Le_Mot_De_Passe.vb" />
     <Compile Include="Models\CommissionColecteur.vb" />
     <Compile Include="Models\DetailsCommission.vb" />
     <Compile Include="Models\HistoriqueCalculCommission.vb" />
@@ -504,6 +508,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201907041446141_Add_Table_DetailsCommissions.resx">
       <DependentUpon>201907041446141_Add_Table_DetailsCommissions.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201908231606185_Control_Sur_Le_Mot_De_Passe.resx">
+      <DependentUpon>201908231606185_Control_Sur_Le_Mot_De_Passe.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -1049,6 +1056,7 @@
     <Content Include="Views\HistoriqueMouvement\FicheCommissionsParPorteFeuille.vbhtml" />
     <Content Include="Views\HistoriqueMouvement\FicheCommissionsParPorteFeuilleSimplifiee.vbhtml" />
     <Content Include="Views\HistoriqueMouvement\FicheOperationsParPeriode.vbhtml" />
+    <Content Include="Views\Shared\_LayoutManage.vbhtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

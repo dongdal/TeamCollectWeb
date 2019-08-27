@@ -23,6 +23,7 @@
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(True)
                         @Html.HiddenFor(Function(model) model.Id)
+                        @Html.HiddenFor(Function(model) model.PasswordExpiredDate)
                         @<div class="box box-warning">
                             <div class="box-header with-border">
                                 <div class="row">
