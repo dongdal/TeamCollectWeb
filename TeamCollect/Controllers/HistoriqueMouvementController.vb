@@ -665,6 +665,11 @@ Namespace TeamCollect
                 Return HttpNotFound()
             End If
 
+            If (HistoMvt.Extourner) Then
+                ModelState.AddModelError("", "Cette opération a déjà été extournée. Veuillez contacter l'administrateur en cas de problème.")
+                Return View(entityVM)
+            End If
+
             Dim DateCollect = HistoMvt.DateOperation
             Dim clientId = HistoMvt.ClientId
             Dim Montant = HistoMvt.Montant

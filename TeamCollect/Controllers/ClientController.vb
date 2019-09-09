@@ -165,7 +165,7 @@ Namespace TeamCollect
                                 excelConnectionString = (Convert.ToString("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=") & fileLocation) + ";Extended Properties=""Excel 8.0;HDR=Yes;IMEX=1"""
                                 'connection String pour l'extension xlsx.
                             ElseIf fileExtension = ".xlsx" Then
-                                excelConnectionString = (Convert.ToString("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=") & fileLocation) + ";Extended Properties=""Excel 12.0;HDR=Yes;IMEX=2"""
+                                excelConnectionString = (Convert.ToString("Provider=Microsoft.ACE.OLEDB.12.0;Data Source=") & fileLocation) + ";Extended Properties=""Excel 12.0;HDR=Yes;IMEX=1"""
                             End If
                             'Create Connection pour Excel
                             excelConnection = New OleDbConnection(excelConnectionString)
@@ -180,8 +180,11 @@ Namespace TeamCollect
                             Dim t As Integer = 0
                             'recuperation des données excel .
                             For Each row As DataRow In dt.Rows
-                                excelSheets(t) = row("TABLE_NAME").ToString()
-                                t += 1
+                                Dim Tempo = row("TABLE_NAME").ToString()
+                                If Tempo.EndsWith("$") Then
+                                    excelSheets(t) = row("TABLE_NAME").ToString()
+                                    t += 1
+                                End If
                             Next
                             excelConnection1 = New OleDbConnection(excelConnectionString)
                             Dim query As String = String.Format("Select * from [{0}]", excelSheets(0))
