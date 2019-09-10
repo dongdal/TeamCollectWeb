@@ -82,11 +82,38 @@ Public Class Resource
     End Property
     
     '''<summary>
+    '''  Recherche une chaîne localisée semblable à Annulation Confirmée!!!.
+    '''</summary>
+    Public Shared ReadOnly Property CancelingProcess() As String
+        Get
+            Return ResourceManager.GetString("CancelingProcess", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Annulation du retrait!!.
+    '''</summary>
+    Public Shared ReadOnly Property CancelingRetrait() As String
+        Get
+            Return ResourceManager.GetString("CancelingRetrait", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
     '''  Recherche une chaîne localisée semblable à :Cette Information est Obligatoire.
     '''</summary>
     Public Shared ReadOnly Property champ_Manquant() As String
         Get
             Return ResourceManager.GetString("champ_Manquant", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Confirmer retrait.
+    '''</summary>
+    Public Shared ReadOnly Property ConfirmerRetrait() As String
+        Get
+            Return ResourceManager.GetString("ConfirmerRetrait", resourceCulture)
         End Get
     End Property
     
@@ -127,11 +154,38 @@ Public Class Resource
     End Property
     
     '''<summary>
+    '''  Recherche une chaîne localisée semblable à Demande de retrait.
+    '''</summary>
+    Public Shared ReadOnly Property DemandeRetrait() As String
+        Get
+            Return ResourceManager.GetString("DemandeRetrait", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
     '''  Recherche une chaîne localisée semblable à Erreur lors de l&apos;enregistrement veuillez essayez à nouveau!.
     '''</summary>
     Public Shared ReadOnly Property ErreurDenreg() As String
         Get
             Return ResourceManager.GetString("ErreurDenreg", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Erreur!!!.
+    '''</summary>
+    Public Shared ReadOnly Property ErreurTitle() As String
+        Get
+            Return ResourceManager.GetString("ErreurTitle", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Une erreur est survenue lors du traitement de votre demande..
+    '''</summary>
+    Public Shared ReadOnly Property ErrorProcess() As String
+        Get
+            Return ResourceManager.GetString("ErrorProcess", resourceCulture)
         End Get
     End Property
     
@@ -298,11 +352,29 @@ Public Class Resource
     End Property
     
     '''<summary>
+    '''  Recherche une chaîne localisée semblable à Message d&apos;alerte.
+    '''</summary>
+    Public Shared ReadOnly Property MessageAlerte() As String
+        Get
+            Return ResourceManager.GetString("MessageAlerte", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
     '''  Recherche une chaîne localisée semblable à Mois.
     '''</summary>
     Public Shared ReadOnly Property Mois() As String
         Get
             Return ResourceManager.GetString("Mois", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Le montant entré est invalide. Veuillez corriger l&apos;erreur..
+    '''</summary>
+    Public Shared ReadOnly Property MontantInvalid() As String
+        Get
+            Return ResourceManager.GetString("MontantInvalid", resourceCulture)
         End Get
     End Property
     
@@ -321,6 +393,24 @@ Public Class Resource
     Public Shared ReadOnly Property PasswordStrength() As String
         Get
             Return ResourceManager.GetString("PasswordStrength", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Le retrait a été effectué avec succès..
+    '''</summary>
+    Public Shared ReadOnly Property SuccessRetrait() As String
+        Get
+            Return ResourceManager.GetString("SuccessRetrait", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Succes!!!.
+    '''</summary>
+    Public Shared ReadOnly Property SuccessTitle() As String
+        Get
+            Return ResourceManager.GetString("SuccessTitle", resourceCulture)
         End Get
     End Property
 End Class

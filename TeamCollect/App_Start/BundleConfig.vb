@@ -89,7 +89,19 @@ Public Module BundleConfig
           "~/js/Highcharts/exporting.js"
           ))
 
-        
+
+        '...................JQuery-Confirm-CSS.........................................................
+
+        bundles.Add(New StyleBundle("~/css/JQueryConfirmCSS").Include(
+                 "~/css/jquery-confirm-CSS/jquery-confirm.min.css"))
+
+
+        '...................JQuery-Confirm-JS.........................................................
+        bundles.Add(New ScriptBundle("~/bundles/JQueryConfirmJS").Include(
+                  "~/js/jquery-confirm-JS/jquery-confirm.min.js"))
+
+
+
     End Sub
 End Module
 

@@ -204,4 +204,34 @@
   <data name="PasswordStrength" xml:space="preserve">
     <value>Le champ {0} doit être composé au minimum de 8 caractères et avoir des minuscules, majuscules, chiffres et caractères spéciaux (#$^+=!*()@%&amp;).</value>
   </data>
+  <data name="MessageAlerte" xml:space="preserve">
+    <value>Message d'alerte</value>
+  </data>
+  <data name="CancelingProcess" xml:space="preserve">
+    <value>Annulation Confirmée!!!</value>
+  </data>
+  <data name="CancelingRetrait" xml:space="preserve">
+    <value>Annulation du retrait!!</value>
+  </data>
+  <data name="ConfirmerRetrait" xml:space="preserve">
+    <value>Confirmer retrait</value>
+  </data>
+  <data name="DemandeRetrait" xml:space="preserve">
+    <value>Demande de retrait</value>
+  </data>
+  <data name="ErreurTitle" xml:space="preserve">
+    <value>Erreur!!!</value>
+  </data>
+  <data name="ErrorProcess" xml:space="preserve">
+    <value>Une erreur est survenue lors du traitement de votre demande.</value>
+  </data>
+  <data name="MontantInvalid" xml:space="preserve">
+    <value>Le montant entré est invalide. Veuillez corriger l'erreur.</value>
+  </data>
+  <data name="SuccessRetrait" xml:space="preserve">
+    <value>Le retrait a été effectué avec succès.</value>
+  </data>
+  <data name="SuccessTitle" xml:space="preserve">
+    <value>Succes!!!</value>
+  </data>
 </root>

@@ -6,6 +6,7 @@ Public Class ClientCfg
     Public Sub New()
         Me.ToTable("Client")
         Me.Property(Function(p) p.NumeroCompte).IsOptional().HasMaxLength(30)
+        Me.Property(Function(p) p.MessageAlerte).IsOptional().HasMaxLength(4000)
         Me.Property(Function(p) p.Pourcentage).IsOptional()
         Me.Property(Function(p) p.Solde).IsOptional()
         Me.Property(Function(p) p.Etat).IsRequired()

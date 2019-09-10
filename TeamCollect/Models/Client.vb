@@ -11,6 +11,7 @@ Partial Public Class Client
     Public Property Solde As Nullable(Of Decimal)
     'Modification du 28-01-2019
     Public Property SoldeDisponible As Nullable(Of Decimal)
+    Public Property MessageAlerte As String
 
     Public Overridable Property PorteFeuille As PorteFeuille
 

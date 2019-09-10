@@ -20,7 +20,7 @@
     <!-- Start .row -->
     <br />
     <div class="row">
-        @Using (Html.BeginForm("Index", "CarnetClient", FormMethod.Get, New With {.class = "form-inline", .role = "form"}))
+        @Using (Html.BeginForm("Index", "Retrait", FormMethod.Get, New With {.class = "form-inline", .role = "form"}))
             @<div style="float:right; padding-bottom:5px">
                 <div id="RchId" class="form-group">
                     <div class="input-group">

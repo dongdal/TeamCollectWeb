@@ -9,6 +9,7 @@
     End If
     <title>@ViewBag.Title - TeamCollect.gov</title>
     @Styles.Render("~/css/CssDeBase")
+    @Styles.Render("~/css/JQueryConfirmCSS")
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/modernizr")
     @RenderSection("css", required:=False)
@@ -62,6 +63,7 @@
     @Scripts.Render("~/bundles/Jstabs")
     @Scripts.Render("~/bundles/Jswidgets")
     @Scripts.Render("~/bundles/Jsprogressbars")
+    @Scripts.Render("~/bundles/JQueryConfirmJS")
     @RenderSection("scripts", required:=False)
 </body>
 </html>

@@ -17,6 +17,13 @@ Namespace Controllers
             Return aspuser
         End Function
 
+        <HttpPost()>
+        Public Function GetMessage(ClientId As String) As ActionResult
+            Dim results = (From client In db.Clients Where client.Id = ClientId Select client.MessageAlerte).FirstOrDefault()
+            Return Json(results, JsonRequestBehavior.AllowGet)
+        End Function
+
+
 
         'Private Function ConvertDate(dateConvert As Date) As String
         '    Dim mydate() = dateConvert.ToString("").Split(" ")
@@ -49,6 +56,10 @@ Namespace Controllers
             'Dim entities = db.Retraits.ToList.Where(Function(m) m.Etat = True)
             Dim CurrentAgenceId = GetCurrentUser.Personne.AgenceId
             Dim entities = (From retrait In db.Retraits Where retrait.Client.AgenceId = CurrentAgenceId Select retrait).ToList
+
+            If Not String.IsNullOrEmpty(searchString) Then
+                entities = entities.Where(Function(e) e.Client.Nom.ToUpper.Equals(searchString.ToUpper) Or e.Client.Prenom.ToUpper.Equals(searchString.ToUpper))
+            End If
 
             ViewBag.EnregCount = entities.Count
 
@@ -120,15 +131,6 @@ Namespace Controllers
             pVM.IDsClient = listclient1
         End Sub
 
-        ' GET: Retrait/Create
-        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
-        Function Create() As ActionResult
-            Dim pVM As New RetraitViewModel
-
-            LoadCombo(pVM)
-            Return View(pVM)
-        End Function
-
         'Get
         Function Annulation(ByVal id As Long?) As ActionResult
             If IsNothing(id) Then
@@ -138,10 +140,22 @@ Namespace Controllers
             If IsNothing(retrait) Then
                 Return HttpNotFound()
             End If
-            Dim entityVM As New AnnulationViewModel
-            entityVM.Id = retrait.Id
+
+            Dim entityVM As New AnnulationViewModel With {
+                .Id = retrait.Id
+            }
 
             Return View(entityVM)
+        End Function
+
+
+        ' GET: Retrait/Create
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
+        Function Create() As ActionResult
+            Dim pVM As New RetraitViewModel
+
+            LoadCombo(pVM)
+            Return View(pVM)
         End Function
 
 
@@ -178,10 +192,11 @@ Namespace Controllers
             db.Entry(retrait).State = EntityState.Modified
             db.SaveChanges()
 
-            Dim Annul As New Annulation
-            Annul.DateAnnulation = Now
-            Annul.Motif = Motif
-            Annul.HistoriqueMouvementId = HistMvt.Id
+            Dim Annul As New Annulation With {
+                .DateAnnulation = Now,
+                .Motif = Motif,
+                .HistoriqueMouvementId = HistMvt.Id
+            }
 
             db.Annulation.Add(Annul)
             db.SaveChanges()
@@ -211,19 +226,20 @@ Namespace Controllers
             Dim JCID = LesJournalCaisse.FirstOrDefault.Id
             Dim LibOperation As String = "ANNULATION RETRAIT-" & RetraitId & "de " & Montant & "Du " & DateRetrait
 
-            Dim parameterList As New List(Of SqlParameter)()
-            parameterList.Add(New SqlParameter("@ClientId", clientId))
-            parameterList.Add(New SqlParameter("@CollecteurId", CollecteurId))
-            parameterList.Add(New SqlParameter("@Montant", +Montant))
-            parameterList.Add(New SqlParameter("@DateOperation", Now))
-            parameterList.Add(New SqlParameter("@Pourcentage", 0))
-            parameterList.Add(New SqlParameter("@MontantRetenu", 0))
-            parameterList.Add(New SqlParameter("@EstTraiter", 0))
-            parameterList.Add(New SqlParameter("@Etat", False))
-            parameterList.Add(New SqlParameter("@DateCreation", Now))
-            parameterList.Add(New SqlParameter("@UserId", UserId))
-            parameterList.Add(New SqlParameter("@JournalCaisseId", JCID))
-            parameterList.Add(New SqlParameter("@LibelleOperation", LibOperation))
+            Dim parameterList As New List(Of SqlParameter) From {
+                New SqlParameter("@ClientId", clientId),
+                New SqlParameter("@CollecteurId", CollecteurId),
+                New SqlParameter("@Montant", +Montant),
+                New SqlParameter("@DateOperation", Now),
+                New SqlParameter("@Pourcentage", 0),
+                New SqlParameter("@MontantRetenu", 0),
+                New SqlParameter("@EstTraiter", 0),
+                New SqlParameter("@Etat", False),
+                New SqlParameter("@DateCreation", Now),
+                New SqlParameter("@UserId", UserId),
+                New SqlParameter("@JournalCaisseId", JCID),
+                New SqlParameter("@LibelleOperation", LibOperation)
+            }
             Dim parameters As SqlParameter() = parameterList.ToArray()
 
             Try
@@ -258,13 +274,125 @@ Namespace Controllers
         ' POST: Retrait/Create
         'Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
         'plus de détails, voir  https://go.microsoft.com/fwlink/?LinkId=317598.
+        '<HttpPost()>
+        '<LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
+        '<ValidateAntiForgeryToken()>
+        'Function Create(<Bind(Include:="Id,ClientId,Montant,SoldeApreOperation,DateRetrait,DateCloture,Etat,DateCreation")> ByVal retraitVM As RetraitViewModel) As ActionResult
+        '    'on recupere l'id du collecteur chef collect connecter
+        '    Dim CollecteurId = ConfigurationManager.AppSettings("CollecteurSystemeId") 'getCurrentUser.PersonneId
+        '    retraitVM.CollecteurId = CollecteurId
+
+        '    If ModelState.IsValid Then
+        '        '1 on recupere le client on teste son solde et on le modifi
+
+        '        Dim ClientId = retraitVM.ClientId
+        '        Dim Montant = Math.Abs(retraitVM.Montant)
+        '        Dim client = db.Clients.Find(ClientId)
+        '        Dim UserId = GetCurrentUser.Id
+        '        If IsNothing(client) Then
+        '            ModelState.AddModelError("ClientId", "Le client Selectionner n'a pas de compte ")
+        '            LoadCombo(retraitVM)
+        '            Return View(retraitVM)
+        '        End If
+
+        '        'on teste si le collecter connecter a une caisse ouverte
+        '        Dim LesJournalCaisse = (From J In db.JournalCaisses Where J.CollecteurId = CollecteurId Select J).ToArray
+        '        If (LesJournalCaisse.Count = 0) Then
+        '            ModelState.AddModelError("Montant", "Vous n'avez pas de caisse ouverte pour effectuer cette opération ")
+        '            LoadCombo(retraitVM)
+        '            Return View(retraitVM)
+        '        End If
+
+        '        If Not (client.SoldeDisponible - Montant >= 0) Then
+        '            ModelState.AddModelError("Montant", "Le solde disponible du client est insuiffisant pour un retrait de " & Montant)
+        '            LoadCombo(retraitVM)
+        '            Return View(retraitVM)
+        '        End If
+        '        'mise a jour du solde du client
+        '        client.Solde -= Montant
+        '        db.Entry(client).State = EntityState.Modified
+        '        db.SaveChanges()
+        '        '2- on cree le retrait
+        '        retraitVM.ClientId = ClientId
+        '        retraitVM.CollecteurId = CollecteurId
+        '        retraitVM.SoldeApreOperation = client.Solde
+        '        retraitVM.DateRetrait = Now
+        '        retraitVM.DateCreation = Now
+        '        retraitVM.Montant = -Montant
+        '        retraitVM.Etat = True
+        '        Dim retrait = retraitVM.GetEntity
+        '        retrait.UserId = UserId
+        '        db.Retraits.Add(retrait)
+        '        db.SaveChanges()
+        '        '3- on recupere le journal caisse et on enregistre dans mouvement historique
+        '        Dim JCID = LesJournalCaisse.FirstOrDefault.Id
+        '        Dim LibOperation As String = "RETRAIT-" & DateTime.Now.ToString & "-AG-" & GetPositionAgence(GetCurrentUser.Personne.AgenceId, GetCurrentUser.Personne.Agence.SocieteId)
+
+        '        Dim parameterList As New List(Of SqlParameter) From {
+        '            New SqlParameter("@ClientId", ClientId),
+        '            New SqlParameter("@CollecteurId", CollecteurId),
+        '            New SqlParameter("@Montant", -Montant),
+        '            New SqlParameter("@DateOperation", Now),
+        '            New SqlParameter("@Pourcentage", 0),
+        '            New SqlParameter("@MontantRetenu", 0),
+        '            New SqlParameter("@EstTraiter", 0),
+        '            New SqlParameter("@Etat", False),
+        '            New SqlParameter("@DateCreation", Now),
+        '            New SqlParameter("@UserId", UserId),
+        '            New SqlParameter("@JournalCaisseId", JCID),
+        '            New SqlParameter("@LibelleOperation", LibOperation)
+        '        }
+        '        Dim parameters As SqlParameter() = parameterList.ToArray()
+
+        '        Try
+        '            'Dim myInsertQuery As String = "INSERT INTO HistoriqueMouvement (ClientId, CollecteurId, Montant, DateOperation, MontantRetenu, Pourcentage, EstTraiter, Etat, DateCreation, UserId, JournalCaisseId) VALUES (@ClientId, @CollecteurId, @Montant, @DateOperation, @MontantRetenu, @Pourcentage, @EstTraiter, @Etat, @DateCreation, @UserId, @JournalCaisseId)"
+        '            Dim myInsertQuery As String = "INSERT INTO HistoriqueMouvement (ClientId, CollecteurId, Montant, DateOperation, MontantRetenu, Pourcentage, EstTraiter, Etat, DateCreation, UserId, JournalCaisseId, LibelleOperation) VALUES (@ClientId, @CollecteurId, @Montant, @DateOperation, @MontantRetenu, @Pourcentage, @EstTraiter, @Etat, @DateCreation, @UserId, @JournalCaisseId, @LibelleOperation)"
+        '            'Dim laDate As Date = Now
+        '            If (db.Database.ExecuteSqlCommand(myInsertQuery, parameters)) Then
+        '                Dim historiquesMouvements = (From h In db.HistoriqueMouvements Where (h.UserId = UserId) Select HistoriqueId = h.Id, JournalCaisseId = h.JournalCaisseId,
+        '                                IdClient = h.ClientId, NomClient = h.Client.Nom, PrenomClient = h.Client.Prenom, IdCollecteur = h.CollecteurId, NomCollecteur = h.Collecteur.Nom, PrenomCollecteur = h.Collecteur.Prenom, MontantCollecte = h.Montant,
+        '                                FraisFixes = h.MontantRetenu, Taux = h.Pourcentage, h.DateOperation, h.LibelleOperation).ToList
+
+        '                Dim historique = historiquesMouvements.ElementAtOrDefault((historiquesMouvements.Count - 1))
+        '                Return RedirectToAction("Index")
+        '                'Return Ok(historique)
+        '            Else
+        '                ModelState.AddModelError("Montant", "Une erreur est survenue pendant l'exécution de la requête: veuillez contacter l'administrateur. ")
+        '                LoadCombo(retraitVM)
+        '                Return View(retraitVM)
+        '            End If
+        '        Catch ex As DbEntityValidationException
+        '            Util.GetError(ex)
+        '            ModelState.AddModelError("Montant", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur.")
+        '            LoadCombo(retraitVM)
+        '            Return View(retraitVM)
+        '        Catch ex As Exception
+        '            Util.GetError(ex)
+        '            ModelState.AddModelError("Montant", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. ")
+        '            LoadCombo(retraitVM)
+        '            Return View(retraitVM)
+        '        End Try
+        '    End If
+        '    LoadCombo(retraitVM)
+        '    Return View(retraitVM)
+        'End Function
+
+
+        ' POST: Retrait/Create
+        'Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
+        'plus de détails, voir  https://go.microsoft.com/fwlink/?LinkId=317598.
         <HttpPost()>
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
         <ValidateAntiForgeryToken()>
-        Function Create(<Bind(Include:="Id,ClientId,Montant,SoldeApreOperation,DateRetrait,DateCloture,Etat,DateCreation")> ByVal retraitVM As RetraitViewModel) As ActionResult
+        Function DemandeDeRetrait(retraitJSON As RetraitJSON) As ActionResult
+            Dim retraitVM As New RetraitViewModel(retraitJSON:=retraitJSON)
             'on recupere l'id du collecteur chef collect connecter
             Dim CollecteurId = ConfigurationManager.AppSettings("CollecteurSystemeId") 'getCurrentUser.PersonneId
             retraitVM.CollecteurId = CollecteurId
+
+            If (retraitVM.Montant <= 0) Then
+                ModelState.AddModelError("Montant", Resource.MontantInvalid)
+            End If
 
             If ModelState.IsValid Then
                 '1 on recupere le client on teste son solde et on le modifi
@@ -272,11 +400,11 @@ Namespace Controllers
                 Dim ClientId = retraitVM.ClientId
                 Dim Montant = Math.Abs(retraitVM.Montant)
                 Dim client = db.Clients.Find(ClientId)
-                Dim UserId = getCurrentUser.Id
+                Dim UserId = GetCurrentUser.Id
                 If IsNothing(client) Then
-                    ModelState.AddModelError("ClientId", "Le client Selectionner n'a pas de compte ")
+                    ModelState.AddModelError("ClientId", "Le client Selectionné n'a pas de compte ")
                     LoadCombo(retraitVM)
-                    Return View(retraitVM)
+                    Return Json(New With {.Result = "Error"})
                 End If
 
                 'on teste si le collecter connecter a une caisse ouverte
@@ -284,13 +412,13 @@ Namespace Controllers
                 If (LesJournalCaisse.Count = 0) Then
                     ModelState.AddModelError("Montant", "Vous n'avez pas de caisse ouverte pour effectuer cette opération ")
                     LoadCombo(retraitVM)
-                    Return View(retraitVM)
+                    Return Json(New With {.Result = "Error"})
                 End If
 
                 If Not (client.SoldeDisponible - Montant >= 0) Then
                     ModelState.AddModelError("Montant", "Le solde disponible du client est insuiffisant pour un retrait de " & Montant)
                     LoadCombo(retraitVM)
-                    Return View(retraitVM)
+                    Return Json(New With {.Result = "Error"})
                 End If
                 'mise a jour du solde du client
                 client.Solde -= Montant
@@ -304,27 +432,28 @@ Namespace Controllers
                 retraitVM.DateCreation = Now
                 retraitVM.Montant = -Montant
                 retraitVM.Etat = True
-                Dim retrait = retraitVM.getEntity
+                Dim retrait = retraitVM.GetEntity
                 retrait.UserId = UserId
                 db.Retraits.Add(retrait)
                 db.SaveChanges()
                 '3- on recupere le journal caisse et on enregistre dans mouvement historique
                 Dim JCID = LesJournalCaisse.FirstOrDefault.Id
-                Dim LibOperation As String = "RETRAIT-" & DateTime.Now.ToString & "-AG-" & GetPositionAgence(getCurrentUser.Personne.AgenceId, getCurrentUser.Personne.Agence.SocieteId)
+                Dim LibOperation As String = "RETRAIT-" & DateTime.Now.ToString & "-AG-" & GetPositionAgence(GetCurrentUser.Personne.AgenceId, GetCurrentUser.Personne.Agence.SocieteId)
 
-                Dim parameterList As New List(Of SqlParameter)()
-                parameterList.Add(New SqlParameter("@ClientId", ClientId))
-                parameterList.Add(New SqlParameter("@CollecteurId", CollecteurId))
-                parameterList.Add(New SqlParameter("@Montant", -Montant))
-                parameterList.Add(New SqlParameter("@DateOperation", Now))
-                parameterList.Add(New SqlParameter("@Pourcentage", 0))
-                parameterList.Add(New SqlParameter("@MontantRetenu", 0))
-                parameterList.Add(New SqlParameter("@EstTraiter", 0))
-                parameterList.Add(New SqlParameter("@Etat", False))
-                parameterList.Add(New SqlParameter("@DateCreation", Now))
-                parameterList.Add(New SqlParameter("@UserId", UserId))
-                parameterList.Add(New SqlParameter("@JournalCaisseId", JCID))
-                parameterList.Add(New SqlParameter("@LibelleOperation", LibOperation))
+                Dim parameterList As New List(Of SqlParameter) From {
+                    New SqlParameter("@ClientId", ClientId),
+                    New SqlParameter("@CollecteurId", CollecteurId),
+                    New SqlParameter("@Montant", -Montant),
+                    New SqlParameter("@DateOperation", Now),
+                    New SqlParameter("@Pourcentage", 0),
+                    New SqlParameter("@MontantRetenu", 0),
+                    New SqlParameter("@EstTraiter", 0),
+                    New SqlParameter("@Etat", False),
+                    New SqlParameter("@DateCreation", Now),
+                    New SqlParameter("@UserId", UserId),
+                    New SqlParameter("@JournalCaisseId", JCID),
+                    New SqlParameter("@LibelleOperation", LibOperation)
+                }
                 Dim parameters As SqlParameter() = parameterList.ToArray()
 
                 Try
@@ -337,28 +466,29 @@ Namespace Controllers
                                         FraisFixes = h.MontantRetenu, Taux = h.Pourcentage, h.DateOperation, h.LibelleOperation).ToList
 
                         Dim historique = historiquesMouvements.ElementAtOrDefault((historiquesMouvements.Count - 1))
-                        Return RedirectToAction("Index")
+                        Return Json(New With {.Result = "OK"})
                         'Return Ok(historique)
                     Else
                         ModelState.AddModelError("Montant", "Une erreur est survenue pendant l'exécution de la requête: veuillez contacter l'administrateur. ")
                         LoadCombo(retraitVM)
-                        Return View(retraitVM)
+                        Return Json(New With {.Result = "Error"})
                     End If
                 Catch ex As DbEntityValidationException
                     Util.GetError(ex)
                     ModelState.AddModelError("Montant", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur.")
                     LoadCombo(retraitVM)
-                    Return View(retraitVM)
+                    Return Json(New With {.Result = "Error"})
                 Catch ex As Exception
                     Util.GetError(ex)
                     ModelState.AddModelError("Montant", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. ")
                     LoadCombo(retraitVM)
-                    Return View(retraitVM)
+                    Return Json(New With {.Result = "Error"})
                 End Try
             End If
             LoadCombo(retraitVM)
             Return View(retraitVM)
         End Function
+
 
         ' GET: Retrait/Edit/5
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
@@ -391,7 +521,7 @@ Namespace Controllers
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
         Function Edit(<Bind(Include:="Id,CollecteurId,Montant,SoldeApreOperation,DateRetrait,DateCloture,Etat,DateCreation")> ByVal retrait As RetraitViewModel) As ActionResult
             If ModelState.IsValid Then
-                Dim ca = retrait.getEntity
+                Dim ca = retrait.GetEntity
                 db.Entry(retrait).State = EntityState.Modified
                 db.SaveChanges()
                 Return RedirectToAction("Index")
@@ -453,5 +583,29 @@ Namespace Controllers
             End While
             Return positionString
         End Function
+    End Class
+
+    Public Class RetraitJSON
+        Private _clientId As Long
+        Public Property ClientId As Long
+            Get
+                Return _clientId
+            End Get
+            Set(value As Long)
+                _clientId = value
+            End Set
+        End Property
+
+        Private _montant As String
+        Public Property Montant As String
+            Get
+                Return _montant
+            End Get
+            Set(value As String)
+                _montant = value
+            End Set
+        End Property
+
+
     End Class
 End Namespace

@@ -17,6 +17,7 @@ Public Class RetraitViewModel
     'Public Property Montant As Decimal
 
     <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    <RegularExpression("^(\d+(((\,))\d+)?)$", ErrorMessageResourceName:="decimalType_error", ErrorMessageResourceType:=GetType(Resource))>
     <Range(500, Decimal.MaxValue, ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="DecimalMaxValue")>
     Public Property Montant As Decimal
 
@@ -31,6 +32,21 @@ Public Class RetraitViewModel
 
 
     Public Sub New()
+
+    End Sub
+
+    Public Sub New(retraitJSON As Controllers.RetraitJSON)
+        With Me
+            .Id = .Id
+            .CollecteurId = .CollecteurId
+            .ClientId = retraitJSON.ClientId
+            Decimal.TryParse(retraitJSON.Montant, .Montant)
+            .Etat = .Etat
+            .SoldeApreOperation = .SoldeApreOperation
+            .DateRetrait = .DateRetrait
+            .DateCloture = .DateCloture
+            .DateCreation = .DateCreation
+        End With
     End Sub
 
     Public Sub New(entity As Retrait)
@@ -47,7 +63,7 @@ Public Class RetraitViewModel
         End With
     End Sub
 
-    Public Function getEntity() As Retrait
+    Public Function GetEntity() As Retrait
         Dim entity As New Retrait
 
         With entity

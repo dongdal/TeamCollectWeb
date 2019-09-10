@@ -291,6 +291,10 @@
       <DependentUpon>201908231606185_Control_Sur_Le_Mot_De_Passe.vb</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201908231606185_Control_Sur_Le_Mot_De_Passe.vb" />
+    <Compile Include="Migrations\201909091017234_Add_Field_MessageAlert_On_Table_Client.Designer.vb">
+      <DependentUpon>201909091017234_Add_Field_MessageAlert_On_Table_Client.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909091017234_Add_Field_MessageAlert_On_Table_Client.vb" />
     <Compile Include="Models\CommissionColecteur.vb" />
     <Compile Include="Models\DetailsCommission.vb" />
     <Compile Include="Models\HistoriqueCalculCommission.vb" />
@@ -512,15 +516,20 @@
     <EmbeddedResource Include="Migrations\201908231606185_Control_Sur_Le_Mot_De_Passe.resx">
       <DependentUpon>201908231606185_Control_Sur_Le_Mot_De_Passe.vb</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909091017234_Add_Field_MessageAlert_On_Table_Client.resx">
+      <DependentUpon>201909091017234_Add_Field_MessageAlert_On_Table_Client.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Content Include="css\jquery-confirm-CSS\jquery-confirm.min.css" />
     <Content Include="js\Highcharts\data.js" />
     <Content Include="js\Highcharts\exporting.js" />
     <Content Include="js\Highcharts\highcharts.js" />
+    <Content Include="js\jquery-confirm-JS\jquery-confirm.min.js" />
     <Content Include="Report\Template\HistoCollectors.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

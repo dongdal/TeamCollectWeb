@@ -33,6 +33,9 @@ Public Class ClientViewModel
     Public Overridable Property LesSecteursActivite As List(Of SelectListItem)
     Public Overridable Property SecteurActivite As SecteurActivite
 
+    <Display(Name:="MessageAlerte", ResourceType:=GetType(Resource))>
+    Public Property MessageAlerte As String
+
     Public Property Solde As Decimal? = 0
     Public Property SoldeDisponible As Decimal? = 0
     Public Property Pourcentage As Decimal? = 0
@@ -55,6 +58,7 @@ Public Class ClientViewModel
             .SecteurActiviteId = entity.SecteurActiviteId
             .PorteFeuilleId = entity.PorteFeuilleId
             .Pourcentage = entity.Pourcentage
+            .AgenceId = entity.AgenceId
             .Solde = entity.Solde
             .SoldeDisponible = entity.SoldeDisponible
             .Nom = entity.Nom
@@ -65,6 +69,7 @@ Public Class ClientViewModel
             .Telephone2 = entity.Telephone2
             .Adresse = entity.Adresse
             .Quartier = entity.Quartier
+            .MessageAlerte = entity.MessageAlerte
             '.AgenceId = entity.AgenceId
             .NumeroCompte = entity.NumeroCompte
             .DateCreation = entity.DateCreation
@@ -96,6 +101,7 @@ Public Class ClientViewModel
             .NumeroCompte = Me.NumeroCompte
             .DateCreation = Me.DateCreation
             .Etat = Me.Etat
+            .MessageAlerte = Me.MessageAlerte
             .UserId = Me.UserId
         End With
 

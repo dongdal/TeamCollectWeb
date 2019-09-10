@@ -5,17 +5,17 @@ End Code
 
 
 <div class="contentwrapper">
-<!--Content wrapper-->
-<div class="heading">
-    <!--  .heading-->
-    <h3 style="color:#353535">
-        <i class="fa fa-archive"></i>Le client: Confirmez-vous cette Suppression?
-    </h3>
+    <!--Content wrapper-->
+    <div class="heading">
+        <!--  .heading-->
+        <h3 style="color:#353535">
+            <i class="fa fa-archive"></i>Le client: Confirmez-vous cette Suppression?
+        </h3>
 
-</div>
-<!-- End  / heading-->
-<!-- Start .row -->
-<div class="row">
+    </div>
+    <!-- End  / heading-->
+    <!-- Start .row -->
+    <div class="row">
         <dl class="dl-horizontal">
             <dt>
                 @Html.DisplayNameFor(Function(model) model.Nom)
@@ -87,6 +87,14 @@ End Code
                 @Html.DisplayFor(Function(model) model.NumeroCompte)
             </dd>
 
+            <dt>
+                @Html.DisplayNameFor(Function(model) model.MessageAlerte)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(Function(model) model.MessageAlerte)
+            </dd>
+
 
         </dl>
         @Using (Html.BeginForm())
@@ -98,7 +106,6 @@ End Code
             </div>
         End Using
     </div>
-</div>
 </div>
 
 
