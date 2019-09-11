@@ -82,6 +82,24 @@ Public Class Resource
     End Property
     
     '''<summary>
+    '''  Recherche une chaîne localisée semblable à Supprimer.
+    '''</summary>
+    Public Shared ReadOnly Property BtnDelete() As String
+        Get
+            Return ResourceManager.GetString("BtnDelete", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Informations.
+    '''</summary>
+    Public Shared ReadOnly Property BtnDetails() As String
+        Get
+            Return ResourceManager.GetString("BtnDetails", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
     '''  Recherche une chaîne localisée semblable à Annulation Confirmée!!!.
     '''</summary>
     Public Shared ReadOnly Property CancelingProcess() As String
@@ -100,11 +118,110 @@ Public Class Resource
     End Property
     
     '''<summary>
+    '''  Recherche une chaîne localisée semblable à Catégorie.
+    '''</summary>
+    Public Shared ReadOnly Property CategorieRemuneration() As String
+        Get
+            Return ResourceManager.GetString("CategorieRemuneration", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Veuillez sélectionner une catégorie.
+    '''</summary>
+    Public Shared ReadOnly Property CategorieRemunerationCombo() As String
+        Get
+            Return ResourceManager.GetString("CategorieRemunerationCombo", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Ajouter une nouvelle catégorie.
+    '''</summary>
+    Public Shared ReadOnly Property CategorieRemunerationCreate() As String
+        Get
+            Return ResourceManager.GetString("CategorieRemunerationCreate", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Supprimer une catégorie.
+    '''</summary>
+    Public Shared ReadOnly Property CategorieRemunerationDelete() As String
+        Get
+            Return ResourceManager.GetString("CategorieRemunerationDelete", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Informations sur la catégorie.
+    '''</summary>
+    Public Shared ReadOnly Property CategorieRemunerationDetail() As String
+        Get
+            Return ResourceManager.GetString("CategorieRemunerationDetail", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Modifier une catégorie.
+    '''</summary>
+    Public Shared ReadOnly Property CategorieRemunerationEdit() As String
+        Get
+            Return ResourceManager.GetString("CategorieRemunerationEdit", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Catégorie.
+    '''</summary>
+    Public Shared ReadOnly Property CategorieRemunerationLibelle() As String
+        Get
+            Return ResourceManager.GetString("CategorieRemunerationLibelle", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Grille de rémunération.
+    '''</summary>
+    Public Shared ReadOnly Property CategorieRemunerationList() As String
+        Get
+            Return ResourceManager.GetString("CategorieRemunerationList", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Gestion des catégories.
+    '''</summary>
+    Public Shared ReadOnly Property CategorieRemunerationManage() As String
+        Get
+            Return ResourceManager.GetString("CategorieRemunerationManage", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
     '''  Recherche une chaîne localisée semblable à :Cette Information est Obligatoire.
     '''</summary>
     Public Shared ReadOnly Property champ_Manquant() As String
         Get
             Return ResourceManager.GetString("champ_Manquant", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Commission Minimale.
+    '''</summary>
+    Public Shared ReadOnly Property CommissionMinimale() As String
+        Get
+            Return ResourceManager.GetString("CommissionMinimale", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Voulez-vous vraiment supprimer cet élément?.
+    '''</summary>
+    Public Shared ReadOnly Property ConfirmDelete() As String
+        Get
+            Return ResourceManager.GetString("ConfirmDelete", resourceCulture)
         End Get
     End Property
     
@@ -118,6 +235,15 @@ Public Class Resource
     End Property
     
     '''<summary>
+    '''  Recherche une chaîne localisée semblable à Formulaire de création....
+    '''</summary>
+    Public Shared ReadOnly Property CreateForm() As String
+        Get
+            Return ResourceManager.GetString("CreateForm", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
     '''  Recherche une chaîne localisée semblable à Votre Format de date n&apos;est pas correct! (jj/mois/annee).
     '''</summary>
     Public Shared ReadOnly Property Dataexpression_Error() As String
@@ -127,11 +253,29 @@ Public Class Resource
     End Property
     
     '''<summary>
+    '''  Recherche une chaîne localisée semblable à Date création.
+    '''</summary>
+    Public Shared ReadOnly Property DateCreation() As String
+        Get
+            Return ResourceManager.GetString("DateCreation", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
     '''  Recherche une chaîne localisée semblable à La valeur saisie est hors limite et ne peut être enregistrée!.
     '''</summary>
     Public Shared ReadOnly Property DecimalMaxValue() As String
         Get
             Return ResourceManager.GetString("DecimalMaxValue", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à La valeur saisie doit être comprise entre {0} et {1}..
+    '''</summary>
+    Public Shared ReadOnly Property DecimalMaxValuePercent() As String
+        Get
+            Return ResourceManager.GetString("DecimalMaxValuePercent", resourceCulture)
         End Get
     End Property
     
@@ -159,6 +303,15 @@ Public Class Resource
     Public Shared ReadOnly Property DemandeRetrait() As String
         Get
             Return ResourceManager.GetString("DemandeRetrait", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Formulaire de modification....
+    '''</summary>
+    Public Shared ReadOnly Property EditForm() As String
+        Get
+            Return ResourceManager.GetString("EditForm", resourceCulture)
         End Get
     End Property
     
@@ -352,6 +505,33 @@ Public Class Resource
     End Property
     
     '''<summary>
+    '''  Recherche une chaîne localisée semblable à Grille de rémuneration.
+    '''</summary>
+    Public Shared ReadOnly Property GrilleRemuneration() As String
+        Get
+            Return ResourceManager.GetString("GrilleRemuneration", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Libelle.
+    '''</summary>
+    Public Shared ReadOnly Property Libelle() As String
+        Get
+            Return ResourceManager.GetString("Libelle", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Profil Manager.
+    '''</summary>
+    Public Shared ReadOnly Property ManagerProfile() As String
+        Get
+            Return ResourceManager.GetString("ManagerProfile", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
     '''  Recherche une chaîne localisée semblable à Message d&apos;alerte.
     '''</summary>
     Public Shared ReadOnly Property MessageAlerte() As String
@@ -393,6 +573,42 @@ Public Class Resource
     Public Shared ReadOnly Property PasswordStrength() As String
         Get
             Return ResourceManager.GetString("PasswordStrength", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Pourcentage Commission.
+    '''</summary>
+    Public Shared ReadOnly Property PourcentageCommission() As String
+        Get
+            Return ResourceManager.GetString("PourcentageCommission", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Salaire de base.
+    '''</summary>
+    Public Shared ReadOnly Property SalaireDeBase() As String
+        Get
+            Return ResourceManager.GetString("SalaireDeBase", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Statut Existant.
+    '''</summary>
+    Public Shared ReadOnly Property StatutExistant() As String
+        Get
+            Return ResourceManager.GetString("StatutExistant", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à La chaîne {0} doit comporter au maximum {1} caractères..
+    '''</summary>
+    Public Shared ReadOnly Property StringLength() As String
+        Get
+            Return ResourceManager.GetString("StringLength", resourceCulture)
         End Get
     End Property
     

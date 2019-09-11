@@ -21,7 +21,7 @@ Namespace TeamCollect
 
         Private db As New ApplicationDbContext
 
-        Private Function getCurrentUser() As ApplicationUser
+        Private Function GetCurrentUser() As ApplicationUser
             Dim id = User.Identity.GetUserId
             Dim aspuser = db.Users.Find(id)
             Return aspuser
@@ -41,7 +41,7 @@ Namespace TeamCollect
             End If
 
             ViewBag.CurrentFilter = searchString
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim entities = db.JournalCaisses.Include(Function(j) j.Collecteur).Where(Function(i) i.Collecteur.AgenceId = userAgenceId).OrderByDescending(Function(e) e.DateOuverture).ToList
 
 
@@ -76,8 +76,8 @@ Namespace TeamCollect
         Function Create() As ActionResult
             Dim entityVM As New JournalCaisseViewModel
 
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
-            Dim userSocieteId = getCurrentUser.Personne.Agence.SocieteId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
+            Dim userSocieteId = GetCurrentUser.Personne.Agence.SocieteId
             Dim listPersonne = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
             Dim LePlafondDeCollecte = db.Societes.OfType(Of Societe).Where(Function(i) i.Id = userSocieteId).First.PlafondDeCollecte.ToString
             Dim listPersonne2 As New List(Of SelectListItem)
@@ -96,7 +96,7 @@ Namespace TeamCollect
         <ValidateAntiForgeryToken()>
         <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
         Function Create(ByVal journalcaisse As JournalCaisseViewModel) As ActionResult
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
 
             If ModelState.IsValid Then
 
@@ -115,7 +115,7 @@ Namespace TeamCollect
                     journalcaisse.Etat = 0
                     journalcaisse.DateCreation = Now.Date
                     journalcaisse.DateOuverture = Now.Date
-                    journalcaisse.UserId = getCurrentUser.Id
+                    journalcaisse.UserId = GetCurrentUser.Id
                     journalcaisse.PlafondEnCours = journalcaisse.PlafondDebat
                     Dim jrn = journalcaisse.getEntity()
                     db.JournalCaisses.Add(jrn)
@@ -152,7 +152,7 @@ Namespace TeamCollect
                 Return HttpNotFound()
             End If
             Dim journalVM = New JournalCaisseViewModel(journalcaisse)
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim IdJournal = journalcaisse.Id
             'Dim listPersonne = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
             Dim listPersonne = (From c In db.Collecteurs, j In db.JournalCaisses Where j.CollecteurId = c.Id And j.Id = IdJournal Select c).ToList
@@ -175,7 +175,7 @@ Namespace TeamCollect
                 Dim entity = journalcaisse.getEntity()
                 entity.DateCloture = Now.Date
                 entity.Etat = 1
-                entity.UserId = getCurrentUser.Id
+                entity.UserId = GetCurrentUser.Id
 
                 Dim wherecloseId = entity.Id
                 Dim montantTheo = db.HistoriqueMouvements.OfType(Of HistoriqueMouvement).Where(Function(h) h.JournalCaisseId = wherecloseId).Sum(Function(h) h.Montant)
@@ -194,7 +194,7 @@ Namespace TeamCollect
                 End Try
             End If
 
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listPersonne = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
             Dim listPersonne2 As New List(Of SelectListItem)
             For Each item In listPersonne

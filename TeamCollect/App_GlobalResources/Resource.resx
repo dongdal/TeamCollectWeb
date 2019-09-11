@@ -234,4 +234,76 @@
   <data name="SuccessTitle" xml:space="preserve">
     <value>Succes!!!</value>
   </data>
+  <data name="BtnDelete" xml:space="preserve">
+    <value>Supprimer</value>
+  </data>
+  <data name="BtnDetails" xml:space="preserve">
+    <value>Informations</value>
+  </data>
+  <data name="CategorieRemuneration" xml:space="preserve">
+    <value>Catégorie</value>
+  </data>
+  <data name="CategorieRemunerationCombo" xml:space="preserve">
+    <value>Veuillez sélectionner une catégorie</value>
+  </data>
+  <data name="CategorieRemunerationCreate" xml:space="preserve">
+    <value>Ajouter une nouvelle catégorie</value>
+  </data>
+  <data name="CategorieRemunerationDelete" xml:space="preserve">
+    <value>Supprimer une catégorie</value>
+  </data>
+  <data name="CategorieRemunerationDetail" xml:space="preserve">
+    <value>Informations sur la catégorie</value>
+  </data>
+  <data name="CategorieRemunerationEdit" xml:space="preserve">
+    <value>Modifier une catégorie</value>
+  </data>
+  <data name="CategorieRemunerationLibelle" xml:space="preserve">
+    <value>Catégorie</value>
+  </data>
+  <data name="CategorieRemunerationList" xml:space="preserve">
+    <value>Grille de rémunération</value>
+  </data>
+  <data name="CategorieRemunerationManage" xml:space="preserve">
+    <value>Gestion des catégories</value>
+  </data>
+  <data name="CommissionMinimale" xml:space="preserve">
+    <value>Commission Minimale</value>
+  </data>
+  <data name="ConfirmDelete" xml:space="preserve">
+    <value>Voulez-vous vraiment supprimer cet élément?</value>
+  </data>
+  <data name="CreateForm" xml:space="preserve">
+    <value>Formulaire de création...</value>
+  </data>
+  <data name="DateCreation" xml:space="preserve">
+    <value>Date création</value>
+  </data>
+  <data name="DecimalMaxValuePercent" xml:space="preserve">
+    <value>La valeur saisie doit être comprise entre {0} et {1}.</value>
+  </data>
+  <data name="EditForm" xml:space="preserve">
+    <value>Formulaire de modification...</value>
+  </data>
+  <data name="Libelle" xml:space="preserve">
+    <value>Libelle</value>
+  </data>
+  <data name="PourcentageCommission" xml:space="preserve">
+    <value>Pourcentage Commission</value>
+  </data>
+  <data name="SalaireDeBase" xml:space="preserve">
+    <value>Salaire de base</value>
+  </data>
+  <data name="StatutExistant" xml:space="preserve">
+    <value>Statut Existant</value>
+  </data>
+  <data name="StringLength" xml:space="preserve">
+    <value>La chaîne {0} doit comporter au maximum {1} caractères.</value>
+  </data>
+  <data name="GrilleRemuneration" xml:space="preserve">
+    <value>Grille de rémuneration</value>
+  </data>
+  <data name="ManagerProfile" xml:space="preserve">
+    <value>Profil Manager</value>
+  </data>
 </root>

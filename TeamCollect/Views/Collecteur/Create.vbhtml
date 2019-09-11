@@ -102,11 +102,20 @@
                                             <label>Agence du collecteur</label>
                                             <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.AgenceId) </label>
                                             @Html.DropDownListFor(Function(model) model.AgenceId,
-                                                New SelectList(Model.IDsAgence, "Value", "Text"), "Selectionnez un Agence", New With {.class = "form-control select2"})
+                         New SelectList(Model.IDsAgence, "Value", "Text"), "Selectionnez un Agence", New With {.class = "form-control select2"})
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            @Html.LabelFor(Function(mode) Model.CategorieRemunerationId)
+                                            @*<label>Téléphone</label>*@
+                                            <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.CategorieRemunerationId) </label>
+                                            @Html.DropDownListFor(Function(model) model.CategorieRemunerationId,
+New SelectList(Model.LesCategorieRemuneration, "Value", "Text"), Resource.CategorieRemunerationCombo, New With {.class = "form-control select2"})
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="box-footer" style="text-align:center">
                                     <input type="submit" value="Enregistrer" class="btn btn-primary btn-sm" />
                                     @Html.ActionLink("Retour", "IndexAgence", Nothing, New With {.class = "btn btn-default btn-sm"})

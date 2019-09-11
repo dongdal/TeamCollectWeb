@@ -1,20 +1,8 @@
-﻿Imports System
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Data.Entity
-Imports System.Linq
+﻿Imports System.Data.Entity
 Imports System.Net
-Imports System.Web
-Imports System.Web.Mvc
 Imports PagedList
-Imports System.Web.SessionState
-Imports System.Web.Script.Serialization
 Imports Microsoft.AspNet.Identity
-Imports Microsoft.AspNet.Identity.EntityFramework
-Imports TeamCollect.My.Resources
 Imports System.Data.Entity.Validation
-Imports System.IO
-Imports TeamCollect.TeamCollecteServices
 
 Namespace TeamCollect
     Public Class CollecteurController
@@ -22,7 +10,7 @@ Namespace TeamCollect
 
         Private db As New ApplicationDbContext
 
-        Private Function getCurrentUser() As ApplicationUser
+        Private Function GetCurrentUser() As ApplicationUser
             Dim id = User.Identity.GetUserId
             Dim aspuser = db.Users.Find(id)
             Return aspuser
@@ -31,14 +19,14 @@ Namespace TeamCollect
         Function ListeCollecteur() As ActionResult
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View()
         End Function
 
         Function ListeCollecteurGlobal() As ActionResult
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
 
             '----------------on recupère la liste des agences pour filtrer---------------
             Dim listPersonne = db.Agences.OfType(Of Agence)().ToList
@@ -111,7 +99,7 @@ Namespace TeamCollect
 
             ViewBag.CurrentFilter = searchString
 
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim entities = From e In db.Personnes.OfType(Of Collecteur).Where(Function(e) e.AgenceId = userAgenceId).ToList
 
             If Not String.IsNullOrEmpty(searchString) Then
@@ -139,18 +127,31 @@ Namespace TeamCollect
             Return View(collecteur)
         End Function
 
+
+        Public Sub LoadComboBox(ByVal entityVM As CollecteurViewModel)
+            Dim CategorieRemuneration = (From e In db.CategorieRemunerations Where e.StatutExistant = True Select e)
+            Dim LesCategorieRemuneration As New List(Of SelectListItem)
+            For Each item In CategorieRemuneration
+                LesCategorieRemuneration.Add(New SelectListItem With {.Value = item.Id, .Text = item.Libelle & " -- [" & String.Format("{0:0,0}", item.SalaireDeBase) & "F CFA]"})
+            Next
+            'LesCategorieRemuneration.Add(New SelectListItem With {.Value = item.Id, .Text = item.Libelle & " -- " & String.Format("{0:0,0}", item.SalaireDeBase) & "F CFA"})
+
+            entityVM.LesCategorieRemuneration = LesCategorieRemuneration
+        End Sub
+
         ' GET: /Collecteur/Create
         <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
         Function Create() As ActionResult
             Dim colVM As New CollecteurViewModel
 
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listPersonne = db.Agences.OfType(Of Agence).Where(Function(e) e.Id = userAgenceId).ToList
             Dim listPersonne2 As New List(Of SelectListItem)
             For Each item In listPersonne
                 listPersonne2.Add(New SelectListItem With {.Value = item.Id, .Text = item.Societe.Libelle & ":-- [" & item.Libelle & "] --"})
             Next
             colVM.IDsAgence = listPersonne2
+            LoadComboBox(colVM)
             Return View(colVM)
         End Function
 
@@ -169,10 +170,29 @@ Namespace TeamCollect
                 collecteur.Id = list.ElementAt(list.Count - 1).Id + 1
                 Dim monwebser = New TeamCollecteServices
                 collecteur.CodeSecret = monwebser.GetRandomString(collecteur.Nom, collecteur.Prenom)
-
-                db.Personnes.Add(collecteur.getEntity)
+                Dim entity = collecteur.GetEntity
+                db.Personnes.Add(entity)
                 Try
                     db.SaveChanges()
+                    Dim historiqueCollecteurCategorie As New HistoriqueCollecteurCategorie With {
+                        .CategorieRemunerationId = entity.CategorieRemunerationId,
+                        .CollecteurId = entity.Id,
+                        .Libelle = entity.CategorieRemuneration.Libelle,
+                        .SalaireDeBase = entity.CategorieRemuneration.SalaireDeBase,
+                        .CommissionMinimale = entity.CategorieRemuneration.CommissionMinimale,
+                        .PourcentageCommission = entity.CategorieRemuneration.PourcentageCommission,
+                        .StatutExistant = True,
+                        .DateCreation = DateTime.Now,
+                        .UserId = GetCurrentUser.Id
+                        }
+                    db.HistoriqueCollecteurCategories.Add(historiqueCollecteurCategorie)
+                    Try
+                        db.SaveChanges()
+                    Catch ex As DbEntityValidationException
+                        Util.GetError(ex, ModelState)
+                    Catch ex As Exception
+                        Util.GetError(ex, ModelState)
+                    End Try
                     Return RedirectToAction("IndexAgence")
                 Catch ex As DbEntityValidationException
                     Util.GetError(ex, ModelState)
@@ -181,13 +201,14 @@ Namespace TeamCollect
                 End Try
             End If
 
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listPersonne = db.Agences.OfType(Of Agence).Where(Function(e) e.Id = userAgenceId).ToList
             Dim listPersonne2 As New List(Of SelectListItem)
             For Each item In listPersonne
                 listPersonne2.Add(New SelectListItem With {.Value = item.Id, .Text = item.Societe.Libelle & ":-- [" & item.Libelle & "] --"})
             Next
             collecteur.IDsAgence = listPersonne2
+            LoadComboBox(collecteur)
             Return View(collecteur)
         End Function
 
@@ -203,13 +224,14 @@ Namespace TeamCollect
             End If
             Dim colVM = New CollecteurViewModel(collecteur)
 
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listPersonne = db.Agences.OfType(Of Agence).Where(Function(e) e.Id = userAgenceId).ToList
             Dim listPersonne2 As New List(Of SelectListItem)
             For Each item In listPersonne
                 listPersonne2.Add(New SelectListItem With {.Value = item.Id, .Text = item.Societe.Libelle & ":-- [" & item.Libelle & "] --"})
             Next
             colVM.IDsAgence = listPersonne2
+            LoadComboBox(colVM)
             Return View(colVM)
         End Function
 
@@ -220,12 +242,44 @@ Namespace TeamCollect
         <ValidateAntiForgeryToken()>
         <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
         Function Edit(ByVal collecteur As CollecteurViewModel) As ActionResult
+            Dim categorieRemuneration = db.CategorieRemunerations.Find(collecteur.CategorieRemunerationId)
+            If IsNothing(categorieRemuneration) Then
+                ModelState.AddModelError("CategorieRemunerationId", "Veuillez sélectionner une catégorie de rémuneration valide")
+            End If
 
             If ModelState.IsValid Then
-                Dim entity = collecteur.getEntity()
+                Dim entity = collecteur.GetEntity()
                 db.Entry(entity).State = EntityState.Modified
                 Try
-                    db.SaveChanges()
+                    'db.SaveChanges()
+
+                    Dim OldHistoriqueCollecteurCategorie = (From e In db.HistoriqueCollecteurCategories Where e.StatutExistant = True And e.CollecteurId = collecteur.Id Order By e.Id Descending).FirstOrDefault()
+                    If Not IsNothing(OldHistoriqueCollecteurCategorie) Then
+                        If (OldHistoriqueCollecteurCategorie.Id > 0 And OldHistoriqueCollecteurCategorie.CategorieRemunerationId <> entity.CategorieRemunerationId) Then
+                            OldHistoriqueCollecteurCategorie.StatutExistant = False
+                            db.Entry(OldHistoriqueCollecteurCategorie).State = EntityState.Modified
+                        End If
+                    End If
+
+                    Dim NewHistoriqueCollecteurCategorie As New HistoriqueCollecteurCategorie With {
+                        .CategorieRemunerationId = categorieRemuneration.Id,
+                        .CollecteurId = entity.Id,
+                        .Libelle = categorieRemuneration.Libelle,
+                        .SalaireDeBase = categorieRemuneration.SalaireDeBase,
+                        .CommissionMinimale = categorieRemuneration.CommissionMinimale,
+                        .PourcentageCommission = categorieRemuneration.PourcentageCommission,
+                        .StatutExistant = True,
+                        .DateCreation = DateTime.Now,
+                        .UserId = GetCurrentUser.Id
+                    }
+                    db.HistoriqueCollecteurCategories.Add(NewHistoriqueCollecteurCategorie)
+                    Try
+                        db.SaveChanges()
+                    Catch ex As DbEntityValidationException
+                        Util.GetError(ex, ModelState)
+                    Catch ex As Exception
+                        Util.GetError(ex, ModelState)
+                    End Try
                     Return RedirectToAction("IndexAgence")
                 Catch ex As DbEntityValidationException
                     Util.GetError(ex, ModelState)
@@ -234,13 +288,14 @@ Namespace TeamCollect
                 End Try
             End If
 
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listPersonne = db.Agences.OfType(Of Agence).Where(Function(e) e.Id = userAgenceId).ToList
             Dim listPersonne2 As New List(Of SelectListItem)
             For Each item In listPersonne
                 listPersonne2.Add(New SelectListItem With {.Value = item.Id, .Text = item.Societe.Libelle & ":-- [" & item.Libelle & "] --"})
             Next
             collecteur.IDsAgence = listPersonne2
+            LoadComboBox(collecteur)
             Return View(collecteur)
         End Function
 

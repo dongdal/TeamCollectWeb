@@ -238,10 +238,13 @@
     <Compile Include="Controllers\BorneCommissionController.vb" />
     <Compile Include="Controllers\CalculAjoutController.vb" />
     <Compile Include="Controllers\CarnetClientController.vb" />
+    <Compile Include="Controllers\CategorieRemunerationsController.vb" />
     <Compile Include="Controllers\ModulePricipale.vb" />
     <Compile Include="Controllers\RetraitController.vb" />
     <Compile Include="Controllers\SecteurActiviteController.vb" />
     <Compile Include="Controllers\TypeCarnetController.vb" />
+    <Compile Include="DAL\Config\HistoriqueCollecteurCategorieCfg.vb" />
+    <Compile Include="DAL\Config\CategorieRemunerationCfg.vb" />
     <Compile Include="DAL\Config\DetailsCommissionsCfg.vb" />
     <Compile Include="DAL\Config\HistoriqueCalculCommissionCfg.vb" />
     <Compile Include="DAL\Config\CommissionColecteurCfg.vb" />
@@ -295,8 +298,14 @@
       <DependentUpon>201909091017234_Add_Field_MessageAlert_On_Table_Client.vb</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201909091017234_Add_Field_MessageAlert_On_Table_Client.vb" />
+    <Compile Include="Migrations\201909101228319_Add_Tables_CategorieRemuneration_And_HistoriqueCollecteurRemuneration.Designer.vb">
+      <DependentUpon>201909101228319_Add_Tables_CategorieRemuneration_And_HistoriqueCollecteurRemuneration.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201909101228319_Add_Tables_CategorieRemuneration_And_HistoriqueCollecteurRemuneration.vb" />
+    <Compile Include="Models\HistoriqueCollecteurCategorie.vb" />
     <Compile Include="Models\CommissionColecteur.vb" />
     <Compile Include="Models\DetailsCommission.vb" />
+    <Compile Include="Models\CategorieRemuneration.vb" />
     <Compile Include="Models\HistoriqueCalculCommission.vb" />
     <Compile Include="Models\TransfertClientPorteFeuille.vb" />
     <Compile Include="Models\AgiosClient.vb" />
@@ -309,6 +318,7 @@
     </Compile>
     <Compile Include="ViewModels\BorneCommissionViewModel.vb" />
     <Compile Include="ViewModels\CarnetClientViewModel.vb" />
+    <Compile Include="ViewModels\CategorieRemunerationViewModel.vb" />
     <Compile Include="ViewModels\ChoixParamAjoutViewModel.vb" />
     <Compile Include="ViewModels\AnnulationViewModel.vb" />
     <Compile Include="ViewModels\TransfertViewModel.vb" />
@@ -518,6 +528,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909091017234_Add_Field_MessageAlert_On_Table_Client.resx">
       <DependentUpon>201909091017234_Add_Field_MessageAlert_On_Table_Client.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201909101228319_Add_Tables_CategorieRemuneration_And_HistoriqueCollecteurRemuneration.resx">
+      <DependentUpon>201909101228319_Add_Tables_CategorieRemuneration_And_HistoriqueCollecteurRemuneration.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -1066,6 +1079,11 @@
     <Content Include="Views\HistoriqueMouvement\FicheCommissionsParPorteFeuilleSimplifiee.vbhtml" />
     <Content Include="Views\HistoriqueMouvement\FicheOperationsParPeriode.vbhtml" />
     <Content Include="Views\Shared\_LayoutManage.vbhtml" />
+    <Content Include="Views\CategorieRemunerations\Create.vbhtml" />
+    <Content Include="Views\CategorieRemunerations\Delete.vbhtml" />
+    <Content Include="Views\CategorieRemunerations\Details.vbhtml" />
+    <Content Include="Views\CategorieRemunerations\Edit.vbhtml" />
+    <Content Include="Views\CategorieRemunerations\Index.vbhtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

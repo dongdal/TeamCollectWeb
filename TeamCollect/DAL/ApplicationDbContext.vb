@@ -45,6 +45,8 @@ Public Class ApplicationDbContext
         'modif du 24-05-2019 pour ajout table transfert
         modelBuilder.Configurations.Add(New CommissionColecteurCfg())
         modelBuilder.Configurations.Add(New HistoriqueCalculCommissionCfg())
+        modelBuilder.Configurations.Add(New CategorieRemunerationCfg())
+        modelBuilder.Configurations.Add(New HistoriqueCollecteurCategorieCfg())
 
     End Sub
 
@@ -83,4 +85,6 @@ Public Class ApplicationDbContext
     Public Property HistoriqueCalculCommission() As DbSet(Of HistoriqueCalculCommission)
     Public Property CommissionColecteur() As DbSet(Of CommissionColecteur)
     Public Property DetailsCommissions() As DbSet(Of DetailsCommissions)
+    Public Property CategorieRemunerations As DbSet(Of CategorieRemuneration)
+    Public Property HistoriqueCollecteurCategories As DbSet(Of HistoriqueCollecteurCategorie)
 End Class

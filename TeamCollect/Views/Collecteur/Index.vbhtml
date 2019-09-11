@@ -46,14 +46,14 @@
             <thead>
                 <tr>
                     <th style="background-color: #304a85"></th>
+                    <th>@Resource.CategorieRemunerationLibelle</th>
                     <th>Nom</th>
                     <th>Prénom </th>
                     <th>Sexe</th>
                     <th>CNI.</th>
                     <th>Tel</th>
-                    <th>Quartier</th>
+                    @*<th>Quartier</th>*@
                     <th>Adresse</th>
-                    <th>Pourcentage</th>
                     <th>Adresse Mac</th>
                     <th>Agence</th>
                 </tr>
@@ -67,14 +67,14 @@
                                 <span class="sr-only">@Resource.Btn_Edit</span>
                             </a>
                         </td>
+                        <td>@item.CategorieRemuneration.Libelle</td>
                         <td>@item.Nom</td>
                         <td>@item.Prenom</td>
                         <td>@item.Sexe</td>
                         <td>@item.CNI</td>
                         <td>@item.Telephone</td>
-                        <td>@item.Quartier</td>
+                        @*<td>@item.Quartier</td>*@
                         <td>@item.Adresse</td>
-                         <td>@item.Pourcentage</td>
                          <td>@item.AdrMac</td>
                         <td>@item.Agence.Libelle</td>
                     </tr>

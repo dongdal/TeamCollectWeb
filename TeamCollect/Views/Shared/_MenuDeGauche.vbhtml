@@ -32,6 +32,9 @@
                                         <a href="@Url.Action("Index", "Grille")" title="Grille de facturation"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Vos Grilles de Fact...</span></a>
                                     </li>
                                     <li>
+                                        <a href="@Url.Action("Index", "CategorieRemunerations")" title="Grille de rémuneration"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Grille de rémuneration</span></a>
+                                    </li>
+                                    <li>
                                         <a href="@Url.Action("Index", "BorneCommission")" title="Borne des Commission"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Borne de Commission</span></a>
                                     </li>
                                     <li>

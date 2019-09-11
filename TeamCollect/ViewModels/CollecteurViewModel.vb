@@ -36,7 +36,11 @@ Public Class CollecteurViewModel
     Public Property Etat As Nullable(Of Integer)
 
 
-
+    <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    <Display(Name:="CategorieRemuneration", ResourceType:=GetType(Resource))>
+    Public Property CategorieRemunerationId As Long
+    Public Overridable Property LesCategorieRemuneration As List(Of SelectListItem)
+    Public Overridable Property CategorieRemuneration As CategorieRemuneration
 
 
     Public Sub New()
@@ -57,11 +61,13 @@ Public Class CollecteurViewModel
             .Quartier = entity.Quartier
             .Pourcentage = entity.Pourcentage
             .DateCreation = entity.DateCreation
+            .CategorieRemuneration = entity.CategorieRemuneration
+            .CategorieRemunerationId = entity.CategorieRemunerationId
             .Etat = entity.Etat
         End With
     End Sub
 
-    Public Function getEntity() As Collecteur
+    Public Function GetEntity() As Collecteur
         Dim entity As New Collecteur
 
         With entity
@@ -78,6 +84,7 @@ Public Class CollecteurViewModel
             .Quartier = Me.Quartier
             .Pourcentage = Me.Pourcentage
             .DateCreation = Me.DateCreation
+            .CategorieRemunerationId = Me.CategorieRemunerationId
             .Etat = Me.Etat
         End With
 

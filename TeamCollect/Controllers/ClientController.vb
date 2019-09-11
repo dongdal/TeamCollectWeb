@@ -66,13 +66,14 @@ Namespace TeamCollect
                 db.Entry(client).State = EntityState.Modified
                 db.SaveChanges()
                 'on enregistre la trace
-                Dim Trans As New TransfertClientPorteFeuille
-                Trans.ClientId = ClientId
-                Trans.UserId = UserId
-                Trans.PorteFeuilleSourceId = entityVM.PorteFeuilleSourceId
-                Trans.PorteFeuilleDestinationId = entityVM.PorteFeuilleId
-                Trans.DateCreation = Now
-                Trans.Etat = True
+                Dim Trans As New TransfertClientPorteFeuille With {
+                    .ClientId = ClientId,
+                    .UserId = UserId,
+                    .PorteFeuilleSourceId = entityVM.PorteFeuilleSourceId,
+                    .PorteFeuilleDestinationId = entityVM.PorteFeuilleId,
+                    .DateCreation = Now,
+                    .Etat = True
+                }
                 db.TransfertClientPorteFeuille.Add(Trans)
                 db.SaveChanges()
 
@@ -86,7 +87,7 @@ Namespace TeamCollect
         Function ListeClient() As ActionResult
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View()
         End Function
 
@@ -105,7 +106,7 @@ Namespace TeamCollect
         End Function
 
         Public Sub LoadCombo(evm As ImportClientViewModel)
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listPersonne = db.Personnes.OfType(Of Collecteur).Where(Function(e) e.AgenceId = userAgenceId).ToList
             Dim listPersonne2 As New List(Of SelectListItem)
             For Each item In listPersonne
@@ -252,19 +253,20 @@ Namespace TeamCollect
                                     Dim JCID = LesJournalCaisse.FirstOrDefault.Id
                                     Dim LibOperation As String = "Solde Initial- au" & DateTime.Now.ToString
 
-                                    Dim parameterList As New List(Of SqlParameter)()
-                                    parameterList.Add(New SqlParameter("@ClientId", ClientId))
-                                    parameterList.Add(New SqlParameter("@CollecteurId", CollecteurId2))
-                                    parameterList.Add(New SqlParameter("@Montant", +Montant))
-                                    parameterList.Add(New SqlParameter("@DateOperation", Now))
-                                    parameterList.Add(New SqlParameter("@Pourcentage", 0))
-                                    parameterList.Add(New SqlParameter("@MontantRetenu", 0))
-                                    parameterList.Add(New SqlParameter("@EstTraiter", 0))
-                                    parameterList.Add(New SqlParameter("@Etat", False))
-                                    parameterList.Add(New SqlParameter("@DateCreation", Now))
-                                    parameterList.Add(New SqlParameter("@UserId", userId))
-                                    parameterList.Add(New SqlParameter("@JournalCaisseId", JCID))
-                                    parameterList.Add(New SqlParameter("@LibelleOperation", LibOperation))
+                                    Dim parameterList As New List(Of SqlParameter) From {
+                                        New SqlParameter("@ClientId", ClientId),
+                                        New SqlParameter("@CollecteurId", CollecteurId2),
+                                        New SqlParameter("@Montant", +Montant),
+                                        New SqlParameter("@DateOperation", Now),
+                                        New SqlParameter("@Pourcentage", 0),
+                                        New SqlParameter("@MontantRetenu", 0),
+                                        New SqlParameter("@EstTraiter", 0),
+                                        New SqlParameter("@Etat", False),
+                                        New SqlParameter("@DateCreation", Now),
+                                        New SqlParameter("@UserId", userId),
+                                        New SqlParameter("@JournalCaisseId", JCID),
+                                        New SqlParameter("@LibelleOperation", LibOperation)
+                                    }
                                     Dim parameters As SqlParameter() = parameterList.ToArray()
                                     Dim myInsertQuery As String = "INSERT INTO HistoriqueMouvement (ClientId, CollecteurId, Montant, DateOperation, MontantRetenu, Pourcentage, EstTraiter, Etat, DateCreation, UserId, JournalCaisseId, LibelleOperation) VALUES (@ClientId, @CollecteurId, @Montant, @DateOperation, @MontantRetenu, @Pourcentage, @EstTraiter, @Etat, @DateCreation, @UserId, @JournalCaisseId, @LibelleOperation)"
                                     db.Database.ExecuteSqlCommand(myInsertQuery, parameters)

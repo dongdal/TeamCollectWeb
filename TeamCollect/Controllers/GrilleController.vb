@@ -1,19 +1,8 @@
-﻿Imports System
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Data.Entity
-Imports System.Linq
+﻿Imports System.Data.Entity
 Imports System.Net
-Imports System.Web
-Imports System.Web.Mvc
 Imports PagedList
-Imports System.Web.SessionState
-Imports System.Web.Script.Serialization
 Imports Microsoft.AspNet.Identity
-Imports Microsoft.AspNet.Identity.EntityFramework
-Imports TeamCollect.My.Resources
 Imports System.Data.Entity.Validation
-Imports System.IO
 
 Namespace TeamCollect
     Public Class GrilleController
