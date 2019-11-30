@@ -876,6 +876,7 @@
     <Content Include="Report\Template\FicheCommissionsParPorteFeuille.rdlc" />
     <Content Include="Report\Template\FicheCommissionsParPorteFeuilleSimplifiee.rdlc" />
     <Content Include="Report\Template\FicheOperationsParPeriode.rdlc" />
+    <Content Include="Report\Template\CommissionCollectriceAvecGrilleRemuneration.rdlc" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1084,6 +1085,8 @@
     <Content Include="Views\CategorieRemunerations\Details.vbhtml" />
     <Content Include="Views\CategorieRemunerations\Edit.vbhtml" />
     <Content Include="Views\CategorieRemunerations\Index.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\CommissionCollectriceAvecGrilleRemuneration.vbhtml" />
+    <Content Include="Views\HistoriqueMouvement\CommissionCollectriceAvecGrilleRemunerationGlobal.vbhtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

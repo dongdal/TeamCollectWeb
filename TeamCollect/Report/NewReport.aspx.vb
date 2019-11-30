@@ -28,7 +28,7 @@ Public Class NewReport
         Return resultDate
     End Function
 
-    Private Function getDataSansId(viewName As String) As DataTable
+    Private Function GetDataSansId(viewName As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
 
@@ -54,7 +54,7 @@ Public Class NewReport
         Return matable
     End Function
 
-    Private Function getData2Param(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String, ByVal parmValue2 As String, ByVal ParaName2 As String) As DataTable
+    Private Function GetData2Param(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String, ByVal parmValue2 As String, ByVal ParaName2 As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
 
@@ -82,7 +82,7 @@ Public Class NewReport
         Return matable
     End Function
 
-    Private Function getDataParam(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String, ByVal parmValue2 As String, ByVal ParaName2 As String, ByVal parmValue3 As String, ByVal ParaName3 As String) As DataTable
+    Private Function GetDataParam(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String, ByVal parmValue2 As String, ByVal ParaName2 As String, ByVal parmValue3 As String, ByVal ParaName3 As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
 
@@ -111,7 +111,7 @@ Public Class NewReport
         Return matable
     End Function
 
-    Private Function getDataParam(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String) As DataTable
+    Private Function GetDataParam(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
 
@@ -139,7 +139,7 @@ Public Class NewReport
     End Function
 
 
-    Private Function getData3Param(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String, ByVal parmValue2 As String, ByVal ParaName2 As String, ByVal parmValue3 As String, ByVal ParaName3 As String) As DataTable
+    Private Function GetData3Param(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String, ByVal parmValue2 As String, ByVal ParaName2 As String, ByVal parmValue3 As String, ByVal ParaName3 As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
 
@@ -168,7 +168,7 @@ Public Class NewReport
         Return matable
     End Function
 
-    Private Function getData(viewName As String, ByVal id_value As String, Optional idName As String = "Id") As DataTable
+    Private Function GetData(viewName As String, ByVal id_value As String, Optional idName As String = "Id") As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
 
@@ -195,7 +195,7 @@ Public Class NewReport
         Return matable
     End Function
 
-    Private Function getDataOperations(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String, AgenceId As String, AgenceIdField As String) As DataTable
+    Private Function GetDataOperations(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String, AgenceId As String, AgenceIdField As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
 
@@ -228,7 +228,7 @@ Public Class NewReport
         Return matable
     End Function
 
-    Private Function getData(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String) As DataTable
+    Private Function GetData(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
 
@@ -260,7 +260,7 @@ Public Class NewReport
         Return matable
     End Function
 
-    Private Function getDataIntervalDate(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String) As DataTable
+    Private Function GetDataIntervalDate(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
 
@@ -321,7 +321,7 @@ Public Class NewReport
         Return matable
     End Function
 
-    Private Function getDataIntervalDateById(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String) As DataTable
+    Private Function GetDataIntervalDateById(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
 
@@ -357,37 +357,44 @@ Public Class NewReport
             Dim type = Request("type")
             Select Case type
 
+                Case "CommissionCollectriceAvecGrilleRemuneration"
+                    Dim Mois = Request("Mois")
+                    Dim Annee = Request("Annee")
+                    Dim AgenceId = Request("AgenceId")
+
+                    ShowReportCommissionCollectriceAvecGrilleRemuneration("CommissionCollectriceAvecGrilleRemuneration", GetDataParam("CommissionCollectriceAvecGrilleRemuneration", AgenceId, "AgenceId", Mois, "Mois", Annee, "Annee"))
+
                 Case "FicheCommissionsCollecteurs"
                     Dim Mois = Request("Mois")
                     Dim Annee = Request("Annee")
                     Dim AgenceId = Request("AgenceId")
 
-                    showReportFicheCommissionsCollecteurs("FicheCommissionsCollecteurs", getDataParam("FicheCommissionsCollecteurs", AgenceId, "AgenceId", Mois, "Mois", Annee, "Annee"))
+                    ShowReportFicheCommissionsCollecteurs("FicheCommissionsCollecteurs", GetDataParam("FicheCommissionsCollecteurs", AgenceId, "AgenceId", Mois, "Mois", Annee, "Annee"))
 
                 Case "FicheCommissionsParPorteFeuille"
                     Dim Mois = Request("Mois")
                     Dim Annee = Request("Annee")
                     Dim AgenceId = Request("AgenceId")
 
-                    showReportFicheCommissionsParPorteFeuille("FicheCommissionsParPorteFeuille", getDataParam("FicheCommissionsParPorteFeuille", AgenceId, "AgenceId", Mois, "Mois", Annee, "Annee"))
+                    ShowReportFicheCommissionsParPorteFeuille("FicheCommissionsParPorteFeuille", GetDataParam("FicheCommissionsParPorteFeuille", AgenceId, "AgenceId", Mois, "Mois", Annee, "Annee"))
 
                 Case "FicheCommissionsParPorteFeuilleSimplifiee"
                     Dim Mois = Request("Mois")
                     Dim Annee = Request("Annee")
                     Dim AgenceId = Request("AgenceId")
 
-                    showReportFicheCommissionsParPorteFeuilleSimplifiee("FicheCommissionsParPorteFeuilleSimplifiee", getDataParam("FicheCommissionsParPorteFeuille", AgenceId, "AgenceId", Mois, "Mois", Annee, "Annee"))
+                    ShowReportFicheCommissionsParPorteFeuilleSimplifiee("FicheCommissionsParPorteFeuilleSimplifiee", GetDataParam("FicheCommissionsParPorteFeuille", AgenceId, "AgenceId", Mois, "Mois", Annee, "Annee"))
 
                 Case "AgiosParClient"
                     Dim Mois = Request("Mois")
                     Dim Annee = Request("Annee")
                     Dim AgenceId = Request("AgenceId")
 
-                    showReportAgiosParClient("AgiosCustomers", getData3Param("AgiosCustomers", AgenceId, "AgenceId", Mois, "Mois", Annee, "Annee"), AgenceId, Mois, Annee)
+                    ShowReportAgiosParClient("AgiosCustomers", GetData3Param("AgiosCustomers", AgenceId, "AgenceId", Mois, "Mois", Annee, "Annee"), AgenceId, Mois, Annee)
 
                 Case "FicheCollecte"
                     Dim JournalCaisseId = Request("JournalCaisseId")
-                    showReportFicheJournaliere("FicheCollecteJournaliere", getData("FicheCollecteJournaliere", JournalCaisseId, "JournalCaisseId"))
+                    ShowReportFicheJournaliere("FicheCollecteJournaliere", GetData("FicheCollecteJournaliere", JournalCaisseId, "JournalCaisseId"))
 
                 Case "FicheCollecteParPeriode"
                     Dim CollecteurId = Request("CollecteurId")
@@ -395,7 +402,7 @@ Public Class NewReport
                     Dim DateDebut = ConvertDate(DateDebutInter)
                     Dim DateFinInter = Request("DateFin")
                     Dim DateFin = ConvertDate(DateFinInter)
-                    ShowReportFicheJournaliereParPeriode("FicheCollecteJournaliereParPeriode", getData("FicheCollecteJournaliereParPeriode", DateDebut, "DateOperation", DateFin, "CollecteurId", CollecteurId), DateDebut, DateFin)
+                    ShowReportFicheJournaliereParPeriode("FicheCollecteJournaliereParPeriode", GetData("FicheCollecteJournaliereParPeriode", DateDebut, "DateOperation", DateFin, "CollecteurId", CollecteurId), DateDebut, DateFin)
 
                 Case "FicheOperationsParPeriode"
                     Dim Operation = Request("Operation")
@@ -406,7 +413,7 @@ Public Class NewReport
                     Dim ChampFiltre = "LibelleOperation"
                     Dim AgenceId = Request("AgenceId")
                     'Operation = Operation & "%"
-                    ShowReportFicheOperationsParPeriode("FicheOperationsParPeriode", getDataOperations("FicheOperationsParPeriode", DateDebut, "DateOperation", DateFin, ChampFiltre, Operation, AgenceId, "AgenceId"), DateDebut, DateFin, Operation)
+                    ShowReportFicheOperationsParPeriode("FicheOperationsParPeriode", GetDataOperations("FicheOperationsParPeriode", DateDebut, "DateOperation", DateFin, ChampFiltre, Operation, AgenceId, "AgenceId"), DateDebut, DateFin, Operation)
 
                 Case "Clt"
                     Dim DateDebutInter = Request("DateDebut")
@@ -417,9 +424,9 @@ Public Class NewReport
                     Dim AgenceId = Request("AgenceId")
 
                     If (IsNothing(AgenceId)) Then
-                        showReportClient("Customers", getDataIntervalDate("Customers", DateDebut, "DateCreation", DateFin))
+                        ShowReportClient("Customers", GetDataIntervalDate("Customers", DateDebut, "DateCreation", DateFin))
                     Else
-                        showReportClient("Customers", getDataIntervalDateById("Customers", DateDebut, "DateCreation", DateFin, "AgenceId", AgenceId))
+                        ShowReportClient("Customers", GetDataIntervalDateById("Customers", DateDebut, "DateCreation", DateFin, "AgenceId", AgenceId))
                     End If
 
                 Case "CltGlobal"
@@ -429,7 +436,7 @@ Public Class NewReport
                     Dim DateFin = ConvertDate(DateFinInter)
 
                     Dim AgenceId = Request("AgenceId")
-                    showReportClient("Customers", getDataIntervalDateById("Customers", DateDebut, "DateCreation", DateFin, "AgenceId", AgenceId))
+                    ShowReportClient("Customers", GetDataIntervalDateById("Customers", DateDebut, "DateCreation", DateFin, "AgenceId", AgenceId))
 
 
                 Case "Colt"
@@ -441,9 +448,9 @@ Public Class NewReport
                     Dim AgenceId = Request("AgenceId")
 
                     If (IsNothing(AgenceId)) Then
-                        showReportClient("Collectors", getDataIntervalDate("Collectors", DateDebut, "DateCreation", DateFin))
+                        ShowReportClient("Collectors", GetDataIntervalDate("Collectors", DateDebut, "DateCreation", DateFin))
                     Else
-                        showReportClient("Collectors", getDataIntervalDateById("Collectors", DateDebut, "DateCreation", DateFin, "AgenceId", AgenceId))
+                        ShowReportClient("Collectors", GetDataIntervalDateById("Collectors", DateDebut, "DateCreation", DateFin, "AgenceId", AgenceId))
                     End If
 
                 Case "ColtGlobal"
@@ -456,9 +463,9 @@ Public Class NewReport
                     'showReportClient("Collectors", getDataIntervalDateById("Collectors", DateDebut, "DateCreation", DateFin, "AgenceId", AgenceId))
 
                     If (IsNothing(AgenceId)) Then
-                        showReportClient("Collectors", getDataIntervalDate("Collectors", DateDebut, "DateCreation", DateFin))
+                        ShowReportClient("Collectors", GetDataIntervalDate("Collectors", DateDebut, "DateCreation", DateFin))
                     Else
-                        showReportClient("Collectors", getDataIntervalDateById("Collectors", DateDebut, "DateCreation", DateFin, "AgenceId", AgenceId))
+                        ShowReportClient("Collectors", GetDataIntervalDateById("Collectors", DateDebut, "DateCreation", DateFin, "AgenceId", AgenceId))
                     End If
 
 
@@ -471,9 +478,9 @@ Public Class NewReport
                     Dim ClientId = Request("ClientId")
 
                     If (String.IsNullOrEmpty(ClientId)) Then
-                        showReportClient("HistoCustomers", getDataIntervalDate("HistoCustomers", DateDebut, "DateOperation", DateFin))
+                        ShowReportClient("HistoCustomers", GetDataIntervalDate("HistoCustomers", DateDebut, "DateOperation", DateFin))
                     Else
-                        showReportClient("HistoCustomers", getDataIntervalDateById("HistoCustomers", DateDebut, "DateOperation", DateFin, "Id", ClientId))
+                        ShowReportClient("HistoCustomers", GetDataIntervalDateById("HistoCustomers", DateDebut, "DateOperation", DateFin, "Id", ClientId))
                     End If
 
                 Case "HistoCltGlobal"
@@ -486,9 +493,9 @@ Public Class NewReport
                     'showReportClient("HistoCustomers", getDataIntervalDateById("HistoCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
 
                     If (IsNothing(AgenceId)) Then
-                        showReportClient("HistoCustomers", getDataIntervalDate("HistoCustomers", DateDebut, "DateOperation", DateFin))
+                        ShowReportClient("HistoCustomers", GetDataIntervalDate("HistoCustomers", DateDebut, "DateOperation", DateFin))
                     Else
-                        showReportClient("HistoCustomers", getDataIntervalDateById("HistoCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
+                        ShowReportClient("HistoCustomers", GetDataIntervalDateById("HistoCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
                     End If
 
 
@@ -502,9 +509,9 @@ Public Class NewReport
                     Dim ClientId = Request("ClientId")
 
                     If (String.IsNullOrEmpty(CollecteurId)) Then
-                        showReportClient("HistoCollectorsDetail", getDataIntervalDate("HistoCollectorsDetail", DateDebut, "DateOperation", DateFin))
+                        ShowReportClient("HistoCollectorsDetail", GetDataIntervalDate("HistoCollectorsDetail", DateDebut, "DateOperation", DateFin))
                     Else
-                        showReportClient("HistoCollectorsDetail", getDataIntervalDateById("HistoCollectorsDetail", DateDebut, "DateOperation", DateFin, "Id", CollecteurId))
+                        ShowReportClient("HistoCollectorsDetail", GetDataIntervalDateById("HistoCollectorsDetail", DateDebut, "DateOperation", DateFin, "Id", CollecteurId))
                     End If
 
                 Case "HistoColParCltGlobal"
@@ -518,9 +525,9 @@ Public Class NewReport
                     'showReportClient("HistoCollectorsDetail", getDataIntervalDateById("HistoCollectorsDetail", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
 
                     If (IsNothing(AgenceId)) Then
-                        showReportClient("HistoCollectorsDetail", getDataIntervalDate("HistoCollectorsDetail", DateDebut, "DateOperation", DateFin))
+                        ShowReportClient("HistoCollectorsDetail", GetDataIntervalDate("HistoCollectorsDetail", DateDebut, "DateOperation", DateFin))
                     Else
-                        showReportClient("HistoCollectorsDetail", getDataIntervalDateById("HistoCollectorsDetail", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
+                        ShowReportClient("HistoCollectorsDetail", GetDataIntervalDateById("HistoCollectorsDetail", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
                     End If
 
 
@@ -533,9 +540,9 @@ Public Class NewReport
                     Dim CollecteurId = Request("CollecteurId")
 
                     If (String.IsNullOrEmpty(CollecteurId)) Then
-                        showReportClient("HistoCollectors", getDataIntervalDate("HistoCollectors", DateDebut, "DateOperation", DateFin))
+                        ShowReportClient("HistoCollectors", GetDataIntervalDate("HistoCollectors", DateDebut, "DateOperation", DateFin))
                     Else
-                        showReportClient("HistoCollectors", getDataIntervalDateById("HistoCollectors", DateDebut, "DateOperation", DateFin, "Id", CollecteurId))
+                        ShowReportClient("HistoCollectors", GetDataIntervalDateById("HistoCollectors", DateDebut, "DateOperation", DateFin, "Id", CollecteurId))
                     End If
 
                 Case "HistoColGlobal"
@@ -548,9 +555,9 @@ Public Class NewReport
                     'showReportClient("HistoCollectors", getDataIntervalDateById("HistoCollectors", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
 
                     If (IsNothing(AgenceId)) Then
-                        showReportClient("HistoCollectors", getDataIntervalDate("HistoCollectors", DateDebut, "DateOperation", DateFin))
+                        ShowReportClient("HistoCollectors", GetDataIntervalDate("HistoCollectors", DateDebut, "DateOperation", DateFin))
                     Else
-                        showReportClient("HistoCollectors", getDataIntervalDateById("HistoCollectors", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
+                        ShowReportClient("HistoCollectors", GetDataIntervalDateById("HistoCollectors", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
                     End If
 
                 Case "RecetteClt"
@@ -562,9 +569,9 @@ Public Class NewReport
                     Dim ClientId = Request("ClientId")
 
                     If (String.IsNullOrEmpty(ClientId)) Then
-                        showReportClient("IncomeByCustomers", getDataIntervalDate("IncomeByCustomers", DateDebut, "DateOperation", DateFin))
+                        ShowReportClient("IncomeByCustomers", GetDataIntervalDate("IncomeByCustomers", DateDebut, "DateOperation", DateFin))
                     Else
-                        showReportClient("IncomeByCustomers", getDataIntervalDateById("IncomeByCustomers", DateDebut, "DateOperation", DateFin, "Id", ClientId))
+                        ShowReportClient("IncomeByCustomers", GetDataIntervalDateById("IncomeByCustomers", DateDebut, "DateOperation", DateFin, "Id", ClientId))
                     End If
 
                 Case "RecetteCltGlobal"
@@ -577,9 +584,9 @@ Public Class NewReport
                     'showReportClient("IncomeByCustomers", getDataIntervalDateById("IncomeByCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
 
                     If (IsNothing(AgenceId)) Then
-                        showReportClient("IncomeByCustomers", getDataIntervalDate("IncomeByCustomers", DateDebut, "DateOperation", DateFin))
+                        ShowReportClient("IncomeByCustomers", GetDataIntervalDate("IncomeByCustomers", DateDebut, "DateOperation", DateFin))
                     Else
-                        showReportClient("IncomeByCustomers", getDataIntervalDateById("IncomeByCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
+                        ShowReportClient("IncomeByCustomers", GetDataIntervalDateById("IncomeByCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
                     End If
 
                 Case "RecetteCol"
@@ -591,9 +598,9 @@ Public Class NewReport
                     Dim CollecteurId = Request("CollecteurId")
 
                     If (String.IsNullOrEmpty(CollecteurId)) Then
-                        showReportClient("IncomeByCollectors", getDataIntervalDate("IncomeByCollectors", DateDebut, "DateOperation", DateFin))
+                        ShowReportClient("IncomeByCollectors", GetDataIntervalDate("IncomeByCollectors", DateDebut, "DateOperation", DateFin))
                     Else
-                        showReportClient("IncomeByCollectors", getDataIntervalDateById("IncomeByCollectors", DateDebut, "DateOperation", DateFin, "Id", CollecteurId))
+                        ShowReportClient("IncomeByCollectors", GetDataIntervalDateById("IncomeByCollectors", DateDebut, "DateOperation", DateFin, "Id", CollecteurId))
                     End If
 
                 Case "RecetteColGlobal"
@@ -606,9 +613,9 @@ Public Class NewReport
                     'showReportClient("IncomeByCollectors", getDataIntervalDateById("IncomeByCollectors", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
 
                     If (IsNothing(AgenceId)) Then
-                        showReportClient("IncomeByCustomers", getDataIntervalDate("IncomeByCustomers", DateDebut, "DateOperation", DateFin))
+                        ShowReportClient("IncomeByCustomers", GetDataIntervalDate("IncomeByCustomers", DateDebut, "DateOperation", DateFin))
                     Else
-                        showReportClient("IncomeByCustomers", getDataIntervalDateById("IncomeByCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
+                        ShowReportClient("IncomeByCustomers", GetDataIntervalDateById("IncomeByCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
                     End If
 
 
@@ -622,9 +629,9 @@ Public Class NewReport
                     'showReportClient("HistoAgence", getDataIntervalDateById("HistoAgence", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
 
                     If (IsNothing(AgenceId)) Then
-                        showReportClient("HistoAgence", getDataIntervalDate("HistoAgence", DateDebut, "DateOperation", DateFin))
+                        ShowReportClient("HistoAgence", GetDataIntervalDate("HistoAgence", DateDebut, "DateOperation", DateFin))
                     Else
-                        showReportClient("HistoAgence", getDataIntervalDateById("HistoAgence", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
+                        ShowReportClient("HistoAgence", GetDataIntervalDateById("HistoAgence", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
                     End If
 
                 Case "HistoBank"
@@ -633,7 +640,7 @@ Public Class NewReport
                     Dim DateFinInter = Request("DateFin")
                     Dim DateFin = ConvertDate(DateFinInter)
 
-                    showReportClient("HistoBank", getDataIntervalDate("HistoAgence", DateDebut, "DateOperation", DateFin))
+                    ShowReportClient("HistoBank", GetDataIntervalDate("HistoAgence", DateDebut, "DateOperation", DateFin))
 
                 Case "LastOperation"
                     Dim DateDebutInter = Request("DateDebut")
@@ -642,56 +649,51 @@ Public Class NewReport
                     Dim DateFin = ConvertDate(DateFinInter)
 
                     Dim AgenceId = Request("AgenceId")
-                    showReportClient("LastOperationOfCustomers", LastOperationIntervalDate("LastOperationOfCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
+                    ShowReportClient("LastOperationOfCustomers", LastOperationIntervalDate("LastOperationOfCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
 
 
                     If (IsNothing(AgenceId)) Then
-                        showReportClient("HistoAgence", getDataIntervalDate("HistoAgence", DateDebut, "DateOperation", DateFin))
-                        showReportClient("LastOperationOfCustomers", LastOperationIntervalDate("LastOperationOfCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
+                        ShowReportClient("HistoAgence", GetDataIntervalDate("HistoAgence", DateDebut, "DateOperation", DateFin))
+                        ShowReportClient("LastOperationOfCustomers", LastOperationIntervalDate("LastOperationOfCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
                     Else
-                        showReportClient("LastOperationOfCustomers", LastOperationIntervalDate("LastOperationOfCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
+                        ShowReportClient("LastOperationOfCustomers", LastOperationIntervalDate("LastOperationOfCustomers", DateDebut, "DateOperation", DateFin, "AgenceId", AgenceId))
                     End If
 
             End Select
         End If
     End Sub
 
-    Private Sub showReportClient(reportName As String, ds As Object)
+    Private Sub ShowReportClient(reportName As String, ds As Object)
         ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
         ReportViewer1.LocalReport.DataSources.Clear()
         ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("dsData", ds))
     End Sub
 
-    Private Sub showReportFicheCommissionsCollecteurs(reportName As String, ds As Object)
+    Private Sub ShowReportCommissionCollectriceAvecGrilleRemuneration(reportName As String, ds As Object)
         ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
         ReportViewer1.LocalReport.DataSources.Clear()
+        ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("DsCommissionCollectriceAvecGrilleRemuneration", ds))
+    End Sub
 
-        'définition des paramètres
-        'Dim P1 As ReportParameter = New ReportParameter("AgenceId", AgenceId)
-        'Dim P2 As ReportParameter = New ReportParameter("Annee", Annee)
-        'Dim P3 As ReportParameter = New ReportParameter("Mois", Mois)
-
-        'Ajout des paramètres
-        'ReportViewer1.LocalReport.SetParameters(New ReportParameter() {P1})
-        'ReportViewer1.LocalReport.SetParameters(New ReportParameter() {P2})
-        'ReportViewer1.LocalReport.SetParameters(New ReportParameter() {P3})
-
+    Private Sub ShowReportFicheCommissionsCollecteurs(reportName As String, ds As Object)
+        ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
+        ReportViewer1.LocalReport.DataSources.Clear()
         ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("DsFicheCommissionsCollecteurs", ds))
     End Sub
 
-    Private Sub showReportFicheCommissionsParPorteFeuille(reportName As String, ds As Object)
+    Private Sub ShowReportFicheCommissionsParPorteFeuille(reportName As String, ds As Object)
         ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
         ReportViewer1.LocalReport.DataSources.Clear()
         ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("DsFicheCommissionsParPorteFeuille", ds))
     End Sub
 
-    Private Sub showReportFicheCommissionsParPorteFeuilleSimplifiee(reportName As String, ds As Object)
+    Private Sub ShowReportFicheCommissionsParPorteFeuilleSimplifiee(reportName As String, ds As Object)
         ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
         ReportViewer1.LocalReport.DataSources.Clear()
         ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("DsFicheCommissionsParPorteFeuilleSimplifiee", ds))
     End Sub
 
-    Private Sub showReportAgiosParClient(reportName As String, ds As Object, AgenceId As Long, Mois As Long, Annee As Long)
+    Private Sub ShowReportAgiosParClient(reportName As String, ds As Object, AgenceId As Long, Mois As Long, Annee As Long)
         ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
         ReportViewer1.LocalReport.DataSources.Clear()
 
@@ -708,7 +710,7 @@ Public Class NewReport
         ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("dsData", ds))
     End Sub
 
-    Private Sub showReportFicheJournaliere(reportName As String, ds As Object)
+    Private Sub ShowReportFicheJournaliere(reportName As String, ds As Object)
         ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
         ReportViewer1.LocalReport.DataSources.Clear()
 
@@ -783,7 +785,7 @@ End Class
 '        Return resultDate
 '    End Function
 
-'    Private Function getDataSansId(viewName As String) As DataTable
+'    Private Function GetDataSansId(viewName As String) As DataTable
 '        Dim matable As DataTable = Nothing
 '        Dim colonne As String = ""
 
@@ -809,7 +811,7 @@ End Class
 '        Return matable
 '    End Function
 
-'    Private Function getData2Param(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String, ByVal parmValue2 As String, ByVal ParaName2 As String) As DataTable
+'    Private Function GetData2Param(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String, ByVal parmValue2 As String, ByVal ParaName2 As String) As DataTable
 '        Dim matable As DataTable = Nothing
 '        Dim colonne As String = ""
 
@@ -837,7 +839,7 @@ End Class
 '        Return matable
 '    End Function
 
-'    Private Function getData3Param(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String, ByVal parmValue2 As String, ByVal ParaName2 As String, ByVal parmValue3 As String, ByVal ParaName3 As String) As DataTable
+'    Private Function GetData3Param(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String, ByVal parmValue2 As String, ByVal ParaName2 As String, ByVal parmValue3 As String, ByVal ParaName3 As String) As DataTable
 '        Dim matable As DataTable = Nothing
 '        Dim colonne As String = ""
 
@@ -866,7 +868,7 @@ End Class
 '        Return matable
 '    End Function
 
-'    Private Function getData(viewName As String, ByVal id_value As String, Optional idName As String = "Id") As DataTable
+'    Private Function GetData(viewName As String, ByVal id_value As String, Optional idName As String = "Id") As DataTable
 '        Dim matable As DataTable = Nothing
 '        Dim colonne As String = ""
 
@@ -893,7 +895,7 @@ End Class
 '        Return matable
 '    End Function
 
-'    Private Function getDataIntervalDate(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String) As DataTable
+'    Private Function GetDataIntervalDate(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String) As DataTable
 '        Dim matable As DataTable = Nothing
 '        Dim colonne As String = ""
 
@@ -954,7 +956,7 @@ End Class
 '        Return matable
 '    End Function
 
-'    Private Function getDataIntervalDateById(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String) As DataTable
+'    Private Function GetDataIntervalDateById(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String) As DataTable
 '        Dim matable As DataTable = Nothing
 '        Dim colonne As String = ""
 
@@ -1197,13 +1199,13 @@ End Class
 '        End If
 '    End Sub
 
-'    Private Sub showReportClient(reportName As String, ds As Object)
+'    Private Sub ShowReportClient(reportName As String, ds As Object)
 '        ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
 '        ReportViewer1.LocalReport.DataSources.Clear()
 '        ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("dsData", ds))
 '    End Sub
 
-'    Private Sub showReportAgiosParClient(reportName As String, ds As Object, AgenceId As Long, Mois As Long, Annee As Long)
+'    Private Sub ShowReportAgiosParClient(reportName As String, ds As Object, AgenceId As Long, Mois As Long, Annee As Long)
 '        ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
 '        ReportViewer1.LocalReport.DataSources.Clear()
 
@@ -1220,7 +1222,7 @@ End Class
 '        ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("dsData", ds))
 '    End Sub
 
-'    Private Sub showReportFicheJournaliere(reportName As String, ds As Object)
+'    Private Sub ShowReportFicheJournaliere(reportName As String, ds As Object)
 '        ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
 '        ReportViewer1.LocalReport.DataSources.Clear()
 

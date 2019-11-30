@@ -23,7 +23,7 @@ Public Class HomeController
 
     Private db As New ApplicationDbContext
 
-    <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR,ADMINISTRATEUR")>
+    <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR,ADMINISTRATEUR,MANAGER")>
     Function Index(sortOrder As String, currentFilter As String, searchString As String, page As Integer?, AgenceId As Long?) As ActionResult
 
         Dim cmd As String = String.Format("select top (5) SUM(Montant) as Montant,SUM(PartBANK) as PartBANK,SUM(PartCLIENT) as PartCLIENT,Min(Libelle) as Agence, Min(Nom) as Nom,  Min(Prenom) as Prenom,  Min(Sexe) as Sexe  from dbo.IncomeByCollectors group by Id order by Montant Desc")

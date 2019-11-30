@@ -56,6 +56,7 @@
                     <th>Adresse</th>
                     <th>Adresse Mac</th>
                     <th>Agence</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -75,8 +76,16 @@
                         <td>@item.Telephone</td>
                         @*<td>@item.Quartier</td>*@
                         <td>@item.Adresse</td>
-                         <td>@item.AdrMac</td>
+                        <td>@item.AdrMac</td>
                         <td>@item.Agence.Libelle</td>
+                        <td>
+                            @If User.IsInAnyRole("MANAGER") Then
+                                @<a class="btn btn-primary btn-xs right" data-toggle="tooltip" data-placement="left" title="@Resource.Btn_Edit" href="@Url.Action("Edit", New With {.id = item.Id})">
+                                    <i class="fa fa-pencil"></i>
+                                    <span class="sr-only">@Resource.Btn_Edit</span>
+                                </a>
+                            End If
+                        </td>
                     </tr>
                 Next
 

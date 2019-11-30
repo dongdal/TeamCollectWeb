@@ -39,7 +39,7 @@ Namespace TeamCollect
         End Function
 
         ' GET: /Collecteur/
-        <LocalizedAuthorize(Roles:="ADMINISTRATEUR")>
+        <LocalizedAuthorize(Roles:="ADMINISTRATEUR,MANAGER")>
         Function Index(sortOrder As String, currentFilter As String, searchString As String, page As Integer?, AgenceId As Long?) As ActionResult
             'Dim exercices = db.Exercices.Include(Function(e) e.User)
             'Return View(exercices.ToList())
@@ -213,7 +213,7 @@ Namespace TeamCollect
         End Function
 
         ' GET: /Collecteur/Edit/5
-        <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
+        <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR,MANAGER")>
         Function Edit(ByVal id As Long?) As ActionResult
             If IsNothing(id) Then
                 Return New HttpStatusCodeResult(HttpStatusCode.BadRequest)
@@ -240,7 +240,7 @@ Namespace TeamCollect
         'plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
         <HttpPost()>
         <ValidateAntiForgeryToken()>
-        <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
+        <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR,MANAGER")>
         Function Edit(ByVal collecteur As CollecteurViewModel) As ActionResult
             Dim categorieRemuneration = db.CategorieRemunerations.Find(collecteur.CategorieRemunerationId)
             If IsNothing(categorieRemuneration) Then
@@ -259,27 +259,30 @@ Namespace TeamCollect
                             OldHistoriqueCollecteurCategorie.StatutExistant = False
                             db.Entry(OldHistoriqueCollecteurCategorie).State = EntityState.Modified
                         End If
+                    ElseIf IsNothing(OldHistoriqueCollecteurCategorie.Id) Then
+                        Dim NewHistoriqueCollecteurCategorie As New HistoriqueCollecteurCategorie With {
+                            .CategorieRemunerationId = categorieRemuneration.Id,
+                            .CollecteurId = entity.Id,
+                            .Libelle = categorieRemuneration.Libelle,
+                            .SalaireDeBase = categorieRemuneration.SalaireDeBase,
+                            .CommissionMinimale = categorieRemuneration.CommissionMinimale,
+                            .PourcentageCommission = categorieRemuneration.PourcentageCommission,
+                            .StatutExistant = True,
+                            .DateCreation = DateTime.Now,
+                            .UserId = GetCurrentUser.Id
+                        }
+                        db.HistoriqueCollecteurCategories.Add(NewHistoriqueCollecteurCategorie)
+                        Try
+                            db.SaveChanges()
+                        Catch ex As DbEntityValidationException
+                            Util.GetError(ex, ModelState)
+                        Catch ex As Exception
+                            Util.GetError(ex, ModelState)
+                        End Try
                     End If
-
-                    Dim NewHistoriqueCollecteurCategorie As New HistoriqueCollecteurCategorie With {
-                        .CategorieRemunerationId = categorieRemuneration.Id,
-                        .CollecteurId = entity.Id,
-                        .Libelle = categorieRemuneration.Libelle,
-                        .SalaireDeBase = categorieRemuneration.SalaireDeBase,
-                        .CommissionMinimale = categorieRemuneration.CommissionMinimale,
-                        .PourcentageCommission = categorieRemuneration.PourcentageCommission,
-                        .StatutExistant = True,
-                        .DateCreation = DateTime.Now,
-                        .UserId = GetCurrentUser.Id
-                    }
-                    db.HistoriqueCollecteurCategories.Add(NewHistoriqueCollecteurCategorie)
-                    Try
-                        db.SaveChanges()
-                    Catch ex As DbEntityValidationException
-                        Util.GetError(ex, ModelState)
-                    Catch ex As Exception
-                        Util.GetError(ex, ModelState)
-                    End Try
+                    If User.IsInRole("MANAGER") Then
+                        Return RedirectToAction("Index")
+                    End If
                     Return RedirectToAction("IndexAgence")
                 Catch ex As DbEntityValidationException
                     Util.GetError(ex, ModelState)

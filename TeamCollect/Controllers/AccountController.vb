@@ -324,7 +324,7 @@ Public Class AccountController
 
     '
     ' GET: /Account/Manage
-    <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
+    <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
     Public Function Manage(ByVal message As ManageMessageId?) As ActionResult
         ViewData("StatusMessage") =
             If(message = ManageMessageId.ChangePasswordSuccess, "Votre mot de passe a été modifié.",
@@ -342,7 +342,7 @@ Public Class AccountController
     ' POST: /Account/Manage
     <HttpPost>
     <ValidateAntiForgeryToken>
-    <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
+    <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
     Public Async Function Manage(model As ManageUserViewModel) As Task(Of ActionResult)
         Dim hasLocalLogin As Boolean = HasPassword()
         ViewBag.HasLocalPassword = hasLocalLogin

@@ -84,6 +84,7 @@ Namespace TeamCollect
         End Function
 
         ' GET:/Rapport
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function ListeClient() As ActionResult
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
@@ -91,6 +92,7 @@ Namespace TeamCollect
             Return View()
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,MANAGER")>
         Function ListeClientGlobal() As ActionResult
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
@@ -333,7 +335,7 @@ Namespace TeamCollect
 
 
         ' GET: /Collecteur/
-        <LocalizedAuthorize(Roles:="ADMINISTRATEUR")>
+        <LocalizedAuthorize(Roles:="ADMINISTRATEUR,MANAGER")>
         Function Index(sortOrder As String, currentFilter As String, searchString As String, page As Integer?, AgenceId As Long?) As ActionResult
             'Dim exercices = db.Exercices.Include(Function(e) e.User)
             'Return View(exercices.ToList())

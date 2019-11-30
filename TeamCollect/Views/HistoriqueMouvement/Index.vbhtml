@@ -114,18 +114,26 @@ Else
                             </td>
                         </tr>
                     Next
-                         <tr role="row" class="odd parent" style="background-color:#eeeeee">
-                             <td></td>
-                             <td style="color: #304a85; font-size:large">TOTAL</td>
-                             <td></td>
-                             <td style="background-color: #304a85; font-size: large">@String.Format("{0:0,0.00}", ViewBag.masom.ToString) Fcfa</td>
+                    <tr role="row" class="odd parent" style="background-color:#eeeeee">
+                        <td></td>
+                        <td style="color: #304a85; font-size:large">TOTAL</td>
+                        <td></td>
+                        <td style="background-color: #304a85; font-size: large">@String.Format("{0:0,0.00}", ViewBag.masom.ToString) Fcfa</td>
 
-                             <td style="color: #304a85; font-size:large"></td>
-                             <td style="background-color: #304a85; font-size: large"></td>
-                         </tr>
+                        <td style="color: #304a85; font-size:large"></td>
+                        <td style="background-color: #304a85; font-size: large"></td>
+                    </tr>
                 </tbody>
             </table>
         </div>
+
+
+        @If User.IsInAnyRole("ADMINISTRATEUR,MANAGER") Then
+            @<div>
+                @Html.ActionLink("Retour", "Index", "Collecteur", Nothing, New With {.class = "btn btn-default btn-sm"})
+            </div>
+        End If
+
         @Html.PagedListPager(Model, Function(page) Url.Action("Index", New With {.page = page, .ClientId = ViewBag.ClientId, .CollecteurId = ViewBag.CollecteurId, .dateDebut = ViewBag.dateDebut, .dateFin = ViewBag.dateFin, .sortOrder = ViewBag.CurrentSort, .currentFilter = ViewBag.CurrentFilter, .tab = ViewBag.activeTab}))
         Page @IIf(Model.PageCount < Model.PageNumber, 0, Model.PageNumber) sur @Model.PageCount ( @ViewBag.EnregCount Enregistrement(s))
 

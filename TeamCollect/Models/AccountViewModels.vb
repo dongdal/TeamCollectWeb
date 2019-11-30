@@ -197,9 +197,9 @@ Public Class SelectUserRolesViewModel
         Dim allRoles = (From e In Db.Roles Select e).OrderBy(Function(r) r.Name).ToList
        
         If (user.Personne.AgenceId.HasValue) Then
-            allRoles = allRoles.Where(Function(u) u.Name = "CHEFCOLLECTEUR" Or u.Name = "COLLECTEUR").ToList
+            allRoles = allRoles.Where(Function(u) u.Name.Contains("CHEFCOLLECTEUR") Or u.Name.Contains("COLLECTEUR")).ToList
         Else
-            allRoles = allRoles.Where(Function(u) u.Name = "ADMINISTRATEUR").ToList
+            allRoles = allRoles.Where(Function(u) u.Name.Contains("ADMINISTRATEUR") Or u.Name.Contains("MANAGER")).ToList
         End If
 
         For Each role As IdentityRole In allRoles

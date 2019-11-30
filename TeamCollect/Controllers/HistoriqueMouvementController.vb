@@ -22,7 +22,7 @@ Namespace TeamCollect
         '    Return View(historiquemouvements.ToList())
         'End Function
 
-        Private Function getCurrentUser() As ApplicationUser
+        Private Function GetCurrentUser() As ApplicationUser
             Dim id = User.Identity.GetUserId
             Dim aspuser = db.Users.Find(id)
             Return aspuser
@@ -35,17 +35,19 @@ Namespace TeamCollect
             Dim Listemois As New List(Of SelectListItem)
 
             For i As Integer = 1 To 12
-                Dim li As New SelectListItem
-                li.Value = i
-                li.Text = i
+                Dim li As New SelectListItem With {
+                    .Value = i,
+                    .Text = i
+                }
                 Listemois.Add(li)
             Next
 
 
             For i As Integer = Now.Year To Now.Year + 7
-                Dim li As New SelectListItem
-                li.Value = i
-                li.Text = i
+                Dim li As New SelectListItem With {
+                    .Value = i,
+                    .Text = i
+                }
                 ListeAnnee.Add(li)
             Next
 
@@ -53,11 +55,12 @@ Namespace TeamCollect
             VM.ListeAnnee = ListeAnnee
         End Sub
 
+        <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
         Function FicheCollecteJournaliere() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             'Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
 
             Dim LesJournauxCaisse = db.JournalCaisses.ToList
@@ -68,16 +71,18 @@ Namespace TeamCollect
             Next
             entityVM.IDsJournalCaisse = LesJournauxCaisse2
             '---------------------------
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function FicheCollecteJournaliereParPeriode() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId As Long = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId As Long = GetCurrentUser.Personne.AgenceId
             'Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
 
             Dim Collecteurs = (From collecteur In db.Collecteurs Select collecteur).ToList
@@ -99,28 +104,30 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            'ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function FicheCommissionsParPorteFeuille() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
             LoadComboStat(entityVM)
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
 
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function FicheOperationsParPeriode() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId As Long = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId As Long = GetCurrentUser.Personne.AgenceId
             'Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
 
             Dim Collecteurs = (From collecteur In db.Collecteurs Select collecteur).ToList
@@ -129,50 +136,92 @@ Namespace TeamCollect
                 Collecteurs = Collecteurs.Where(Function(e) e.AgenceId = userAgenceId).ToList
             End If
 
-            Dim ListeOperations As New List(Of SelectListItem)
-            ListeOperations.Add(New SelectListItem With {.Value = "RETRAIT", .Text = "RETRAITS"})
-            ListeOperations.Add(New SelectListItem With {.Value = "VENTE CARNET", .Text = "VENTE DE CARNETS"})
+            Dim ListeOperations As New List(Of SelectListItem) From {
+                New SelectListItem With {.Value = "RETRAIT", .Text = "RETRAITS"},
+                New SelectListItem With {.Value = "VENTE CARNET", .Text = "VENTE DE CARNETS"}
+            }
             entityVM.ListeOperations = ListeOperations
             '---------------------------
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function FicheCommissionsParPorteFeuilleSimplifiee() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
             LoadComboStat(entityVM)
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
 
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,MANAGER")>
+        Function CommissionCollectriceAvecGrilleRemunerationGlobal() As ActionResult
+
+            Dim entityVM As New StatViewModel
+            '---------------les collecteurs-----------------
+            LoadComboStat(entityVM)
+
+            ViewBag.dateDebut = Now.Date.ToString("d")
+            ViewBag.dateFin = Now.Date.ToString("d")
+
+            '----------------on recupère la liste des agences pour filtrer---------------
+            Dim Agences = db.Agences.OfType(Of Agence)().ToList
+            Dim LesAgences As New List(Of SelectListItem)
+            For Each item In Agences
+                LesAgences.Add(New SelectListItem With {.Value = item.Id, .Text = item.Societe.Libelle & ":-- [" & item.Libelle & "] --"})
+            Next
+            ViewBag.LesAgences = LesAgences.ToList
+
+            'Dim userAgenceId = GetCurrentUser.Personne.AgenceId
+            'ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
+
+            Return View(entityVM)
+
+        End Function
+
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
+        Function CommissionCollectriceAvecGrilleRemuneration() As ActionResult
+
+            Dim entityVM As New StatViewModel
+            '---------------les collecteurs-----------------
+            LoadComboStat(entityVM)
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
+
+            Return View(entityVM)
+
+        End Function
+
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function FicheCommissionsCollecteurs() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
             LoadComboStat(entityVM)
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
 
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function AgiosParClient() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
             LoadComboStat(entityVM)
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
 
             Return View(entityVM)
 
@@ -180,11 +229,12 @@ Namespace TeamCollect
 
 
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
         Function HistoriqueClient() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
             Dim listPersonne2 As New List(Of SelectListItem)
             For Each item In listcollecteur
@@ -204,16 +254,17 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function HistoriqueClientGlobal() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
             Dim listPersonne2 As New List(Of SelectListItem)
             For Each item In listcollecteur
@@ -241,16 +292,17 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function HistoriqueColParClient() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
 
             Dim listPersonne2 As New List(Of SelectListItem)
@@ -271,16 +323,17 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function HistoriqueColParClientGlobal() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
 
             Dim listPersonne2 As New List(Of SelectListItem)
@@ -309,11 +362,12 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function HistoriqueAgence() As ActionResult
 
             Dim entityVM As New StatViewModel
@@ -321,11 +375,12 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function HistoriqueBank() As ActionResult
 
             Dim entityVM As New StatViewModel
@@ -337,11 +392,12 @@ Namespace TeamCollect
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function HistoriqueCollecteur() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
 
             Dim listPersonne2 As New List(Of SelectListItem)
@@ -362,16 +418,17 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function HistoriqueCollecteurGlobal() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
 
             Dim listPersonne2 As New List(Of SelectListItem)
@@ -400,16 +457,17 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function RecetteClient() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
 
             Dim listPersonne2 As New List(Of SelectListItem)
@@ -430,16 +488,17 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function RecetteClientGlobal() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
 
             Dim listPersonne2 As New List(Of SelectListItem)
@@ -468,16 +527,17 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function RecetteCollecteur() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
 
             Dim listPersonne2 As New List(Of SelectListItem)
@@ -500,16 +560,17 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function RecetteCollecteurGlobal() As ActionResult
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
 
             Dim listPersonne2 As New List(Of SelectListItem)
@@ -538,20 +599,21 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View(entityVM)
 
         End Function
 
         ' GET: /Rapport
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function ClientInactif() As ActionResult
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = getCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View()
         End Function
         ' GET: /Collecteur/
-        <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR,ADMINISTRATEUR")>
+        <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR,ADMINISTRATEUR,MANAGER")>
         Function Index(page As Integer?, dateDebut As String, dateFin As String, ClientId As Long?, CollecteurId As Long?) As ActionResult
 
 
@@ -637,11 +699,13 @@ Namespace TeamCollect
             If IsNothing(HistoMvt) Then
                 Return HttpNotFound()
             End If
-            Dim entityVM As New AnnulationViewModel
-            entityVM.Id = HistoMvt.Id
-            entityVM.DateDebut = dateDebut
-            entityVM.DateFin = dateFin
-            entityVM.CollecteurId = CollecteurId
+
+            Dim entityVM As New AnnulationViewModel With {
+                .Id = HistoMvt.Id,
+                .DateDebut = dateDebut,
+                .DateFin = dateFin,
+                .CollecteurId = CollecteurId
+            }
 
             Return View(entityVM)
         End Function
@@ -679,9 +743,10 @@ Namespace TeamCollect
             'db.SaveChanges()
             Dim Extour As Boolean = True
             Dim myUpdateQuery As String = "Update HistoriqueMouvement Set Extourner = @Extour Where Id=@Id"
-            Dim parameterList1 As New List(Of SqlParameter)()
-            parameterList1.Add(New SqlParameter("@Id", HistoMvt.Id))
-            parameterList1.Add(New SqlParameter("@Extour", Extour))
+            Dim parameterList1 As New List(Of SqlParameter) From {
+                New SqlParameter("@Id", HistoMvt.Id),
+                New SqlParameter("@Extour", Extour)
+            }
             Dim parameters1 As SqlParameter() = parameterList1.ToArray()
             db.Database.ExecuteSqlCommand(myUpdateQuery, parameters1)
             'If Not (db.Database.ExecuteSqlCommand(myUpdateQuery, parameters1)) Then
@@ -689,10 +754,11 @@ Namespace TeamCollect
             '    Return View(entityVM)
             'End If
 
-            Dim Annul As New Annulation
-            Annul.DateAnnulation = Now
-            Annul.Motif = Motif
-            Annul.HistoriqueMouvementId = HistoMvt.Id
+            Dim Annul As New Annulation With {
+                .DateAnnulation = Now,
+                .Motif = Motif,
+                .HistoriqueMouvementId = HistoMvt.Id
+            }
 
             db.Annulation.Add(Annul)
             'db.SaveChanges()
@@ -730,19 +796,20 @@ Namespace TeamCollect
 
             Dim LibOperation As String = "ANNULATION COLLECT- " & HistoMvt.Id & "de " & Montant & "Du " & DateCollect
 
-            Dim parameterList As New List(Of SqlParameter)()
-            parameterList.Add(New SqlParameter("@ClientId", clientId))
-            parameterList.Add(New SqlParameter("@CollecteurId", CollecteurId))
-            parameterList.Add(New SqlParameter("@Montant", -Montant))
-            parameterList.Add(New SqlParameter("@DateOperation", Now))
-            parameterList.Add(New SqlParameter("@Pourcentage", 0))
-            parameterList.Add(New SqlParameter("@MontantRetenu", 0))
-            parameterList.Add(New SqlParameter("@EstTraiter", 0))
-            parameterList.Add(New SqlParameter("@Etat", False))
-            parameterList.Add(New SqlParameter("@DateCreation", Now))
-            parameterList.Add(New SqlParameter("@UserId", UserId))
-            parameterList.Add(New SqlParameter("@JournalCaisseId", JCID))
-            parameterList.Add(New SqlParameter("@LibelleOperation", LibOperation))
+            Dim parameterList As New List(Of SqlParameter) From {
+                New SqlParameter("@ClientId", clientId),
+                New SqlParameter("@CollecteurId", CollecteurId),
+                New SqlParameter("@Montant", -Montant),
+                New SqlParameter("@DateOperation", Now),
+                New SqlParameter("@Pourcentage", 0),
+                New SqlParameter("@MontantRetenu", 0),
+                New SqlParameter("@EstTraiter", 0),
+                New SqlParameter("@Etat", False),
+                New SqlParameter("@DateCreation", Now),
+                New SqlParameter("@UserId", UserId),
+                New SqlParameter("@JournalCaisseId", JCID),
+                New SqlParameter("@LibelleOperation", LibOperation)
+            }
             Dim parameters As SqlParameter() = parameterList.ToArray()
 
             Try
@@ -759,7 +826,7 @@ Namespace TeamCollect
 
                     'db.SaveChanges()
 
-                    Return RedirectToAction("Index", "HistoriqueMouvement", New With {.CollecteurId = CollecteurId, .dateDebut = entityVM.DateDebut, .dateFin = entityVM.DateFin})
+                    Return RedirectToAction("Index", "HistoriqueMouvement", New With {CollecteurId, entityVM.DateDebut, entityVM.DateFin})
 
                     'Return Ok(historique)
                 Else
@@ -782,7 +849,7 @@ Namespace TeamCollect
         <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR,ADMINISTRATEUR")>
         Function Export(page As Integer?, dateDebut As String, dateFin As String, ClientId As Long?, TypeExport As Long?) As ActionResult
 
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
 
             'on test si une caisse est ouverte
             Dim nbreDouverture = db.JournalCaisses.OfType(Of JournalCaisse).Where(Function(h) h.Id = -1 Or (Not h.DateOuverture Is Nothing And h.DateCloture Is Nothing And h.Collecteur.AgenceId = userAgenceId)).Count
@@ -822,8 +889,9 @@ Namespace TeamCollect
                         Next
 
                         'generation du fichier excel pour tous les clients ayant un numero de compte
-                        Dim gv = New GridView
-                        gv.DataSource = entities.Where(Function(h) h.Client.NumeroCompte IsNot Nothing)
+                        Dim gv = New GridView With {
+                            .DataSource = entities.Where(Function(h) h.Client.NumeroCompte IsNot Nothing)
+                        }
                         gv.DataBind()
 
                         Dim dt = New DataTable("ExportClient")
@@ -903,8 +971,9 @@ Namespace TeamCollect
                         If Not (IsNothing(TypeExport)) Then
 
                             'generation du fichier excel pour le client
-                            Dim gv = New GridView()
-                            gv.DataSource = entities.Where(Function(h) h.Client.NumeroCompte IsNot Nothing)
+                            Dim gv = New GridView With {
+                                .DataSource = entities.Where(Function(h) h.Client.NumeroCompte IsNot Nothing)
+                            }
                             gv.DataBind()
 
                             Dim dt = New DataTable()
@@ -1020,9 +1089,10 @@ Namespace TeamCollect
                     'on envoie le resultat de la requette à la vue
                     Dim Listresult As New List(Of HistoriqueMouvement)
                     For Each Item In entities
-                        Dim result = New HistoriqueMouvement
-                        result.Client = Item.Client
-                        result.Montant = Item.Total
+                        Dim result = New HistoriqueMouvement With {
+                            .Client = Item.Client,
+                            .Montant = Item.Total
+                        }
                         Listresult.Add(result)
                     Next
 
