@@ -98,11 +98,23 @@ Else
                             @*<td>@ConfigurationManager.AppSettings("CollecteurSystemeId")</td>*@
                             <td>@item.Collecteur.Nom &nbsp; @item.Collecteur.Prenom </td>
                             <td style="text-align:right">
-                                @if (item.Extourner = True) Then
+                                @if (item.Extourner = True Or item.JournalCaisse.Etat = 1) Then
                                     'ElseIf (item.DateOperation.Value.Date = Now.Date) Then
                                 Else
                                     If (item.LibelleOperation.Contains("CASH-IN")) Then
-                                        @<a class="btn btn-primary btn-xs right" data-toggle="tooltip" data-placement="left" title="Annuler" href="@Url.Action("Annulation", New With {.id = item.Id, .CollecteurId = item.CollecteurId, .dateDebut = ViewBag.dateDebut.ToString, .dateFin = ViewBag.dateFin.ToString})">
+                                        @<a class="btn btn-primary btn-xs right" data-toggle="tooltip" data-placement="left" title="Annuler une collecte" href="@Url.Action("Annulation", New With {.id = item.Id, .CollecteurId = item.CollecteurId, .dateDebut = ViewBag.dateDebut.ToString, .dateFin = ViewBag.dateFin.ToString})">
+                                            <i class="fa fa-remove"> Extourner</i>
+                                            <span class="sr-only">Annuler</span>
+                                        </a>
+                                    End If
+                                    If (item.LibelleOperation.Contains("RETRAIT")) Then
+                                        @<a class="btn btn-primary btn-xs right" data-toggle="tooltip" data-placement="left" title="Annuler un retrait" href="@Url.Action("AnnulationRetrait", New With {.id = item.Id, .CollecteurId = item.CollecteurId, .dateDebut = ViewBag.dateDebut.ToString, .dateFin = ViewBag.dateFin.ToString})">
+                                            <i class="fa fa-remove"> Extourner</i>
+                                            <span class="sr-only">Annuler</span>
+                                        </a>
+                                    End If
+                                    If (item.LibelleOperation.Contains("VENTE")) Then
+                                        @<a class="btn btn-primary btn-xs right" data-toggle="tooltip" data-placement="left" title="Annuler une vente de carnet" href="@Url.Action("AnnulationVente", New With {.id = item.Id, .CollecteurId = item.CollecteurId, .dateDebut = ViewBag.dateDebut.ToString, .dateFin = ViewBag.dateFin.ToString})">
                                             <i class="fa fa-remove"> Extourner</i>
                                             <span class="sr-only">Annuler</span>
                                         </a>
@@ -130,7 +142,8 @@ Else
 
         @If User.IsInAnyRole("ADMINISTRATEUR,MANAGER") Then
             @<div>
-                @Html.ActionLink("Retour", "Index", "Collecteur", Nothing, New With {.class = "btn btn-default btn-sm"})
+                @Html.ActionLink("Retour à la liste des clients", "IndexAgence", "Client", Nothing, New With {.class = "btn btn-default btn-sm"})
+                @Html.ActionLink("Retour à la liste de collecteurs", "Index", "Collecteur", Nothing, New With {.class = "btn btn-default btn-sm"})
             </div>
         End If
 

@@ -170,7 +170,7 @@ Namespace TeamCollect
         <HttpPost()>
         <ValidateAntiForgeryToken()>
         <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
-        Function Edit(ByVal journalcaisse As JournalCaisseViewModel) As ActionResult
+        Function Edit(ByVal journalcaisse As JournalCaisseViewModel) As JsonResult
             If ModelState.IsValid Then
                 Dim entity = journalcaisse.getEntity()
                 entity.DateCloture = Now.Date
@@ -186,11 +186,13 @@ Namespace TeamCollect
 
                 Try
                     db.SaveChanges()
-                    Return RedirectToAction("Index")
+                    Return Json(New With {.Result = "OK"})
                 Catch ex As DbEntityValidationException
                     Util.GetError(ex, ModelState)
+                    Return Json(New With {.Result = "Error: Une erreur est survenue pendant l'exécution de la requête: veuillez contacter l'administrateur."})
                 Catch ex As Exception
                     Util.GetError(ex, ModelState)
+                    Return Json(New With {.Result = "Error: Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur."})
                 End Try
             End If
 
@@ -202,7 +204,7 @@ Namespace TeamCollect
             Next
             journalcaisse.IDsCollecteur = listPersonne2
 
-            Return View(journalcaisse)
+            Return Json(New With {.Result = "Error"})
         End Function
 
         '' GET: /JournalCaisse/Delete/5

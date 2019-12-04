@@ -11,7 +11,6 @@ Public Class NewReport
         End Get
     End Property
 
-
     Private Function ConvertDate(dateConvert As Date) As String
         Dim mydate() = dateConvert.ToString.Split(" ")
         Dim time = mydate(1)
@@ -228,6 +227,35 @@ Public Class NewReport
         Return matable
     End Function
 
+    Private Function GetDataExtraFilter(viewName As String, ByVal datedebutValue As String, ByVal datefilter As String, ByVal datefinValue As String, ByVal ExtraFilter As String, ByVal ExtraFilterIdValue As String) As DataTable
+        Dim matable As DataTable = Nothing
+        Dim colonne As String = ""
+
+        Dim cmd As String = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {1} = {2}) ", viewName, ExtraFilter, ExtraFilterIdValue)
+
+        Using myConnection As New SqlConnection(ConnectionString)
+            Using macmd As SqlCommand = New SqlCommand(cmd, myConnection)
+                macmd.Parameters.AddWithValue("@DateDebut", datedebutValue + " 00:00:00")
+                macmd.Parameters.AddWithValue("@DateFin", datefinValue + " 23:59:59")
+                'macmd.Parameters.AddWithValue("@p3", IdValue)
+                macmd.CommandTimeout = 0
+                Try
+                    myConnection.Open()
+                    Using reader As SqlDataReader = macmd.ExecuteReader
+                        matable = New DataTable
+                        matable.Load(reader)
+                        reader.Close()
+                    End Using
+                Catch ex As Exception
+                    'logMessage(ex.Message)
+                End Try
+            End Using
+            myConnection.Close()
+        End Using
+
+        Return matable
+    End Function
+
     Private Function GetData(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
@@ -395,6 +423,17 @@ Public Class NewReport
                 Case "FicheCollecte"
                     Dim JournalCaisseId = Request("JournalCaisseId")
                     ShowReportFicheJournaliere("FicheCollecteJournaliere", GetData("FicheCollecteJournaliere", JournalCaisseId, "JournalCaisseId"))
+
+                Case "ListeClientParCollectrice"
+                    Dim CollecteurId = Request("CollecteurId")
+                    Dim DateDebutInter = Request("DateDebut")
+                    Dim DateDebut = ConvertDate(DateDebutInter)
+                    Dim DateFinInter = Request("DateFin")
+                    Dim DateFin = ConvertDate(DateFinInter)
+                    Dim LeChampDate = "DateCreation"
+                    Dim ExtraFilter = "IdCollecteur"
+                    Dim datefilter = LeChampDate & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & LeChampDate & " <= (CONVERT(datetime2, @DateFin, 120)) AND AgenceId=" & AppSession.AgenceId.ToString()
+                    ShowReportListeClientParCollectrice("ListeClientParCollectrice", GetDataExtraFilter("vListeClientParCollectrice", DateDebut, datefilter, DateFin, ExtraFilter, CollecteurId), DateDebut, DateFin)
 
                 Case "FicheCollecteParPeriode"
                     Dim CollecteurId = Request("CollecteurId")
@@ -715,6 +754,24 @@ Public Class NewReport
         ReportViewer1.LocalReport.DataSources.Clear()
 
         ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("dsData", ds))
+    End Sub
+
+    Private Sub ShowReportListeClientParCollectrice(reportName As String, ds As Object, DateDebut As String, DateFin As String)
+        ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
+        ReportViewer1.LocalReport.DataSources.Clear()
+
+        'définition des paramètres
+        Dim LaDateDebut As ReportParameter = New ReportParameter("DateDebut", DateDebut)
+        Dim LaDateFin As ReportParameter = New ReportParameter("DateFin", DateFin)
+        Dim Utilisateur As ReportParameter = New ReportParameter("Utilisateur", AppSession.NomPrenomUser)
+
+        'Ajout des paramètres
+        ReportViewer1.LocalReport.SetParameters(New ReportParameter() {LaDateDebut})
+        ReportViewer1.LocalReport.SetParameters(New ReportParameter() {LaDateFin})
+        ReportViewer1.LocalReport.SetParameters(New ReportParameter() {Utilisateur})
+
+
+        ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("DsListeClientParCollectrice", ds))
     End Sub
 
     Private Sub ShowReportFicheJournaliereParPeriode(reportName As String, ds As Object, DateDebut As String, DateFin As String)

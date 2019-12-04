@@ -66,9 +66,7 @@
                                     <a href="@Url.Action("Index", "Collecteur")"><i class="s16  icomoon-icon-users-2"></i><span class="txt">Tous les Collecteurs</span> </a>
                                 </li>
                             End If
-                            @*@<li>
-                                    <a href="@Url.Action("Index", "CalculAjout")"><i class="s16  icomoon-icon-lock"></i><span class="txt">Calcul des Agios</span> </a>
-                                </li>*@
+
 
                             @<li>
                                 <a href="#"><i class="s16  icomoon-icon-print-2"></i><span class="txt">Gestion des Rapports </span></a>
@@ -78,6 +76,9 @@
                                     </li>
                                     <li>
                                         <a href="@Url.Action("ListeClientGlobal", "Client")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste des Clients </span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ListeClientParCollectrice", "Client")" title="Liste Clients enrôlés par une collectrice à une période donnée"> <i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste Clients / Période</span></a>
                                     </li>
                                     <li>
                                         <a href="@Url.Action("HistoriqueClientGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Historique Client </span></a>
@@ -100,30 +101,6 @@
                                     <li>
                                         <a href="@Url.Action("CommissionCollectriceAvecGrilleRemunerationGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Fiche rémunération</span></a>
                                     </li>
-
-                                    @*<li>
-            <a href="@Url.Action("ClientInactif", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Clients Inactifs </span></a>
-        </li>*@
-
-                                    @*<li>
-                                        <a href="@Url.Action("FicheCollecteJournaliereParPeriodeGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Collectes Périodiques </span></a>
-                                    </li>
-                                    <li>
-                                        <a href="@Url.Action("AgiosParClient", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Agios Par Client </span></a>
-                                    </li>
-                                    <li>
-                                        <a href="@Url.Action("FicheCommissionsCollecteurs", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Fiche de commisisons</span></a>
-                                    </li>
-                                    <li>
-                                        <a href="@Url.Action("CommissionCollectriceAvecGrilleRemuneration", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Fiche rémunération</span></a>
-                                    </li>
-                                    <li>
-                                        <a href="@Url.Action("FicheCommissionsParPorteFeuille", "HistoriqueMouvement")" title="Commissions par portefeuille"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Commis... par portefeuille</span></a>
-                                    </li>
-                                    <li>
-                                        <a href="@Url.Action("FicheCommissionsParPorteFeuilleSimplifiee", "HistoriqueMouvement")" title="Commissions par portefeuille simplifiée"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Commissions simplifiées</span></a>
-                                    </li>*@
-
 
                                 </ul>
 
@@ -160,23 +137,15 @@
                             @<li>
                                 <a href="@Url.Action("Index", "JournalCaisse")"><i class="s16 icomoon-icon-calculate"></i><span class="txt">Ouverture de caisse</span> </a>
                             </li>
-                            @*@<li>
-                                    <a href="#"><i class="s16  icomoon-icon-transmission-2"></i><span class="txt">Gestion des transferts </span></a>
-                                    <ul class="sub">
-                                        <li>
-                                            <a href="@Url.Action("Export", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Exportation</span></a>
-                                        </li>
-                                        <li>
-                                            <a href="@Url.Action("Import", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Importation </span></a>
-                                        </li>
-                                    </ul>
 
-                                </li>*@
                             @<li>
                                 <a href="#"><i class="s16  icomoon-icon-print-2"></i><span class="txt">Gestion des Rapports </span></a>
                                 <ul class="sub">
                                     <li>
                                         <a href="@Url.Action("ListeClient", "Client")"> <i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste des Clients</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ListeClientParCollectrice", "Client")" title="Liste Clients enrôlés par une collectrice à une période donnée"> <i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste Clients / Période</span></a>
                                     </li>
                                     <li>
                                         <a href="@Url.Action("ListeCollecteur", "Collecteur")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste des Collecteurs </span></a>
@@ -211,24 +180,7 @@
                                     <li>
                                         <a href="@Url.Action("HistoriqueCollecteur", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Synthèse Collecteur</span></a>
                                     </li>
-                                    @*<li>
-                                            <a href="@Url.Action("HistoriqueColParClient", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Collecteur Détails</span></a>
-                                        </li>
-                                        <li>
-                                            <a href="@Url.Action("RecetteCollecteur", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Recette Collecteur </span></a>
-                                        </li>
-                                        <li>
-                                            <a href="@Url.Action("HistoriqueAgence", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Recette Agence </span></a>
-                                        </li>
-                                        <li>
-                                            <a href="@Url.Action("HistoriqueBank", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Recette de la Banque </span></a>
-                                        </li>*@
-                                    @*<li>
-                                            <a href="@Url.Action("ClientInactif", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Clients Inactifs </span></a>
-                                        </li>
-                                        <li>
-                                            <a href="@Url.Action("HistoriqueMouvement", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Clients Inactifs </span></a>
-                                        </li>*@
+
                                 </ul>
 
                             </li>

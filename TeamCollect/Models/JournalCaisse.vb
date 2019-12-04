@@ -23,6 +23,6 @@ Partial Public Class JournalCaisse
     Public Overridable Property Collecteur As Collecteur
 
     Public Overridable Property HistoriqueMouvement As ICollection(Of HistoriqueMouvement) = New HashSet(Of HistoriqueMouvement)
-    Public Overridable Property infoCompensation As ICollection(Of InfoCompensation) = New HashSet(Of InfoCompensation)
+    Public Overridable Property InfoCompensation As ICollection(Of InfoCompensation) = New HashSet(Of InfoCompensation)
 
 End Class

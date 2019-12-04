@@ -18,7 +18,7 @@ Namespace Controllers
 
         Private db As New ApplicationDbContext
 
-        Private Function getCurrentUser() As ApplicationUser
+        Private Function GetCurrentUser() As ApplicationUser
             Dim id = User.Identity.GetUserId
             Dim aspuser = db.Users.Find(id)
             Return aspuser
@@ -63,18 +63,38 @@ Namespace Controllers
 
         Public Sub LoadCombo(pVM As CarnetClientViewModel)
             Dim listClient = db.Clients.OfType(Of Client)().ToList
-            Dim listClient2 As New List(Of SelectListItem)
+            Dim listClient1 As New List(Of SelectListItem)
+            Dim CurrentUser = getCurrentUser()
+
+            If User.IsInRole("CHEFCOLLECTEUR") Then
+                listClient = listClient.Where(Function(e) e.AgenceId = CurrentUser.Personne.AgenceId).ToList()
+            End If
+
+            'For Each item In listClient
+            '    listClient2.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & ":-- [" & item.Nom & "] --"})
+            '    listclient1.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom.ToUpper & " " & item.Prenom.ToUpper & "[Portefeuille: " & item.PorteFeuille.Libelle.ToUpper & "]" & " :-- " & " [Solde Dispo: " & item.SoldeDisponible & "]"})
+            'Next
+
             For Each item In listClient
-                listClient2.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & ":-- [" & item.Nom & "] --"})
+                Dim PorteFeuilleLibelle As String = "AUCUN PORTEFEUILLE"
+                If (Not IsNothing(item.PorteFeuille)) Then
+                    PorteFeuilleLibelle = item.PorteFeuille.Libelle.ToUpper
+                End If
+
+                If (String.IsNullOrEmpty(item.Prenom)) Then
+                    listClient1.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom.ToUpper & " :-- " & "[Portefeuille: " & PorteFeuilleLibelle.ToUpper & "]" & " :-- " & " [Solde Dispo: " & item.SoldeDisponible & "]"})
+                Else
+                    listClient1.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom.ToUpper & " " & item.Prenom.ToUpper & "[Portefeuille: " & PorteFeuilleLibelle.ToUpper & "]" & " :-- " & " [Solde Dispo: " & item.SoldeDisponible & "]"})
+                End If
             Next
 
             Dim listType = db.TypeCarnets.OfType(Of TypeCarnet)().ToList
             Dim listcarnet As New List(Of SelectListItem)
             For Each item In listType
-                listcarnet.Add(New SelectListItem With {.Value = item.Id, .Text = item.Libelle & ":-- [" & item.Libelle & "] --"})
+                listcarnet.Add(New SelectListItem With {.Value = item.Id, .Text = item.Libelle.ToUpper & ":-- [" & item.Prix & "] --"})
             Next
 
-            pVM.IDsClient = listClient2
+            pVM.IDsClient = listClient1
             pVM.IDsTypeCarnet = listcarnet
         End Sub
 
@@ -147,19 +167,20 @@ Namespace Controllers
                 'Dim LibOperation As String = "Achat Carnet : " & ca.TypeCarnet.Libelle & " - Le -" & DateTime.Now.ToString
                 Dim LibOperation As String = "VENTE CARNET : " & ca.TypeCarnet.Libelle & " - Le -" & DateTime.Now.ToString
 
-                Dim parameterList As New List(Of SqlParameter)()
-                parameterList.Add(New SqlParameter("@ClientId", ClientId))
-                parameterList.Add(New SqlParameter("@CollecteurId", CollecteurId))
-                parameterList.Add(New SqlParameter("@Montant", -Montant))
-                parameterList.Add(New SqlParameter("@DateOperation", Now))
-                parameterList.Add(New SqlParameter("@Pourcentage", 0))
-                parameterList.Add(New SqlParameter("@MontantRetenu", 0))
-                parameterList.Add(New SqlParameter("@EstTraiter", 0))
-                parameterList.Add(New SqlParameter("@Etat", False))
-                parameterList.Add(New SqlParameter("@DateCreation", Now))
-                parameterList.Add(New SqlParameter("@UserId", UserId))
-                parameterList.Add(New SqlParameter("@JournalCaisseId", JCID))
-                parameterList.Add(New SqlParameter("@LibelleOperation", LibOperation))
+                Dim parameterList As New List(Of SqlParameter) From {
+                    New SqlParameter("@ClientId", ClientId),
+                    New SqlParameter("@CollecteurId", CollecteurId),
+                    New SqlParameter("@Montant", -Montant),
+                    New SqlParameter("@DateOperation", Now),
+                    New SqlParameter("@Pourcentage", 0),
+                    New SqlParameter("@MontantRetenu", 0),
+                    New SqlParameter("@EstTraiter", 0),
+                    New SqlParameter("@Etat", False),
+                    New SqlParameter("@DateCreation", Now),
+                    New SqlParameter("@UserId", UserId),
+                    New SqlParameter("@JournalCaisseId", JCID),
+                    New SqlParameter("@LibelleOperation", LibOperation)
+                }
                 Dim parameters As SqlParameter() = parameterList.ToArray()
 
                 Try

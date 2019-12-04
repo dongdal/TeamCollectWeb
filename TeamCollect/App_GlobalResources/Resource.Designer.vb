@@ -73,6 +73,33 @@ Public Class Resource
     End Property
     
     '''<summary>
+    '''  Recherche une chaîne localisée semblable à Annuler la clôture.
+    '''</summary>
+    Public Shared ReadOnly Property AnnulerCloture() As String
+        Get
+            Return ResourceManager.GetString("AnnulerCloture", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Voulez-vous vraiment annuler cette opération?.
+    '''</summary>
+    Public Shared ReadOnly Property AnnulerOperationBody() As String
+        Get
+            Return ResourceManager.GetString("AnnulerOperationBody", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Annuler une opération.
+    '''</summary>
+    Public Shared ReadOnly Property AnnulerOperationTitle() As String
+        Get
+            Return ResourceManager.GetString("AnnulerOperationTitle", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
     '''  Recherche une chaîne localisée semblable à Modifier.
     '''</summary>
     Public Shared ReadOnly Property Btn_Edit() As String
@@ -96,6 +123,15 @@ Public Class Resource
     Public Shared ReadOnly Property BtnDetails() As String
         Get
             Return ResourceManager.GetString("BtnDetails", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Opération annulée.
+    '''</summary>
+    Public Shared ReadOnly Property CancelingOperation() As String
+        Get
+            Return ResourceManager.GetString("CancelingOperation", resourceCulture)
         End Get
     End Property
     
@@ -204,6 +240,33 @@ Public Class Resource
     Public Shared ReadOnly Property champ_Manquant() As String
         Get
             Return ResourceManager.GetString("champ_Manquant", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Impossible de changer le mot de passe.
+    '''</summary>
+    Public Shared ReadOnly Property ChangePasswordImpossible() As String
+        Get
+            Return ResourceManager.GetString("ChangePasswordImpossible", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Clôturer la caisse.
+    '''</summary>
+    Public Shared ReadOnly Property CloturerCaisse() As String
+        Get
+            Return ResourceManager.GetString("CloturerCaisse", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Voulez-vous vraiment clôturer cette caisse?.
+    '''</summary>
+    Public Shared ReadOnly Property CloturerCaisseBody() As String
+        Get
+            Return ResourceManager.GetString("CloturerCaisseBody", resourceCulture)
         End Get
     End Property
     
@@ -609,6 +672,15 @@ Public Class Resource
     Public Shared ReadOnly Property StringLength() As String
         Get
             Return ResourceManager.GetString("StringLength", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Opération effectuée avec succès..
+    '''</summary>
+    Public Shared ReadOnly Property SuccessOperation() As String
+        Get
+            Return ResourceManager.GetString("SuccessOperation", resourceCulture)
         End Get
     End Property
     

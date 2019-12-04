@@ -1,11 +1,11 @@
-﻿@ModelType  RetraitViewModel
+﻿@ModelType  AnnulationViewModel
 @Imports TeamCollect.My.Resources
 <div class="contentwrapper">
     <!--Content wrapper-->
     <div class="heading">
         <!--  .heading-->
         <h3 style="color:#353535">
-            <i class="fa fa-archive"></i>Retraits
+            <i class="fa fa-archive"></i>Annuler un retrait
         </h3>
     </div>
     <!-- End  / heading-->
@@ -14,46 +14,38 @@
         <div class="panel panel-pattern toggle panelMove panelRefresh">
             <!-- Start .panel -->
             <div class="panel-heading">
-                <h4 class="panel-title" style="color:#353535"><i class="fa fa-magic"></i> Formulaire d'enregistrement...</h4>
+                <h4 class="panel-title" style="color:#353535"><i class="fa fa-magic"></i> Formulaire d'Annulation d'un retrait...</h4>
             </div>
             <div class="panel-body pt0 pb0">
                 <div id="wizard" class="bwizard">
-                    @Using (Html.BeginForm("Ajouter", "Retrait", FormMethod.Post, New With {.role = "form", .id = "__AjaxAntiForgeryForm"}))
+                    @Using (Html.BeginForm("AnnulationRetrait", "HistoriqueMouvement", FormMethod.Post, New With {.role = "form", .id = "__AjaxAntiForgeryForm"}))
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(True)
+                        @Html.HiddenFor(Function(model) model.Id)
+                        @Html.HiddenFor(Function(model) model.CollecteurId)
+                        @Html.HiddenFor(Function(model) model.DateDebut)
+                        @Html.HiddenFor(Function(model) model.DateFin)
                         @<div class="box box-warning">
                             <div class="box-header with-border">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>Client</label>
 
-                                            @Html.DropDownListFor(Function(model) model.ClientId,
-New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New With {.class = "form-control select2"})
-                                            @Html.ValidationMessageFor(Function(model) model.ClientId)
-                                        </div>
-                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>Montant </label>
-                                            <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.Montant) </label>
-                                            @Html.EditorFor(Function(model) model.Montant)
-                                            @Html.ValidationMessageFor(Function(model) model.Montant)
+                                            <label>Saisir le Motif de l'annulation </label>
+                                            <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.Motif) </label>
+                                            @Html.EditorFor(Function(model) model.Motif)
+                                            @Html.ValidationMessageFor(Function(model) model.Motif)
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
 
-                                    <Label id="MessageAlerte" style="color: #fdcd23" >  </Label>
-
-
-                                    @*<div Class="col-md-6">
-                                            <div Class="form-group">
-                                                <Label> Etat </Label>
-                                                <Label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.Etat) </Label>
-                                                @Html.EditorFor(Function(model) model.Etat)
-                                            </div>
-                                        </div>*@
+                                </div>
+                                <div class="box-footer" style="text-align:center">
+                                    <input type="button" onclick="AnnulerRetrait();" value="Enregistrer" class="btn btn-primary btn-sm" />
+                                    <a class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="left" title="Retour" href="@Url.Action("Index", "HistoriqueMouvement", New With {.ClientId = Model.Id, .dateDebut = Now.Date.ToString("d"), .dateFin = Now.Date.ToString("d")})">
+                                        <i class=""></i> Retour
+                                    </a>
                                 </div>
 
                             </div>
@@ -61,12 +53,6 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New 
                         </div>
 
                     End Using
-
-                    <div class="box-footer" style="text-align:center">
-                        <input type="button" onclick="DemandeDeRetrait();" value="Enregistrer" class="btn btn-primary btn-sm" />
-                        @Html.ActionLink("Retour", "Index", "Retrait", Nothing, New With {.class = "btn btn-default btn-sm"})
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -76,65 +62,29 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New 
     @Scripts.Render("~/bundles/jqueryval")
 
     <script>
-        //alert("Le niveau sélectionné = " + $(cboPereId).val());
-        var cboPereId = '#ClientId';
-        var cboFilsId = '';
-        var MessageAlerte = 'MessageAlerte';
-        var url = '@Url.Action("GetMessage")';
-        var MsgCombo = '';
-        //Dropdownlist Selectedchange event
-        //Dropdownlist Selectedchange event
-        $(cboPereId).change(function () {
-            //alert("Le niveau sélectionné = " + $(cboPereId).val());
-            document.getElementById('MessageAlerte').innerHTML = '';
-            document.getElementById(MessageAlerte).style.display = '';
-
-            //document.getElementById(CommuneDiv).style.display = (Niveau == 1) ? '' : 'none';
-                $(cboFilsId).empty();
-                if ($(cboPereId).val()) {
-
-                    $.ajax({
-                        type: 'POST',
-                        url: url, // we are calling json method
-
-                        dataType: 'json',
-                        data: { ClientId: $(cboPereId).val() },
-                        // here we are get value of selected country and passing same value as inputto json method GetStates.
-
-                        success: function (msg) {
-                            //$("#MessageAlerte").text(msg.Value);
-                            document.getElementById('MessageAlerte').innerHTML = msg;
-                        },
-                        error: function (ex) {
-                            //alert('Failed to retrieve states.' + ex);
-                        }
-                    });
-                } else {
-                            //$("#" + MessageAlerte).text(msg.Value);
-                };
-
-            return false;
-        })
-    </script>
-
-    <script>
-        function DemandeDeRetrait() {
-            var ClientId = '#ClientId';
-            var Montant = '#Montant';
-            var MessageAlert = document.getElementById('MessageAlerte').innerHTML;
+        function AnnulerRetrait() {
+            var Id = '#Id';
+            var CollecteurId = '#CollecteurId';
+            var DateDebut = '#DateDebut';
+            var DateFin = '#DateFin';
+            var Motif = '#Motif';
+            //var MessageAlert = document.getElementById('MessageAlerte').innerHTML;
 
             var form = $('#__AjaxAntiForgeryForm');
             var token = $('input[name="__RequestVerificationToken"]', form).val();
 
-            var retraitJSON = {
-                'ClientId': $(ClientId).val(),
-                'Montant': $(Montant).val(),
-            }
+            //var retraitJSON = {
+            //    'ClientId': $(ClientId).val(),
+            //    'Montant': $(Montant).val(),
+            //}
 
             //$.alert("Identifiant= " + Type);
-            $.confirm({
-                title: '@Resource.DemandeRetrait',
-                content: MessageAlert,
+            if (typeof $(Id).val() == "undefined" || $(Id).val() == "" || typeof $(CollecteurId).val() == "undefined" || $(CollecteurId).val() == "" || typeof $(DateDebut).val() == "undefined" || $(DateDebut).val() == "" || typeof $(DateFin).val() == "undefined" || $(DateFin).val() == "" || typeof $(Motif).val() == "undefined" || $(Motif).val() == "") {
+                $.alert('"Veuillez renseigner tous les champs obligatoires."');
+            } else {
+                        $.confirm({
+                title: '@Resource.AnnulerOperationTitle',
+                content: '@Resource.AnnulerOperationBody',
                 animationSpeed: 1000,
                 animationBounce: 3,
                 animation: 'rotatey',
@@ -143,19 +93,22 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New 
                 buttons: {
                     Confirmer: function () {
                         $.ajax({
-                            url: '@Url.Action("DemandeDeRetrait")',
+                            url: '@Url.Action("AnnulationRetrait")',
                             type: 'POST',
                             data: {
                                 __RequestVerificationToken: token,
-                                ClientId: $(ClientId).val(),
-                                Montant: $(Montant).val()
+                                Id: $(Id).val(),
+                                CollecteurId: $(CollecteurId).val(),
+                                DateDebut: $(DateDebut).val(),
+                                DateFin: $(DateFin).val(),
+                                Motif: $(Motif).val()
                             },
                         }).done(function (data) {
                             if (data.Result == "OK") {
                                 //$ctrl.closest('li').remove();
                                 $.confirm({
                                     title: '@Resource.SuccessTitle',
-                                    content: '@Resource.SuccessRetrait',
+                                    content: '@Resource.SuccessOperation',
                                     animationSpeed: 1000,
                                     animationBounce: 3,
                                     animation: 'rotatey',
@@ -163,13 +116,14 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New 
                                     theme: 'supervan',
                                     buttons: {
                                         OK: function () {
-                                            window.location.href = '@Url.Action("Index", "Retrait")';
+                                            window.location.href = '@Url.Action("Index", "HistoriqueMouvement")';
                                             //window.location.reload();
                                         }
                                     }
                                 });
                             }
-                            else if (data.Result) {
+                            else {
+                                //alert(data.Result.Message);
                                 $.confirm({
                                     title: '@Resource.ErreurTitle',
                                     content: data.Result,
@@ -180,6 +134,7 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New 
                                     theme: 'supervan',
                                     buttons: {
                                         OK: function () {
+                                            @*window.location.href = '@Url.Action("Index", "HistoriqueMouvement")';*@
                                             //window.location.reload();
                                         }
                                     }
@@ -205,7 +160,7 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New 
                     Annuler: function () {
                         $.confirm({
                             title: '@Resource.CancelingProcess',
-                            content: '@Resource.CancelingRetrait',
+                            content: '@Resource.CancelingOperation',
                             animationSpeed: 1000,
                             animationBounce: 3,
                             animation: 'rotatey',
@@ -220,7 +175,7 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New 
                 }
             });
         }
+        }
     </script>
-
 
 End Section

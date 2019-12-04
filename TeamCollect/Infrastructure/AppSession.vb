@@ -18,6 +18,15 @@
         End Set
     End Property
 
+    Shared Property NomPrenomUser As String
+        Get
+            Return HttpContext.Current.Session("NomPrenomUser")
+        End Get
+        Set(value As String)
+            HttpContext.Current.Session("NomPrenomUser") = value
+        End Set
+    End Property
+
     Shared Property UserName As String
         Get
             Return HttpContext.Current.Session("UserName")

@@ -306,4 +306,28 @@
   <data name="ManagerProfile" xml:space="preserve">
     <value>Profil Manager</value>
   </data>
+  <data name="AnnulerCloture" xml:space="preserve">
+    <value>Annuler la clôture</value>
+  </data>
+  <data name="AnnulerOperationBody" xml:space="preserve">
+    <value>Voulez-vous vraiment annuler cette opération?</value>
+  </data>
+  <data name="AnnulerOperationTitle" xml:space="preserve">
+    <value>Annuler une opération</value>
+  </data>
+  <data name="CancelingOperation" xml:space="preserve">
+    <value>Opération annulée</value>
+  </data>
+  <data name="ChangePasswordImpossible" xml:space="preserve">
+    <value>Impossible de changer le mot de passe</value>
+  </data>
+  <data name="CloturerCaisse" xml:space="preserve">
+    <value>Clôturer la caisse</value>
+  </data>
+  <data name="CloturerCaisseBody" xml:space="preserve">
+    <value>Voulez-vous vraiment clôturer cette caisse?</value>
+  </data>
+  <data name="SuccessOperation" xml:space="preserve">
+    <value>Opération effectuée avec succès.</value>
+  </data>
 </root>

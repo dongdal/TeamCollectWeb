@@ -46,6 +46,38 @@ Namespace TeamCollect
             Return View(entityVM)
         End Function
 
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
+        Function ListeClientParCollectrice() As ActionResult
+
+            Dim entityVM As New StatViewModel
+            '---------------les collecteurs-----------------
+            Dim userAgenceId As Long = GetCurrentUser.Personne.AgenceId
+            'Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
+            Dim CollecteurSystem = ConfigurationManager.AppSettings("CollecteurSystemeId") 'Il s'agit de l'identitfiant du collecteur système
+
+            Dim Collecteurs = (From collecteur In db.Collecteurs Where collecteur.Id <> CollecteurSystem Select collecteur).ToList
+
+            If Not User.IsInRole("ADMINISTRATEUR") Then
+                Collecteurs = Collecteurs.Where(Function(e) e.AgenceId = userAgenceId).ToList
+            End If
+
+            Dim LesCollecteurs As New List(Of SelectListItem)
+            For Each item In Collecteurs
+                If String.IsNullOrEmpty(item.Prenom) Then
+                    LesCollecteurs.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom})
+                Else
+                    LesCollecteurs.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & " " & item.Prenom})
+                End If
+            Next
+            entityVM.IDsCollecteur = LesCollecteurs
+            '---------------------------
+
+            ViewBag.dateDebut = Now.Date.ToString("d")
+            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
+            Return View(entityVM)
+
+        End Function
 
         <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR,ADMINISTRATEUR")>
         <HttpPost()>

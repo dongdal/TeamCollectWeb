@@ -61,12 +61,23 @@ Namespace TeamCollect
             If ModelState.IsValid Then
                 infocompensation.DateCreation = Now.Date
                 infocompensation.UserId = getCurrentUser.Id
+                Dim LeJournalCaisse = (From j In db.InfoCompensation Where j.JournalCaisseId = infocompensation.JournalCaisseId Select j.JournalCaisse).FirstOrDefault()
+                Dim LesCompensations = (From e In db.InfoCompensation Where e.JournalCaisseId = infocompensation.JournalCaisseId Select e).ToList()
+                Dim MontantTotalVerse As Decimal = 0.0
+                Dim Manquant = LeJournalCaisse.MontantTheorique - LeJournalCaisse.MontantReel
+                For Each compensation In LesCompensations
+                    MontantTotalVerse = MontantTotalVerse + compensation.MontantVerse
+                Next
+                If (MontantTotalVerse + infocompensation.MontantVerse > Manquant) Then
+                    ModelState.AddModelError("", "Veuillez vérifier le montant saisi et vous rassurer que la somme de vos versements n'excèdent pas le montant du manquant.")
+                    Return View(infocompensation)
+                End If
                 db.InfoCompensation.Add(infocompensation)
-                db.SaveChanges()
-                Return RedirectToAction("Index", "JournalCaisse", New With {.Id = infocompensation.JournalCaisseId})
-            End If
+                    db.SaveChanges()
+                    Return RedirectToAction("Index", "JournalCaisse", New With {.Id = infocompensation.JournalCaisseId})
+                End If
 
-            Return View(infocompensation)
+                Return View(infocompensation)
         End Function
 
         ' GET: /InfoCompensation/Edit/5

@@ -109,23 +109,38 @@ Namespace Controllers
         Public Sub LoadCombo(pVM As RetraitViewModel)
             Dim listcollecteur = db.Collecteurs.OfType(Of Collecteur)().ToList
             Dim listcollecteur1 As New List(Of SelectListItem)
-            For Each item In listcollecteur
-                listcollecteur1.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & ":-- [" & item.Nom & "] --"})
-            Next
+
 
             Dim listclient = db.Clients.OfType(Of Client)().ToList
             Dim listclient1 As New List(Of SelectListItem)
-            For Each item In listclient
-                listclient1.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & ":-- " & item.Prenom & " [Solde Dispo: " & item.SoldeDisponible & "]"})
+
+            Dim CurrentUser = GetCurrentUser()
+
+            If User.IsInRole("CHEFCOLLECTEUR") Then
+                listcollecteur = listcollecteur.Where(Function(e) e.AgenceId = CurrentUser.Personne.AgenceId).ToList()
+                listclient = listclient.Where(Function(e) e.AgenceId = CurrentUser.Personne.AgenceId).ToList()
+            End If
+
+            For Each item In listcollecteur
+                listcollecteur1.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom.ToUpper & " :-- [" & item.Prenom.ToUpper & "]"})
             Next
 
             'For Each item In listclient
-            '    If (String.IsNullOrEmpty(item.PorteFeuille.Libelle)) Then
-            '        listclient1.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & ":-- " & item.Prenom & " [Solde: " & item.Solde & "] "})
-            '    Else
-            '        listclient1.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & ":-- " & item.Prenom & " [Solde: " & item.Solde & "] - " & item.PorteFeuille.Libelle})
-            '    End If
+            '    listclient1.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom.ToUpper & " :-- " & item.Prenom.ToUpper & "[Portefeuille: " & item.PorteFeuille.Libelle.ToUpper & "]" & " :-- " & " [Solde Dispo: " & item.SoldeDisponible & "]"})
             'Next
+
+            For Each item In listclient
+                Dim PorteFeuilleLibelle As String = "AUCUN PORTEFEUILLE"
+                If (Not IsNothing(item.PorteFeuille)) Then
+                    PorteFeuilleLibelle = item.PorteFeuille.Libelle.ToUpper
+                End If
+
+                If (String.IsNullOrEmpty(item.Prenom)) Then
+                    listclient1.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom.ToUpper & " :-- " & "[Portefeuille: " & PorteFeuilleLibelle.ToUpper & "]" & " :-- " & " [Solde Dispo: " & item.SoldeDisponible & "]"})
+                Else
+                    listclient1.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom.ToUpper & " " & item.Prenom.ToUpper & "[Portefeuille: " & PorteFeuilleLibelle.ToUpper & "]" & " :-- " & " [Solde Dispo: " & item.SoldeDisponible & "]"})
+                End If
+            Next
 
             pVM.IDsCollecteur = listcollecteur1
             pVM.IDsClient = listclient1
@@ -384,7 +399,7 @@ Namespace Controllers
         <HttpPost()>
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
         <ValidateAntiForgeryToken()>
-        Function DemandeDeRetrait(retraitJSON As RetraitJSON) As ActionResult
+        Function DemandeDeRetrait(retraitJSON As RetraitJSON) As JsonResult
             Dim retraitVM As New RetraitViewModel(retraitJSON:=retraitJSON)
             'on recupere l'id du collecteur chef collect connecter
             Dim CollecteurId = ConfigurationManager.AppSettings("CollecteurSystemeId") 'getCurrentUser.PersonneId
@@ -471,22 +486,22 @@ Namespace Controllers
                     Else
                         ModelState.AddModelError("Montant", "Une erreur est survenue pendant l'exécution de la requête: veuillez contacter l'administrateur. ")
                         LoadCombo(retraitVM)
-                        Return Json(New With {.Result = "Error"})
+                        Return Json(New With {.Result = "Error: Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. "})
                     End If
                 Catch ex As DbEntityValidationException
                     Util.GetError(ex)
                     ModelState.AddModelError("Montant", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur.")
                     LoadCombo(retraitVM)
-                    Return Json(New With {.Result = "Error"})
+                    Return Json(New With {.Result = "Error: Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. "})
                 Catch ex As Exception
                     Util.GetError(ex)
                     ModelState.AddModelError("Montant", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. ")
                     LoadCombo(retraitVM)
-                    Return Json(New With {.Result = "Error"})
+                    Return Json(New With {.Result = "Error: Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. "})
                 End Try
             End If
             LoadCombo(retraitVM)
-            Return View(retraitVM)
+            Return Json(New With {.Result = "Error"})
         End Function
 
 
