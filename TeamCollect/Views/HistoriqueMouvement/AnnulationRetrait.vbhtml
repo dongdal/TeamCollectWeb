@@ -116,7 +116,7 @@
                                     theme: 'supervan',
                                     buttons: {
                                         OK: function () {
-                                            window.location.href = '@Url.Action("Index", "HistoriqueMouvement")';
+                                            window.location.href = '@Url.Action("IndexAgence", "Collecteur")';
                                             //window.location.reload();
                                         }
                                     }

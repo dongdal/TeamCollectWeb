@@ -137,6 +137,9 @@
                             @<li>
                                 <a href="@Url.Action("Index", "JournalCaisse")"><i class="s16 icomoon-icon-calculate"></i><span class="txt">Ouverture de caisse</span> </a>
                             </li>
+                            @<li>
+                                <a href="@Url.Action("Index", "CompteurImpression")"><i class="s16 icomoon-icon-print"></i><span class="txt">Compteur d'Impression</span> </a>
+                            </li>
 
                             @<li>
                                 <a href="#"><i class="s16  icomoon-icon-print-2"></i><span class="txt">Gestion des Rapports </span></a>

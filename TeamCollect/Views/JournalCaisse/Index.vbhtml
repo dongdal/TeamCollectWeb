@@ -33,6 +33,7 @@
                 </div>
             </div>
         End Using
+        <p Class="text-danger">@ViewBag.Message</p>
         <table class="table table-bordered table-striped table-hover dt-responsive table-responsive" cellspacing="0" width="100%">
             <thead>
                 <tr>
@@ -50,27 +51,27 @@
             </thead>
             <tbody>
                 @Code Dim i = 0 End Code
-                
+
                 @For Each item In Model
-                    
+
                     Dim PlafondEncours As Decimal = item.PlafondEnCours
                     Dim PlafondDeDebat As Decimal = item.PlafondDeDebat
                     Dim Progression = Replace((Math.Round((PlafondEncours / IIf(PlafondDeDebat = 0, 1, PlafondDeDebat)), 3) * 100), ",", ".")
-                    
+
                     Dim manquant As Decimal = 0.0
                     Dim SumVersement As Decimal = 0.0
                     Dim Reste As Decimal = 0
-                    
+
                     @<tr role="row" class="odd parent">
                         <td>@item.Collecteur.Nom &nbsp; @item.Collecteur.Prenom </td>
                         <td>@item.FondCaisse</td>
                         <td>@item.DateOuverture.Value.ToString("d")</td>
-                         <td style="background-color: white">
-                            <label style="color: #304a85">@item.PlafondEnCours Fcfa</label> 
-                             <div class="progress progress-striped">
-                                 <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="@Progression" aria-valuemin="0" aria-valuemax="100" style="width:@Progression%;"> &nbsp;%@Progression </div>
-                             </div>
-                         </td>
+                        <td style="background-color: white">
+                            <label style="color: #304a85">@item.PlafondEnCours Fcfa</label>
+                            <div class="progress progress-striped">
+                                <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="@Progression" aria-valuemin="0" aria-valuemax="100" style="width:@Progression%;"> &nbsp;%@Progression </div>
+                            </div>
+                        </td>
                         <td>@item.MontantTheorique</td>
                         <td>@item.MontantReel</td>
                         @If (IsNothing(item.DateCloture)) Then
@@ -92,50 +93,50 @@
                             @<td>
                                 <button type="button" class="btn btn-danger btn-xs btn-round">.</button>
                             </td>
-                        If ((item.MontantTheorique - item.MontantReel) > 0) Then
+                            If ((item.MontantTheorique - item.MontantReel) > 0) Then
 
-                            manquant = (item.MontantTheorique - item.MontantReel)
-                            For Each itemCompensation In item.infoCompensation
-                                SumVersement = (SumVersement + itemCompensation.MontantVerse)
-                            Next
-                            Dim Pourcentage = Replace((Math.Round((SumVersement / manquant), 3) * 100), ",", ".")
-                            Reste = (manquant - SumVersement)
-                            @<td style="background-color: red">
-                                Manquant : @Math.Abs(manquant) Fcfa
-                            </td>
-                             @<td style="background-color: white">
-                                <div class="progress progress-striped">
-                                    <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="@Pourcentage" aria-valuemin="0" aria-valuemax="100" style="width:@Pourcentage%;"> &nbsp;%@Pourcentage </div>
-                                </div>
-                            </td>
-                             @<td>
-                                  <button type="button" class="btn btn-default btn-sm btn-round" onclick="TblDeroul('@i');"> Info</button>
-                                
-                            </td>
-                        Else
-                            If ((item.MontantTheorique - item.MontantReel) < 0) Then
+                                manquant = (item.MontantTheorique - item.MontantReel)
+                                For Each itemCompensation In item.infoCompensation
+                                    SumVersement = (SumVersement + itemCompensation.MontantVerse)
+                                Next
+                                Dim Pourcentage = Replace((Math.Round((SumVersement / manquant), 3) * 100), ",", ".")
+                                Reste = (manquant - SumVersement)
+                                @<td style="background-color: red">
+                                    Manquant : @Math.Abs(manquant) Fcfa
+                                </td>
+                                @<td style="background-color: white">
+                                    <div class="progress progress-striped">
+                                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="@Pourcentage" aria-valuemin="0" aria-valuemax="100" style="width:@Pourcentage%;"> &nbsp;%@Pourcentage </div>
+                                    </div>
+                                </td>
+                                @<td>
+                                    <button type="button" class="btn btn-default btn-sm btn-round" onclick="TblDeroul('@i');"> Info</button>
 
-                                manquant = item.MontantTheorique - item.MontantReel
-
-                            @<td style="background-color: green">
-                                Superflu : @Math.Abs(manquant) Fcfa
-                            </td>
+                                </td>
                             Else
+                                If ((item.MontantTheorique - item.MontantReel) < 0) Then
+
+                                    manquant = item.MontantTheorique - item.MontantReel
+
+                                    @<td style="background-color: green">
+                                        Superflu : @Math.Abs(manquant) Fcfa
+                                    </td>
+                                Else
 
 
+                                End If
                             End If
-                        End If
 
 
                         End If
 
 
                     </tr>
-                     @<tr id="@i" class="child" style="display:none; border:1px solid black;">
-                            <td class="child" colspan="9" style="width: 650px;">
-                                <div class="col-md-8">
-                                    <legend class="scheduler-border" style="color:white"> Listing des versements pour la compensation du manquant:</legend>
-                                    
+                    @<tr id="@i" class="child" style="display:none; border:1px solid black;">
+                        <td class="child" colspan="9" style="width: 650px;">
+                            <div class="col-md-8">
+                                <legend class="scheduler-border" style="color:white"> Listing des versements pour la compensation du manquant:</legend>
+
                                 <table class="table table-bordered table-striped table-hover dt-responsive table-responsive" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
@@ -148,71 +149,71 @@
                                         @For Each itemCompensation In item.infoCompensation
                                             @<tr role="row" class="odd parent" style="background-color: #353535">
                                                 <td>@itemCompensation.Libelle &nbsp; </td>
-                                                 <td>@itemCompensation.MontantVerse</td>
+                                                <td>@itemCompensation.MontantVerse</td>
                                                 <td>@itemCompensation.DateCreation.ToString("d")</td>
                                             </tr>
                                         Next
-                                            <tr role="row" class="odd parent" style="background-color: #cccccc; font-size:16px; color:black">
-                                                <td style="float:right">Reste à Payer:</td>
-                                                <td> @Reste Fcfa</td>
-                                                <td></td>
-                                            </tr>
+                                        <tr role="row" class="odd parent" style="background-color: #cccccc; font-size:16px; color:black">
+                                            <td style="float:right">Reste à Payer:</td>
+                                            <td> @Reste Fcfa</td>
+                                            <td></td>
+                                        </tr>
                                     </tbody>
                                 </table>
-                           
-                                 </div>
-                                @If (Reste > 0) Then
-                                    @<div class="col-md-4">
+
+                            </div>
+                            @If (Reste > 0) Then
+                                @<div class="col-md-4">
 
                                     @Using (Html.BeginForm("Create", "InfoCompensation", FormMethod.Post, New With {.role = "form"}))
                                         @Html.AntiForgeryToken()
                                         @Html.ValidationSummary(True)
-                                        @<input type="hidden" class="form-control" id="JournalCaisseId" name="JournalCaisseId" value="@item.Id"/>
-                                    
-                                    @<fieldset class="scheduler-border">
-                                        <legend class="scheduler-border" style="color:white"> Formulaire de versement:</legend>
-                                        <div class="control-group">
-                                            <div class="col-md-12">
-                                                <label>Libelle du versement :</label>
-                                                <div>
-                                                    <input type="text" class="form-control" id="Libelle" name="Libelle" required />
+                                        @<input type="hidden" class="form-control" id="JournalCaisseId" name="JournalCaisseId" value="@item.Id" />
+
+                                        @<fieldset class="scheduler-border">
+                                            <legend class="scheduler-border" style="color:white"> Formulaire de versement:</legend>
+                                            <div class="control-group">
+                                                <div class="col-md-12">
+                                                    <label>Libelle du versement :</label>
+                                                    <div>
+                                                        <input type="text" class="form-control" id="Libelle" name="Libelle" required />
+                                                        <br />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="control-group">
+                                                <div class="col-md-8">
+                                                    <label> Montant du versement :</label>
+                                                    <div>
+                                                        <input type="number" class=" form-control" id="MontantVerse" name="MontantVerse" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
                                                     <br />
+                                                    <button type="submit" class="btn btn-default mr5 mb10">Valider</button>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="control-group">
-                                            <div class="col-md-8">
-                                                <label> Montant du versement :</label>
-                                                <div>
-                                                    <input type="number" class=" form-control" id="MontantVerse" name="MontantVerse" required />
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <br />
-                                                <button type="submit" class="btn btn-default mr5 mb10">Valider</button>
-                                            </div>
-                                        </div>
-
-                                    </fieldset>
+                                        </fieldset>
                                     End Using
 
-                                 </div>
-                                Else
-                                 @<div class="col-md-4" style="text-align:center">
-                                     <br /><br /><br />
-                                     <i style="color:white; font-size:50px" class="icomoon-icon-bubble-check"></i>
-                                      <button type="button" class="btn btn-default"> La Totalité du montant a été compensé...</button>
+                                </div>
+                            Else
+                                @<div class="col-md-4" style="text-align:center">
+                                    <br /><br /><br />
+                                    <i style="color:white; font-size:50px" class="icomoon-icon-bubble-check"></i>
+                                    <button type="button" class="btn btn-default"> La Totalité du montant a été compensé...</button>
 
-                                 </div>
-                                
-                                End If
-                               
-                            </td>
-                        </tr>
-                     @Code
-                     i = i + 1
-                    End Code 
+                                </div>
+
+                            End If
+
+                        </td>
+                    </tr>
+                    @Code
+                        i = i + 1
+                    End Code
                 Next
 
             </tbody>
@@ -250,7 +251,7 @@
     </div>
     <!-- /.modal -->
 
-   
+
 
 
 
@@ -258,7 +259,7 @@
 
 <script>
     function TblDeroul(MonId) {
-            $('#' + MonId).fadeToggle(5);
+        $('#' + MonId).fadeToggle(5);
     };
 
 </script>

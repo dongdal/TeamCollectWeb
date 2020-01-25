@@ -61,7 +61,7 @@ Namespace TeamCollect
             If ModelState.IsValid Then
                 infocompensation.DateCreation = Now.Date
                 infocompensation.UserId = getCurrentUser.Id
-                Dim LeJournalCaisse = (From j In db.InfoCompensation Where j.JournalCaisseId = infocompensation.JournalCaisseId Select j.JournalCaisse).FirstOrDefault()
+                Dim LeJournalCaisse = (From j In db.JournalCaisses Where j.Id = infocompensation.JournalCaisseId Select j).FirstOrDefault()
                 Dim LesCompensations = (From e In db.InfoCompensation Where e.JournalCaisseId = infocompensation.JournalCaisseId Select e).ToList()
                 Dim MontantTotalVerse As Decimal = 0.0
                 Dim Manquant = LeJournalCaisse.MontantTheorique - LeJournalCaisse.MontantReel
@@ -69,13 +69,14 @@ Namespace TeamCollect
                     MontantTotalVerse = MontantTotalVerse + compensation.MontantVerse
                 Next
                 If (MontantTotalVerse + infocompensation.MontantVerse > Manquant) Then
-                    ModelState.AddModelError("", "Veuillez vérifier le montant saisi et vous rassurer que la somme de vos versements n'excèdent pas le montant du manquant.")
-                    Return View(infocompensation)
+                    'ModelState.AddModelError("", "Veuillez vérifier le montant saisi et vous rassurer que la somme de vos versements n'excèdent pas le montant du manquant.")
+                    Dim Message = "Veuillez vérifier le montant saisi et vous rassurer que la somme de vos versements n'excèdent pas le montant du manquant."
+                    Return RedirectToAction("Index", "JournalCaisse", New With {.Message = Message})
                 End If
                 db.InfoCompensation.Add(infocompensation)
                     db.SaveChanges()
-                    Return RedirectToAction("Index", "JournalCaisse", New With {.Id = infocompensation.JournalCaisseId})
-                End If
+                Return RedirectToAction("Index", "JournalCaisse", New With {.Id = infocompensation.JournalCaisseId})
+            End If
 
                 Return View(infocompensation)
         End Function

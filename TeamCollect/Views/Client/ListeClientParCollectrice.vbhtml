@@ -38,7 +38,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Opération </label>
+                            <label>Collectrice </label>
                             <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.CollecteurId) </label>
                             @Html.DropDownListFor(Function(model) model.CollecteurId,
 New SelectList(Model.IDsCollecteur, "Value", "Text"), "Selectionnez une Collectrice", New With {.class = "form-control select2"})

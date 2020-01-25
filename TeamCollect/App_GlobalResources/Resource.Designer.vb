@@ -271,6 +271,15 @@ Public Class Resource
     End Property
     
     '''<summary>
+    '''  Recherche une chaîne localisée semblable à Collectrice.
+    '''</summary>
+    Public Shared ReadOnly Property CollectriceId() As String
+        Get
+            Return ResourceManager.GetString("CollectriceId", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
     '''  Recherche une chaîne localisée semblable à Commission Minimale.
     '''</summary>
     Public Shared ReadOnly Property CommissionMinimale() As String
@@ -321,6 +330,15 @@ Public Class Resource
     Public Shared ReadOnly Property DateCreation() As String
         Get
             Return ResourceManager.GetString("DateCreation", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Date impression.
+    '''</summary>
+    Public Shared ReadOnly Property DatePremiereImpression() As String
+        Get
+            Return ResourceManager.GetString("DatePremiereImpression", resourceCulture)
         End Get
     End Property
     
@@ -460,6 +478,15 @@ Public Class Resource
     End Property
     
     '''<summary>
+    '''  Recherche une chaîne localisée semblable à Le nouveau mot de passe ne peut être identique ou être constitué à partir de l&apos;ancien mot de passe..
+    '''</summary>
+    Public Shared ReadOnly Property GestUser_NewPasswordContainOldPassword() As String
+        Get
+            Return ResourceManager.GetString("GestUser_NewPasswordContainOldPassword", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
     '''  Recherche une chaîne localisée semblable à Votre mot de passe a été défini..
     '''</summary>
     Public Shared ReadOnly Property GestUser_PwdDefine() As String
@@ -577,6 +604,15 @@ Public Class Resource
     End Property
     
     '''<summary>
+    '''  Recherche une chaîne localisée semblable à Opération.
+    '''</summary>
+    Public Shared ReadOnly Property HistoriqueMouvementId() As String
+        Get
+            Return ResourceManager.GetString("HistoriqueMouvementId", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
     '''  Recherche une chaîne localisée semblable à Libelle.
     '''</summary>
     Public Shared ReadOnly Property Libelle() As String
@@ -618,6 +654,15 @@ Public Class Resource
     Public Shared ReadOnly Property MontantInvalid() As String
         Get
             Return ResourceManager.GetString("MontantInvalid", resourceCulture)
+        End Get
+    End Property
+    
+    '''<summary>
+    '''  Recherche une chaîne localisée semblable à Nombre d&apos;impression.
+    '''</summary>
+    Public Shared ReadOnly Property NombreImpression() As String
+        Get
+            Return ResourceManager.GetString("NombreImpression", resourceCulture)
         End Get
     End Property
     

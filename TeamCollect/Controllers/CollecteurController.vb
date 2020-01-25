@@ -166,14 +166,15 @@ Namespace TeamCollect
                 collecteur.DateCreation = Now
                 collecteur.Etat = 0
                 Dim entities = (From e In db.Personnes.OfType(Of Collecteur)() Select e)
-                Dim list As List(Of Personne) = db.Personnes.OfType(Of Personne)().ToList
-                collecteur.Id = list.ElementAt(list.Count - 1).Id + 1
+                'Dim list As List(Of Personne) = db.Personnes.OfType(Of Personne)().ToList
+                'collecteur.Id = list.ElementAt(list.Count - 1).Id + 1
                 Dim monwebser = New TeamCollecteServices
                 collecteur.CodeSecret = monwebser.GetRandomString(collecteur.Nom, collecteur.Prenom)
                 Dim entity = collecteur.GetEntity
                 db.Personnes.Add(entity)
                 Try
                     db.SaveChanges()
+                    entity.CategorieRemuneration = db.CategorieRemunerations.Find(entity.CategorieRemunerationId)
                     Dim historiqueCollecteurCategorie As New HistoriqueCollecteurCategorie With {
                         .CategorieRemunerationId = entity.CategorieRemunerationId,
                         .CollecteurId = entity.Id,
@@ -235,6 +236,40 @@ Namespace TeamCollect
             Return View(colVM)
         End Function
 
+        Private Sub SaveHistoriqueCollectrice(ByVal collecteur As CollecteurViewModel, ByVal CategorieRemuneration As CategorieRemuneration)
+            Dim entity = collecteur.GetEntity()
+            Dim OldHistoriqueCollecteurCategorie = (From e In db.HistoriqueCollecteurCategories Where e.StatutExistant = True And e.CollecteurId = collecteur.Id Order By e.Id Descending).FirstOrDefault()
+            If Not IsNothing(OldHistoriqueCollecteurCategorie) Then
+                If (OldHistoriqueCollecteurCategorie.Id > 0 And OldHistoriqueCollecteurCategorie.CategorieRemunerationId <> entity.CategorieRemunerationId) Then
+                    OldHistoriqueCollecteurCategorie.StatutExistant = False
+                    db.Entry(OldHistoriqueCollecteurCategorie).State = EntityState.Modified
+                End If
+            Else
+                Dim NewHistoriqueCollecteurCategorie As New HistoriqueCollecteurCategorie With {
+                    .CategorieRemunerationId = CategorieRemuneration.Id,
+                    .CollecteurId = entity.Id,
+                    .Libelle = CategorieRemuneration.Libelle,
+                    .SalaireDeBase = CategorieRemuneration.SalaireDeBase,
+                    .CommissionMinimale = CategorieRemuneration.CommissionMinimale,
+                    .PourcentageCommission = CategorieRemuneration.PourcentageCommission,
+                    .StatutExistant = True,
+                    .DateCreation = DateTime.Now,
+                    .UserId = GetCurrentUser.Id
+                }
+                db.HistoriqueCollecteurCategories.Add(NewHistoriqueCollecteurCategorie)
+                Try
+                    db.SaveChanges()
+                Catch ex As DbEntityValidationException
+                    Util.GetError(ex, ModelState)
+                Catch ex As Exception
+                    Util.GetError(ex, ModelState)
+                End Try
+            End If
+            'If User.IsInRole("MANAGER") Then
+            '    Return RedirectToAction("Index")
+            'End If
+        End Sub
+
         ' POST: /Collecteur/Edit/5
         'Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
         'plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -251,39 +286,13 @@ Namespace TeamCollect
                 Dim entity = collecteur.GetEntity()
                 db.Entry(entity).State = EntityState.Modified
                 Try
-                    'db.SaveChanges()
-
-                    Dim OldHistoriqueCollecteurCategorie = (From e In db.HistoriqueCollecteurCategories Where e.StatutExistant = True And e.CollecteurId = collecteur.Id Order By e.Id Descending).FirstOrDefault()
-                    If Not IsNothing(OldHistoriqueCollecteurCategorie) Then
-                        If (OldHistoriqueCollecteurCategorie.Id > 0 And OldHistoriqueCollecteurCategorie.CategorieRemunerationId <> entity.CategorieRemunerationId) Then
-                            OldHistoriqueCollecteurCategorie.StatutExistant = False
-                            db.Entry(OldHistoriqueCollecteurCategorie).State = EntityState.Modified
-                        End If
-                    ElseIf IsNothing(OldHistoriqueCollecteurCategorie.Id) Then
-                        Dim NewHistoriqueCollecteurCategorie As New HistoriqueCollecteurCategorie With {
-                            .CategorieRemunerationId = categorieRemuneration.Id,
-                            .CollecteurId = entity.Id,
-                            .Libelle = categorieRemuneration.Libelle,
-                            .SalaireDeBase = categorieRemuneration.SalaireDeBase,
-                            .CommissionMinimale = categorieRemuneration.CommissionMinimale,
-                            .PourcentageCommission = categorieRemuneration.PourcentageCommission,
-                            .StatutExistant = True,
-                            .DateCreation = DateTime.Now,
-                            .UserId = GetCurrentUser.Id
-                        }
-                        db.HistoriqueCollecteurCategories.Add(NewHistoriqueCollecteurCategorie)
-                        Try
-                            db.SaveChanges()
-                        Catch ex As DbEntityValidationException
-                            Util.GetError(ex, ModelState)
-                        Catch ex As Exception
-                            Util.GetError(ex, ModelState)
-                        End Try
-                    End If
+                    db.SaveChanges()
+                    SaveHistoriqueCollectrice(collecteur, categorieRemuneration)
                     If User.IsInRole("MANAGER") Then
                         Return RedirectToAction("Index")
+                    Else
+                        Return RedirectToAction("IndexAgence")
                     End If
-                    Return RedirectToAction("IndexAgence")
                 Catch ex As DbEntityValidationException
                     Util.GetError(ex, ModelState)
                 Catch ex As Exception

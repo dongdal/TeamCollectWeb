@@ -12,8 +12,8 @@ End Code
             PasswordExpiredText = "Votre mot de passe est arrivé à expiration. Merci de le changer. / Your password has expired. Thank you for changing it."
         End If
 
-<p class="text-success">@ViewBag.StatusMessage</p>
-<p class="text-warning">@PasswordExpiredText </p>
+<p class="text-success" style="font-size: 20px;" >@ViewBag.StatusMessage</p>
+<p class="text-warning" style="font-size: 16px;" >@PasswordExpiredText </p>
 
 <div class="row">
     <div class="col-md-12">

@@ -1,4 +1,5 @@
-﻿Imports Microsoft.Reporting.WebForms
+﻿Imports Microsoft.AspNet.Identity
+Imports Microsoft.Reporting.WebForms
 Imports System.Data.SqlClient
 Imports System.IO
 
@@ -10,6 +11,14 @@ Public Class NewReport
             Return ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString
         End Get
     End Property
+
+    Private db As New ApplicationDbContext
+
+    Private Function GetCurrentUser() As ApplicationUser
+        Dim id = User.Identity.GetUserId
+        Dim aspuser = db.Users.Find(id)
+        Return aspuser
+    End Function
 
     Private Function ConvertDate(dateConvert As Date) As String
         Dim mydate() = dateConvert.ToString.Split(" ")
@@ -199,7 +208,19 @@ Public Class NewReport
         Dim colonne As String = ""
 
         Dim datefilter = lechampdate & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & lechampdate & " <= (CONVERT(datetime2, @DateFin, 120))"
-        Dim cmd As String = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} LIKE '" & IdValue & "%'  AND {3} = @AgenceId) ", viewName, lechampdate, IdLechamp, AgenceIdField)
+        Dim cmd As String = ""
+
+        If Not (String.IsNullOrEmpty(AgenceId)) And Not (User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("SA") Or User.IsInRole("MANAGER")) Then
+            cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} LIKE '" & IdValue & "%'  AND {3} = " & AgenceId & ") ", viewName, lechampdate, IdLechamp, AgenceIdField)
+        Else
+            If User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("SA") Or User.IsInRole("MANAGER") Then
+                cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} LIKE '" & IdValue & "%' ) ", viewName, lechampdate, IdLechamp)
+            Else
+                AgenceId = GetCurrentUser.Personne.AgenceId
+                cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} LIKE '" & IdValue & "%'  AND {3} = " & AgenceId & ") ", viewName, lechampdate, IdLechamp, AgenceIdField)
+            End If
+        End If
+
         ' Dim cmd As String = String.Format(" SELECT * FROM {0} Where ({1} = @p1) ", viewName, ParaName1)
         'datefilter = " AND  " & DateFilterFieldName & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & DateFilterFieldName & " <= (CONVERT(datetime2, @DateFin, 120)) "
 
@@ -207,7 +228,7 @@ Public Class NewReport
             Using macmd As SqlCommand = New SqlCommand(cmd, myConnection)
                 macmd.Parameters.AddWithValue("@DateDebut", datedebutValue + " 00:00:00")
                 macmd.Parameters.AddWithValue("@DateFin", datefinValue + " 23:59:59")
-                macmd.Parameters.AddWithValue("@AgenceId", AgenceId)
+                'macmd.Parameters.AddWithValue("@AgenceId", AgenceId)
                 'macmd.Parameters.AddWithValue("@p3", IdValue)
                 macmd.CommandTimeout = 0
                 Try
@@ -432,7 +453,12 @@ Public Class NewReport
                     Dim DateFin = ConvertDate(DateFinInter)
                     Dim LeChampDate = "DateCreation"
                     Dim ExtraFilter = "IdCollecteur"
-                    Dim datefilter = LeChampDate & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & LeChampDate & " <= (CONVERT(datetime2, @DateFin, 120)) AND AgenceId=" & AppSession.AgenceId.ToString()
+                    Dim datefilter = LeChampDate & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & LeChampDate & " <= (CONVERT(datetime2, @DateFin, 120)) "
+
+                    If Not (User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("MANAGER") Or User.IsInRole("SA")) Then
+                        datefilter = datefilter & " AND AgenceId=" & AppSession.AgenceId.ToString()
+                    End If
+
                     ShowReportListeClientParCollectrice("ListeClientParCollectrice", GetDataExtraFilter("vListeClientParCollectrice", DateDebut, datefilter, DateFin, ExtraFilter, CollecteurId), DateDebut, DateFin)
 
                 Case "FicheCollecteParPeriode"
@@ -804,10 +830,29 @@ Public Class NewReport
             LOperation = New ReportParameter("Operation", "VENTES DE CARNET")
         End If
 
+        Dim Utilisateur = ""
+        Dim UtilisateurCourant = GetCurrentUser()
+
+        If (String.IsNullOrEmpty(GetCurrentUser.Personne.Prenom)) Then
+            Utilisateur = UtilisateurCourant.Personne.Nom
+        Else
+            Utilisateur = UtilisateurCourant.Personne.Nom & " " & UtilisateurCourant.Personne.Prenom
+        End If
+
+        Dim CurrentUserParam As ReportParameter = New ReportParameter("Utilisateur", Utilisateur)
+
+        Dim Agence = "TOUTES LES AGENCES"
+        If Not (User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("SA") Or User.IsInRole("MANAGER")) Then
+            Agence = UtilisateurCourant.Personne.Agence.Libelle.ToUpper()
+        End If
+        Dim AgenceParam As ReportParameter = New ReportParameter("Agence", Agence)
+
         'Ajout des paramètres
         ReportViewer1.LocalReport.SetParameters(New ReportParameter() {LaDateDebut})
         ReportViewer1.LocalReport.SetParameters(New ReportParameter() {LaDateFin})
         ReportViewer1.LocalReport.SetParameters(New ReportParameter() {LOperation})
+        ReportViewer1.LocalReport.SetParameters(New ReportParameter() {CurrentUserParam})
+        ReportViewer1.LocalReport.SetParameters(New ReportParameter() {AgenceParam})
 
 
         ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("DsFicheOperationsParPeriode", ds))

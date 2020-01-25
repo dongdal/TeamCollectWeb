@@ -15,6 +15,7 @@ Public Class ApplicationDbContext
         modelBuilder.Conventions.Remove(Of OneToManyCascadeDeleteConvention)()
         modelBuilder.Configurations.Add(New ClientCfg())
         modelBuilder.Configurations.Add(New CollecteurCfg())
+        modelBuilder.Configurations.Add(New CompteurImpressionCfg())
         modelBuilder.Configurations.Add(New CoordonneeGeographiqueCfg())
         modelBuilder.Configurations.Add(New HistoriqueMouvementCfg())
         modelBuilder.Configurations.Add(New JournalCaisseCfg())
@@ -52,6 +53,7 @@ Public Class ApplicationDbContext
 
     Public Property Clients() As DbSet(Of Client)
     Public Property Collecteurs() As DbSet(Of Collecteur)
+    Public Property CompteurImpressions() As DbSet(Of CompteurImpression)
     Public Property CoordonneeGeographiques() As DbSet(Of CoordonneeGeographique)
     Public Property HistoriqueMouvements() As DbSet(Of HistoriqueMouvement)
     Public Property JournalCaisses() As DbSet(Of JournalCaisse)

@@ -330,4 +330,19 @@
   <data name="SuccessOperation" xml:space="preserve">
     <value>Opération effectuée avec succès.</value>
   </data>
+  <data name="CollectriceId" xml:space="preserve">
+    <value>Collectrice</value>
+  </data>
+  <data name="DatePremiereImpression" xml:space="preserve">
+    <value>Date impression</value>
+  </data>
+  <data name="HistoriqueMouvementId" xml:space="preserve">
+    <value>Opération</value>
+  </data>
+  <data name="NombreImpression" xml:space="preserve">
+    <value>Nombre d'impression</value>
+  </data>
+  <data name="GestUser_NewPasswordContainOldPassword" xml:space="preserve">
+    <value>Le nouveau mot de passe ne peut être identique ou être constitué à partir de l'ancien mot de passe.</value>
+  </data>
 </root>

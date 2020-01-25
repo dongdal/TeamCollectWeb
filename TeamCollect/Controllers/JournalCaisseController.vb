@@ -28,7 +28,7 @@ Namespace TeamCollect
         End Function
 
         <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
-        Function Index(sortOrder As String, currentFilter As String, searchString As String, page As Integer?) As ActionResult
+        Function Index(sortOrder As String, currentFilter As String, searchString As String, page As Integer?, Optional Message As String = "") As ActionResult
             'Dim exercices = db.Exercices.Include(Function(e) e.User)
             'Return View(exercices.ToList())
 
@@ -50,6 +50,7 @@ Namespace TeamCollect
                 entities = entities.Where(Function(e) e.Collecteur.Nom.ToUpper.Contains(searchString.ToUpper) Or e.Collecteur.Prenom.ToUpper.Contains(searchString.ToUpper)).ToList
             End If
             ViewBag.EnregCount = entities.Count
+            ViewBag.Message = Message
 
             Dim pageSize As Integer = ConfigurationManager.AppSettings("PageSize")
             Dim pageNumber As Integer = If(page, 1)
@@ -167,10 +168,49 @@ Namespace TeamCollect
         ' POST: /JournalCaisse/Edit/5
         'Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
         'plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
+        '<HttpPost()>
+        '<ValidateAntiForgeryToken()>
+        '<LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
+        'Function Edit(ByVal journalcaisse As JournalCaisseJS) As JsonResult
+        '    If ModelState.IsValid Then
+        '        Dim entity = journalcaisse.getEntity()
+        '        entity.DateCloture = Now.Date
+        '        entity.Etat = 1
+        '        entity.UserId = GetCurrentUser.Id
+
+        '        Dim wherecloseId = entity.Id
+        '        Dim montantTheo = db.HistoriqueMouvements.OfType(Of HistoriqueMouvement).Where(Function(h) h.JournalCaisseId = wherecloseId).Sum(Function(h) h.Montant)
+        '        entity.MontantTheorique = (IIf(montantTheo.HasValue, montantTheo, 0) + entity.FondCaisse)
+        '        entity.MontantReel = entity.MontantReel
+
+        '        db.Entry(entity).State = EntityState.Modified
+
+        '        Try
+        '            db.SaveChanges()
+        '            Return Json(New With {.Result = "OK"})
+        '        Catch ex As DbEntityValidationException
+        '            Util.GetError(ex, ModelState)
+        '            Return Json(New With {.Result = "Error: Une erreur est survenue pendant l'exécution de la requête: veuillez contacter l'administrateur."})
+        '        Catch ex As Exception
+        '            Util.GetError(ex, ModelState)
+        '            Return Json(New With {.Result = "Error: Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur."})
+        '        End Try
+        '    End If
+
+        '    'Dim userAgenceId = GetCurrentUser.Personne.AgenceId
+        '    'Dim listPersonne = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
+        '    'Dim listPersonne2 As New List(Of SelectListItem)
+        '    'For Each item In listPersonne
+        '    '    listPersonne2.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & " " & item.Prenom})
+        '    'Next
+        '    ''journalcaisse.IDsCollecteur = listPersonne2
+
+        '    Return Json(New With {.Result = "Error"})
+        'End Function
+        '<ValidateAntiForgeryToken()>
         <HttpPost()>
-        <ValidateAntiForgeryToken()>
-        <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
-        Function Edit(ByVal journalcaisse As JournalCaisseViewModel) As JsonResult
+        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
+        Function CloturerCaisse(ByVal journalcaisse As JournalCaisseJSON) As JsonResult
             If ModelState.IsValid Then
                 Dim entity = journalcaisse.getEntity()
                 entity.DateCloture = Now.Date
@@ -196,13 +236,13 @@ Namespace TeamCollect
                 End Try
             End If
 
-            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
-            Dim listPersonne = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
-            Dim listPersonne2 As New List(Of SelectListItem)
-            For Each item In listPersonne
-                listPersonne2.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & " " & item.Prenom})
-            Next
-            journalcaisse.IDsCollecteur = listPersonne2
+            'Dim userAgenceId = GetCurrentUser.Personne.AgenceId
+            'Dim listPersonne = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
+            'Dim listPersonne2 As New List(Of SelectListItem)
+            'For Each item In listPersonne
+            '    listPersonne2.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & " " & item.Prenom})
+            'Next
+            ''journalcaisse.IDsCollecteur = listPersonne2
 
             Return Json(New With {.Result = "Error"})
         End Function
@@ -238,5 +278,41 @@ Namespace TeamCollect
             End If
             MyBase.Dispose(disposing)
         End Sub
+    End Class
+
+    Public Class JournalCaisseJSON
+        Public Property Id As Long = 0
+        Public Property CollecteurId As Long = 0
+        Public Property DateCreation As Nullable(Of Date)
+        Public Property FondCaisse As String
+        Public Property PlafondDebat As String
+        Public Property PlafondEnCours As String
+        Public Property MontantReel As String
+        Public Property MontantTheorique As String
+        Public Property DateOuverture As Date
+        Public Property DateCloture As Nullable(Of Date)
+        Public Property UserId As String
+        Public Property Etat As Nullable(Of Integer)
+
+        Public Function getEntity() As JournalCaisse
+            Dim entity As New JournalCaisse
+
+            With entity
+                .Id = Me.Id
+                .CollecteurId = Me.CollecteurId
+                .MontantTheorique = Me.MontantTheorique
+                .MontantReel = Me.MontantReel
+                .FondCaisse = Me.FondCaisse
+                .DateOuverture = Me.DateOuverture
+                .DateCloture = Me.DateCloture
+                .UserId = Me.UserId
+                .DateCreation = Me.DateCreation
+                .Etat = Me.Etat
+                .PlafondDeDebat = Me.PlafondDebat
+                .PlafondEnCours = Me.PlafondEnCours
+            End With
+
+            Return entity
+        End Function
     End Class
 End Namespace

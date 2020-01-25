@@ -19,10 +19,11 @@
             </div>
             <div class="panel-body pt0 pb0">
                 <div id="wizard" class="bwizard">
-                    @Using (Html.BeginForm("Edit", "JournalCaisse", New With {.role = "form", .id = "__AjaxAntiForgeryForm"}))
+                    @Using (Html.BeginForm("Edit", "JournalCaisse", FormMethod.Post, New With {.role = "form", .id = "__AjaxAntiForgeryForm"}))
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(True)
                         @Html.HiddenFor(Function(model) model.Id)
+                        @Html.HiddenFor(Function(model) model.UserId)
                         @Html.HiddenFor(Function(model) model.Etat)
                         @Html.HiddenFor(Function(model) model.DateCreation)
                         @Html.HiddenFor(Function(model) model.DateOuverture)
@@ -78,6 +79,8 @@
             var PlafondDebat = '#PlafondDebat';
             var PlafondEnCours = '#PlafondEnCours';
             var MontantReel = '#MontantReel';
+            var UserId = '#UserId';
+            var Etat = '#Etat';
 
             var form = $('#__AjaxAntiForgeryForm');
             var token = $('input[name="__RequestVerificationToken"]', form).val();
@@ -85,7 +88,6 @@
             if (typeof $(FondCaisse).val() == "undefined" || $(FondCaisse).val() == "" ||typeof $(Id).val() == "undefined" || $(Id).val() == "" || typeof $(CollecteurId).val() == "undefined" || $(CollecteurId).val() == "" || typeof $(Etat).val() == "undefined" || $(Etat).val() == "" || typeof $(DateCreation).val() == "undefined" || $(DateCreation).val() == "" || typeof $(DateOuverture).val() == "undefined" || $(DateOuverture).val() == "" || typeof $(PlafondDebat).val() == "undefined" || $(PlafondDebat).val() == "" || typeof $(PlafondEnCours).val() == "undefined" || $(PlafondEnCours).val() == "" || typeof $(MontantReel).val() == "undefined" || $(MontantReel).val() == "") {
                 $.alert('"Veuillez renseigner tous les champs obligatoires."');
             } else {
-
             $.confirm({
                 title: '@Resource.CloturerCaisse',
                 content: '@Resource.CloturerCaisseBody',
@@ -97,17 +99,19 @@
                 buttons: {
                     Confirmer: function () {
                         $.ajax({
-                            url: '@Url.Action("Edit")',
+                            url: '@Url.Action("CloturerCaisse")',
                             type: 'POST',
                             data: {
-                                __RequestVerificationToken: token,
                                 Id: $(Id).val(),
                                 CollecteurId: $(CollecteurId).val(),
                                 DateCreation: $(DateCreation).val(),
                                 FondCaisse: $(FondCaisse).val(),
                                 PlafondDebat: $(PlafondDebat).val(),
                                 PlafondEnCours: $(PlafondEnCours).val(),
-                                MontantReel: $(MontantReel).val()
+                                MontantReel: $(MontantReel).val(),
+                                DateOuverture: $(DateOuverture).val(),
+                                UserId: $(UserId).val(),
+                                Etat: $(Etat).val()
                             },
                         }).done(function (data) {
                             if (data.Result == "OK") {

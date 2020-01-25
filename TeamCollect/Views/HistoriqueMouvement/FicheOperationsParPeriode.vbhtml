@@ -15,44 +15,54 @@
     <div class="row">
         @Using (Html.BeginForm())
             @<div class="col-md-12 form-group">
-                <fieldset>
-                    <legend style="color:white"> Votre Filtre</legend>
-                    <div class="col-md-2">
-                        <div class="input-group">
-                            <label>Date de début</label>
-                            <div class="input-group input-icon">
-                                <span class="input-group-addon"><i class="fa fa-calendar s16"></i></span>
-                                <input type="text" class="form-control" value="@ViewBag.dateDebut.ToString" id="basic-datepicker" name="dateDebut" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <div class="input-group">
-                            <label>Date de fin</label>
-                            <div class="input-group input-icon">
-                                <span class="input-group-addon"><i class="fa fa-calendar s16"></i></span>
-                                <input type="text" class="form-control" value="@ViewBag.dateFin.ToString" id="basic-datepicker2" name="dateFin" />
-                            </div>
+                 <fieldset>
+                     <legend style="color:white"> Votre Filtre</legend>
+                     <div class="col-md-2">
+                         <div class="input-group">
+                             <label>Date de début</label>
+                             <div class="input-group input-icon">
+                                 <span class="input-group-addon"><i class="fa fa-calendar s16"></i></span>
+                                 <input type="text" class="form-control" value="@ViewBag.dateDebut.ToString" id="basic-datepicker" name="dateDebut" />
+                             </div>
+                         </div>
+                     </div>
+                     <div class="col-md-2">
+                         <div class="input-group">
+                             <label>Date de fin</label>
+                             <div class="input-group input-icon">
+                                 <span class="input-group-addon"><i class="fa fa-calendar s16"></i></span>
+                                 <input type="text" class="form-control" value="@ViewBag.dateFin.ToString" id="basic-datepicker2" name="dateFin" />
+                             </div>
 
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Opération </label>
-                            <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.Operation) </label>
-                            @Html.DropDownListFor(Function(model) model.Operation,
- New SelectList(Model.ListeOperations, "Value", "Text"), "Selectionnez une opération", New With {.class = "form-control select2"})
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <br />
-                        <div class="input-group">
-                            <span class="input-group-btn">
-                                <button id="lnkReport" class="btn btn-primary" type="button" style="margin-top:5px"> Visualiser <i class="fa fa-print"></i></button>
-                            </span>
-                        </div>
-                    </div>
-                </fieldset>
+                         </div>
+                     </div>
+                     <div class="col-md-3">
+                         <div class="form-group">
+                             <label>Agence </label>
+                             <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.AgenceId) </label>
+                             @Html.DropDownListFor(Function(model) model.AgenceId,
+New SelectList(Model.ListeAgence, "Value", "Text"), "Selectionnez une Agence", New With {.class = "form-control select2"})
+                         </div>
+                     </div>
+
+                     <div class="col-md-3">
+                         <div class="form-group">
+                             <label>Opération </label>
+                             <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.Operation) </label>
+                             @Html.DropDownListFor(Function(model) model.Operation,
+  New SelectList(Model.ListeOperations, "Value", "Text"), "Selectionnez une opération", New With {.class = "form-control select2"})
+                         </div>
+                     </div>
+
+                     <div class="col-md-2">
+                         <br />
+                         <div class="input-group">
+                             <span class="input-group-btn">
+                                 <button id="lnkReport" class="btn btn-primary" type="button" style="margin-top:5px"> Visualiser <i class="fa fa-print"></i></button>
+                             </span>
+                         </div>
+                     </div>
+                 </fieldset>
             </div>
         End Using
     </div>
@@ -70,7 +80,7 @@
     $('#lnkReport').on('click', function () {
         var DateDebut = $('#basic-datepicker').val();
         var DateFin = $('#basic-datepicker2').val();
-        var AgenceId = @ViewBag.UserAgenceId.ToString; //$('#AgenceId').val();
+        var AgenceId = $('#AgenceId').val();
         var Operation = $('#Operation').val();
         if (Operation == null || Operation == "") {
             alert("Merci de bien vouloir sélectionner une opération.");

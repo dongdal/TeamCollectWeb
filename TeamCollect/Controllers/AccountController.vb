@@ -338,7 +338,8 @@ Public Class AccountController
                 If(message = ManageMessageId.SetPasswordSuccess, Resource.GestUser_PwdDefine,
                     If(message = ManageMessageId.RemoveLoginSuccess, Resource.GestUser_DeleteConection,
                         If(message = ManageMessageId.UnknownError, Resource.GestUser_ErrorOccured,
-                        "")))))
+                        If(message = ManageMessageId.NewPasswordContainOldPassword, Resource.GestUser_NewPasswordContainOldPassword,
+                        ""))))))
         ViewBag.HasLocalPassword = HasPassword()
         ViewBag.ReturnUrl = Url.Action("Manage")
         Return View()
@@ -367,6 +368,12 @@ Public Class AccountController
         ViewBag.HasLocalPassword = hasLocalLogin
         ViewBag.ReturnUrl = Url.Action("Manage")
         If hasLocalLogin Then
+            If (model.NewPassword.ToLower.Contains(model.OldPassword.ToLower)) Then
+                ModelState.AddModelError("NewPassword", "Le nouveau mot de passe ne peut être identique ou être constitué à partir de l'ancien mot de passe.")
+                Return RedirectToAction("Manage", New With {
+                    .Message = ManageMessageId.NewPasswordContainOldPassword
+                })
+            End If
             If ModelState.IsValid Then
                 Dim result As IdentityResult = Await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword)
                 If result.Succeeded Then
@@ -631,6 +638,7 @@ Public Class AccountController
         SetPasswordSuccess
         RemoveLoginSuccess
         UnknownError
+        NewPasswordContainOldPassword
     End Enum
 
     Private Class ChallengeResult

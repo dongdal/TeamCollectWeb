@@ -239,10 +239,12 @@
     <Compile Include="Controllers\CalculAjoutController.vb" />
     <Compile Include="Controllers\CarnetClientController.vb" />
     <Compile Include="Controllers\CategorieRemunerationsController.vb" />
+    <Compile Include="Controllers\CompteurImpressionController.vb" />
     <Compile Include="Controllers\ModulePricipale.vb" />
     <Compile Include="Controllers\RetraitController.vb" />
     <Compile Include="Controllers\SecteurActiviteController.vb" />
     <Compile Include="Controllers\TypeCarnetController.vb" />
+    <Compile Include="DAL\Config\CompteurImpressionCfg.vb" />
     <Compile Include="DAL\Config\HistoriqueCollecteurCategorieCfg.vb" />
     <Compile Include="DAL\Config\CategorieRemunerationCfg.vb" />
     <Compile Include="DAL\Config\DetailsCommissionsCfg.vb" />
@@ -302,6 +304,11 @@
       <DependentUpon>201909101228319_Add_Tables_CategorieRemuneration_And_HistoriqueCollecteurRemuneration.vb</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201909101228319_Add_Tables_CategorieRemuneration_And_HistoriqueCollecteurRemuneration.vb" />
+    <Compile Include="Migrations\201912300754013_Add_Table_CompteurImpression.Designer.vb">
+      <DependentUpon>201912300754013_Add_Table_CompteurImpression.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912300754013_Add_Table_CompteurImpression.vb" />
+    <Compile Include="Models\CompteurImpression.vb" />
     <Compile Include="Models\HistoriqueCollecteurCategorie.vb" />
     <Compile Include="Models\CommissionColecteur.vb" />
     <Compile Include="Models\DetailsCommission.vb" />
@@ -321,6 +328,7 @@
     <Compile Include="ViewModels\CategorieRemunerationViewModel.vb" />
     <Compile Include="ViewModels\ChoixParamAjoutViewModel.vb" />
     <Compile Include="ViewModels\AnnulationViewModel.vb" />
+    <Compile Include="ViewModels\CompteurImpressionViewModel.vb" />
     <Compile Include="ViewModels\TransfertViewModel.vb" />
     <Compile Include="ViewModels\RetraitViewModel.vb" />
     <Compile Include="ViewModels\SecteurActiviteViewModel.vb" />
@@ -531,6 +539,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201909101228319_Add_Tables_CategorieRemuneration_And_HistoriqueCollecteurRemuneration.resx">
       <DependentUpon>201909101228319_Add_Tables_CategorieRemuneration_And_HistoriqueCollecteurRemuneration.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912300754013_Add_Table_CompteurImpression.resx">
+      <DependentUpon>201912300754013_Add_Table_CompteurImpression.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -875,9 +886,9 @@
     <Content Include="Report\Template\FicheCommissionsCollecteurs.rdlc" />
     <Content Include="Report\Template\FicheCommissionsParPorteFeuille.rdlc" />
     <Content Include="Report\Template\FicheCommissionsParPorteFeuilleSimplifiee.rdlc" />
-    <Content Include="Report\Template\FicheOperationsParPeriode.rdlc" />
     <Content Include="Report\Template\CommissionCollectriceAvecGrilleRemuneration.rdlc" />
     <Content Include="Report\Template\ListeClientParCollectrice.rdlc" />
+    <EmbeddedResource Include="Report\Template\FicheOperationsParPeriode.rdlc" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1091,6 +1102,7 @@
     <Content Include="Views\HistoriqueMouvement\AnnulationRetrait.vbhtml" />
     <Content Include="Views\HistoriqueMouvement\AnnulationVente.vbhtml" />
     <Content Include="Views\Client\ListeClientParCollectrice.vbhtml" />
+    <Content Include="Views\CompteurImpression\Index.vbhtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

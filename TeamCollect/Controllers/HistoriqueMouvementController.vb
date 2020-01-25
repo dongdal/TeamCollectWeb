@@ -148,6 +148,13 @@ Namespace TeamCollect
             entityVM.ListeOperations = ListeOperations
             '---------------------------
 
+            Dim Agences = (From e In db.Agences Select e).ToList
+            Dim AgenceList As New List(Of SelectListItem)
+            For Each agence In Agences
+                AgenceList.Add(New SelectListItem With {.Value = agence.Id, .Text = agence.Libelle})
+            Next
+            entityVM.ListeAgence = AgenceList
+
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
             ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
@@ -718,9 +725,9 @@ Namespace TeamCollect
         End Function
 
 
+        '<ValidateAntiForgeryToken()>
         <HttpPost()>
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
-        <ValidateAntiForgeryToken()>
         Function Annulation(entityVM As AnnulationViewModel) As JsonResult
             'on recupere l'id du collecteur chef collect connecter
             Dim HistoriqueMouvementId = entityVM.Id
@@ -886,7 +893,6 @@ Namespace TeamCollect
         'POST/AnnulationRetrait/5
         <HttpPost()>
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
-        <ValidateAntiForgeryToken()>
         Function AnnulationRetrait(entityVM As AnnulationViewModel) As JsonResult
             'on recupere l'id du collecteur chef collect connecter
             Dim HistoriqueMouvementId = entityVM.Id
@@ -958,7 +964,7 @@ Namespace TeamCollect
             'db.SaveChanges()
 
             'mise a jour du solde du client
-            Client.Solde -= Montant
+            client.Solde -= Montant
             db.Entry(client).State = EntityState.Modified
             'db.SaveChanges()
 
@@ -1052,7 +1058,6 @@ Namespace TeamCollect
         'POST/AnnulationVente/5
         <HttpPost()>
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
-        <ValidateAntiForgeryToken()>
         Function AnnulationVente(entityVM As AnnulationViewModel) As JsonResult
             'on recupere l'id du collecteur chef collect connecter
             Dim HistoriqueMouvementId = entityVM.Id

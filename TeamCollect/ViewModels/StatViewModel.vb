@@ -6,7 +6,9 @@ Public Class StatViewModel
     Public Property CollecteurId As Long
     Public Overridable Property IDsCollecteur As List(Of SelectListItem)
     Public Overridable Property Collecteur As Collecteur
+    <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
     Public Overridable Property Operation As String
+    Public Overridable Property AgenceId As String
 
     Public Property ClientId As Long
     Public Overridable Property IDsClient As List(Of SelectListItem)
@@ -28,6 +30,7 @@ Public Class StatViewModel
     Public Property ListeMois As IEnumerable(Of SelectListItem)
     Public Property ListeAnnee As IEnumerable(Of SelectListItem)
     Public Property ListeOperations As IEnumerable(Of SelectListItem)
+    Public Property ListeAgence As IEnumerable(Of SelectListItem)
 
 
     Public Property myjson As String
