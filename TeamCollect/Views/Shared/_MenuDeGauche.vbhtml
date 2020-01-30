@@ -181,6 +181,9 @@
                                         <a href="@Url.Action("FicheOperationsParPeriode", "HistoriqueMouvement")" title="Historique des opérations"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Historique opérations</span></a>
                                     </li>
                                     <li>
+                                        <a href="@Url.Action("HistoriqueCollectriceParPeriode", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Etat caise collectrice</span></a>
+                                    </li>
+                                    <li>
                                         <a href="@Url.Action("HistoriqueCollecteur", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Synthèse Collecteur</span></a>
                                     </li>
 

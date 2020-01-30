@@ -203,6 +203,38 @@ Public Class NewReport
         Return matable
     End Function
 
+    Private Function GetDataHistorique(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String) As DataTable
+        Dim matable As DataTable = Nothing
+        Dim colonne As String = ""
+
+        Dim datefilter = lechampdate & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & lechampdate & " <= (CONVERT(datetime2, @DateFin, 120))"
+        Dim cmd As String = ""
+        cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {1} = {2} ) ", viewName, IdLechamp, IdValue)
+
+        Using myConnection As New SqlConnection(ConnectionString)
+            Using macmd As SqlCommand = New SqlCommand(cmd, myConnection)
+                macmd.Parameters.AddWithValue("@DateDebut", datedebutValue + " 00:00:00")
+                macmd.Parameters.AddWithValue("@DateFin", datefinValue + " 23:59:59")
+                'macmd.Parameters.AddWithValue("@AgenceId", AgenceId)
+                'macmd.Parameters.AddWithValue("@p3", IdValue)
+                macmd.CommandTimeout = 0
+                Try
+                    myConnection.Open()
+                    Using reader As SqlDataReader = macmd.ExecuteReader
+                        matable = New DataTable
+                        matable.Load(reader)
+                        reader.Close()
+                    End Using
+                Catch ex As Exception
+                    'logMessage(ex.Message)
+                End Try
+            End Using
+            myConnection.Close()
+        End Using
+
+        Return matable
+    End Function
+
     Private Function GetDataOperations(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String, AgenceId As String, AgenceIdField As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
@@ -479,6 +511,19 @@ Public Class NewReport
                     Dim AgenceId = Request("AgenceId")
                     'Operation = Operation & "%"
                     ShowReportFicheOperationsParPeriode("FicheOperationsParPeriode", GetDataOperations("FicheOperationsParPeriode", DateDebut, "DateOperation", DateFin, ChampFiltre, Operation, AgenceId, "AgenceId"), DateDebut, DateFin, Operation)
+
+
+                Case "HistoriqueCollectriceParPeriode"
+                    Dim Operation = Request("Operation")
+                    Dim CollecteurId = Request("CollecteurId")
+                    Dim DateDebutInter = Request("DateDebut")
+                    Dim DateDebut = ConvertDate(DateDebutInter)
+                    Dim DateFinInter = Request("DateFin")
+                    Dim DateFin = ConvertDate(DateFinInter)
+                    Dim ChampFiltre = "CollectriceId"
+                    Dim AgenceId = AppSession.AgenceId
+                    'Operation = Operation & "%"
+                    ShowReportHistoriqueCollectriceParPeriode("HistoriqueCollectriceParPeriode", GetDataHistorique("HistoriqueCollectriceParPeriode", DateDebut, "DateOperation", DateFin, ChampFiltre, CollecteurId), DateDebut, DateFin, Operation)
 
                 Case "Clt"
                     Dim DateDebutInter = Request("DateDebut")
@@ -830,20 +875,13 @@ Public Class NewReport
             LOperation = New ReportParameter("Operation", "VENTES DE CARNET")
         End If
 
-        Dim Utilisateur = ""
-        Dim UtilisateurCourant = GetCurrentUser()
-
-        If (String.IsNullOrEmpty(GetCurrentUser.Personne.Prenom)) Then
-            Utilisateur = UtilisateurCourant.Personne.Nom
-        Else
-            Utilisateur = UtilisateurCourant.Personne.Nom & " " & UtilisateurCourant.Personne.Prenom
-        End If
+        Dim Utilisateur = AppSession.NomPrenomUser
 
         Dim CurrentUserParam As ReportParameter = New ReportParameter("Utilisateur", Utilisateur)
 
         Dim Agence = "TOUTES LES AGENCES"
         If Not (User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("SA") Or User.IsInRole("MANAGER")) Then
-            Agence = UtilisateurCourant.Personne.Agence.Libelle.ToUpper()
+            Agence = AppSession.AgenceLibelle
         End If
         Dim AgenceParam As ReportParameter = New ReportParameter("Agence", Agence)
 
@@ -856,6 +894,27 @@ Public Class NewReport
 
 
         ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("DsFicheOperationsParPeriode", ds))
+    End Sub
+
+    Private Sub ShowReportHistoriqueCollectriceParPeriode(reportName As String, ds As Object, DateDebut As String, DateFin As String, Operation As String)
+        ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
+        ReportViewer1.LocalReport.DataSources.Clear()
+
+        'définition des paramètres
+        Dim LaDateDebut As ReportParameter = New ReportParameter("DateDebut", DateDebut)
+        Dim LaDateFin As ReportParameter = New ReportParameter("DateFin", DateFin)
+
+        Dim Utilisateur = AppSession.NomPrenomUser
+
+        Dim CurrentUserParam As ReportParameter = New ReportParameter("Utilisateur", Utilisateur.ToUpper())
+
+        'Ajout des paramètres
+        ReportViewer1.LocalReport.SetParameters(New ReportParameter() {LaDateDebut})
+        ReportViewer1.LocalReport.SetParameters(New ReportParameter() {LaDateFin})
+        ReportViewer1.LocalReport.SetParameters(New ReportParameter() {CurrentUserParam})
+
+
+        ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("DsHistoriqueCollectriceParPeriode", ds))
     End Sub
 
 

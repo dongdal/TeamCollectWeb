@@ -66,6 +66,16 @@
         End Set
     End Property
 
+    Shared Property AgenceLibelle As String
+        Get
+            Return HttpContext.Current.Session("AgenceLibelle")
+
+        End Get
+        Set(value As String)
+            HttpContext.Current.Session("AgenceLibelle") = value
+        End Set
+    End Property
+
     'Shared Property LastExercices As Dictionary(Of Integer, Integer)
     '    Get
     '        Return HttpContext.Current.Session("LastExercices")

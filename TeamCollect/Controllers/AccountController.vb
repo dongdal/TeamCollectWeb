@@ -109,6 +109,7 @@ Public Class AccountController
                 AppSession.PersonneId = appUser.PersonneId
                 AppSession.CodeSecret = appUser.CodeSecret
                 AppSession.AgenceId = appUser.Personne.AgenceId
+                AppSession.AgenceLibelle = appUser.Personne.Agence.Libelle.ToUpper
                 AppSession.PasswordExpiredDate = appUser.PasswordExpiredDate
                 If (String.IsNullOrEmpty(appUser.Personne.Prenom)) Then
                     AppSession.NomPrenomUser = appUser.Personne.Nom.ToUpper
