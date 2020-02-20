@@ -888,8 +888,8 @@
     <Content Include="Report\Template\FicheCommissionsParPorteFeuilleSimplifiee.rdlc" />
     <Content Include="Report\Template\CommissionCollectriceAvecGrilleRemuneration.rdlc" />
     <Content Include="Report\Template\ListeClientParCollectrice.rdlc" />
-    <EmbeddedResource Include="Report\Template\FicheOperationsParPeriode.rdlc" />
     <Content Include="Report\Template\HistoriqueCollectriceParPeriode.rdlc" />
+    <Content Include="Report\Template\FicheOperationsParPeriode.rdlc" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

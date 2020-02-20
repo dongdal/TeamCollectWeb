@@ -87,7 +87,6 @@
         </Paragraphs>
         <rd:DefaultName>Textbox2</rd:DefaultName>
         <Top>0.81139cm</Top>
-        <Left>0cm</Left>
         <Height>0.81167cm</Height>
         <Width>26.74875cm</Width>
         <Style>
@@ -502,7 +501,7 @@
                                 <FontFamily>Trebuchet Ms</FontFamily>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
-                                <Format>#,0.00;-#,0.00;'-'</Format>
+                                <Format>#,0;-#,0;'-'</Format>
                                 <Color>Blue</Color>
                               </Style>
                             </TextRun>
@@ -596,7 +595,7 @@
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>Collecteur</Value>
+                                <Value>PorteFeuille</Value>
                                 <Style>
                                   <FontFamily>Trebuchet Ms</FontFamily>
                                   <FontWeight>Bold</FontWeight>
@@ -688,9 +687,9 @@
               </TablixHeader>
               <TablixMembers>
                 <TablixMember>
-                  <Group Name="CollecteurId">
+                  <Group Name="PorteFeuilleId">
                     <GroupExpressions>
-                      <GroupExpression>=Fields!CollecteurId.Value</GroupExpression>
+                      <GroupExpression>=Fields!PorteFeuilleId.Value</GroupExpression>
                     </GroupExpressions>
                   </Group>
                   <SortExpressions>
@@ -701,14 +700,44 @@
                   <TablixHeader>
                     <Size>3.61503cm</Size>
                     <CellContents>
-                      <Textbox Name="Collecteur">
+                      <Textbox Name="LibellePorteFeuille">
                         <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
                         <Paragraphs>
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>=Fields!Collecteur.Value</Value>
+                                <Value>=Fields!PorteFeuilleId.Value</Value>
+                                <Style>
+                                  <FontFamily>Trebuchet Ms</FontFamily>
+                                  <FontSize>9pt</FontSize>
+                                  <FontWeight>Normal</FontWeight>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style>
+                              <TextAlign>Center</TextAlign>
+                            </Style>
+                          </Paragraph>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>- </Value>
+                                <Style>
+                                  <FontFamily>Tahoma</FontFamily>
+                                  <FontSize>8pt</FontSize>
+                                  <FontWeight>Bold</FontWeight>
+                                </Style>
+                              </TextRun>
+                            </TextRuns>
+                            <Style>
+                              <TextAlign>Center</TextAlign>
+                            </Style>
+                          </Paragraph>
+                          <Paragraph>
+                            <TextRuns>
+                              <TextRun>
+                                <Value>=Fields!LibellePorteFeuille.Value</Value>
                                 <Style>
                                   <FontFamily>Trebuchet Ms</FontFamily>
                                   <FontSize>9pt</FontSize>
@@ -720,7 +749,7 @@
                             </Style>
                           </Paragraph>
                         </Paragraphs>
-                        <rd:DefaultName>Collecteur</rd:DefaultName>
+                        <rd:DefaultName>LibellePorteFeuille</rd:DefaultName>
                         <Style>
                           <Border>
                             <Color>LightGrey</Color>
@@ -793,9 +822,8 @@
         </TablixRowHierarchy>
         <DataSetName>DsFicheOperationsParPeriode</DataSetName>
         <Top>2.59786cm</Top>
-        <Left>0cm</Left>
         <Height>1.8cm</Height>
-        <Width>26.74875cm</Width>
+        <Width>26.74876cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <Border>
@@ -807,7 +835,7 @@
     <Height>1.90852in</Height>
     <Style />
   </Body>
-  <Width>10.531in</Width>
+  <Width>10.53101in</Width>
   <Page>
     <PageHeader>
       <Height>2.50542cm</Height>
@@ -818,7 +846,6 @@
           <Source>Embedded</Source>
           <Value>logo</Value>
           <Sizing>FitProportional</Sizing>
-          <Left>0cm</Left>
           <Height>1.5cm</Height>
           <Width>1.5cm</Width>
           <Style>
@@ -964,7 +991,6 @@ BP : 4531 Yaoundé</Value>
       <ReportItems>
         <Line Name="Line1">
           <Top>0.17639cm</Top>
-          <Left>0cm</Left>
           <Height>0cm</Height>
           <Width>26.74875cm</Width>
           <Style>
@@ -1063,7 +1089,6 @@ BP : 4531 Yaoundé</Value>
           </Paragraphs>
           <rd:DefaultName>Utilisateur</rd:DefaultName>
           <Top>0.35779cm</Top>
-          <Left>0cm</Left>
           <Height>0.6cm</Height>
           <Width>9.89417cm</Width>
           <ZIndex>2</ZIndex>
@@ -1175,6 +1200,10 @@ FROM            FicheOperationsParPeriode</CommandText>
         </Field>
         <Field Name="LibelleOperation">
           <DataField>LibelleOperation</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="LibellePorteFeuille">
+          <DataField>LibellePorteFeuille</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>

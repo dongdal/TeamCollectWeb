@@ -33,6 +33,7 @@ Partial Public Class HistoriqueMouvement
 
 
     Public Property LibelleOperation As String
+    Public Overridable Property CompteurImpression As ICollection(Of CompteurImpression) = New HashSet(Of CompteurImpression)
 
     'Public Property CoordoneeGeographiqueId As Long?
     'Public Overridable Property CoordoneeGeographique As CoordonneeGeographique

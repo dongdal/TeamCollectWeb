@@ -27,7 +27,7 @@ Namespace TeamCollect
                 searchString = currentFilter
             End If
 
-            Dim entities = (From e In db.CompteurImpressions Select e).ToList
+            Dim entities = From e In db.CompteurImpressions.Include(Function(h) h.Collectrice).Include(Function(h) h.HistoriqueMouvement).ToList
 
             If Not String.IsNullOrEmpty(searchString) Then
                 entities = entities.Where(Function(e) e.Collectrice.UserName.ToUpper.Contains(searchString.ToUpper) Or e.Collectrice.Personne.Nom.ToUpper.Contains(searchString.ToUpper) Or

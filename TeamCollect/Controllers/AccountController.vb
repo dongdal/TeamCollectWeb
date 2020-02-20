@@ -108,23 +108,30 @@ Public Class AccountController
                 AppSession.UserName = appUser.UserName
                 AppSession.PersonneId = appUser.PersonneId
                 AppSession.CodeSecret = appUser.CodeSecret
-                AppSession.AgenceId = appUser.Personne.AgenceId
-                AppSession.AgenceLibelle = appUser.Personne.Agence.Libelle.ToUpper
+                If (IsNothing(appUser.Personne.AgenceId)) Then
+                    AppSession.AgenceId = 0
+                    AppSession.AgenceLibelle = "TOUTES LES AGENCES"
+                Else
+                    AppSession.AgenceId = appUser.Personne.AgenceId
+                    AppSession.AgenceLibelle = appUser.Personne.Agence.Libelle.ToUpper
+                    'AppSession.AgenceId = 20003
+                End If
+
                 AppSession.PasswordExpiredDate = appUser.PasswordExpiredDate
                 If (String.IsNullOrEmpty(appUser.Personne.Prenom)) Then
-                    AppSession.NomPrenomUser = appUser.Personne.Nom.ToUpper
-                Else
-                    AppSession.NomPrenomUser = appUser.Personne.Nom.ToUpper & " " & appUser.Personne.Prenom.ToUpper
-                End If
-                Await SignInAsync(appUser, model.RememberMe)
+                        AppSession.NomPrenomUser = appUser.Personne.Nom.ToUpper
+                    Else
+                        AppSession.NomPrenomUser = appUser.Personne.Nom.ToUpper & " " & appUser.Personne.Prenom.ToUpper
+                    End If
+                    Await SignInAsync(appUser, model.RememberMe)
 
-                If AppSession.PasswordExpiredDate < DateTime.UtcNow Then
-                    Return RedirectToAction("Manage", "Account")
-                End If
+                    If AppSession.PasswordExpiredDate < DateTime.UtcNow Then
+                        Return RedirectToAction("Manage", "Account")
+                    End If
 
 
-                'My.Computer.Audio.Play("K:\Alarm.wav", AudioPlayMode.BackgroundLoop)
-                Return RedirectToAction("Index", "Home")
+                    'My.Computer.Audio.Play("K:\Alarm.wav", AudioPlayMode.BackgroundLoop)
+                    Return RedirectToAction("Index", "Home")
                 Else
                     ModelState.AddModelError("", "Invalid username or password.")
             End If
