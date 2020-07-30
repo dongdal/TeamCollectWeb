@@ -51,13 +51,16 @@ Namespace TeamCollect
 
             Dim entityVM As New StatViewModel
             '---------------les collecteurs-----------------
-            Dim userAgenceId As Long = GetCurrentUser.Personne.AgenceId
+            Dim userAgenceId = 0
+            If Not User.IsInRole("ADMINISTRATEUR") And Not User.IsInRole("MANAGER") Then
+                userAgenceId = GetCurrentUser.Personne.AgenceId.Value
+            End If
             'Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
             Dim CollecteurSystem = ConfigurationManager.AppSettings("CollecteurSystemeId") 'Il s'agit de l'identitfiant du collecteur système
 
             Dim Collecteurs = (From collecteur In db.Collecteurs Where collecteur.Id <> CollecteurSystem Select collecteur).ToList
 
-            If Not User.IsInRole("ADMINISTRATEUR") Then
+            If Not User.IsInRole("ADMINISTRATEUR") And Not User.IsInRole("MANAGER") Then
                 Collecteurs = Collecteurs.Where(Function(e) e.AgenceId = userAgenceId).ToList
             End If
 
@@ -74,7 +77,7 @@ Namespace TeamCollect
 
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
+            ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
         End Function
@@ -120,7 +123,11 @@ Namespace TeamCollect
         Function ListeClient() As ActionResult
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
+            Dim userAgenceId = 0
+            If Not User.IsInRole("ADMINISTRATEUR") And Not User.IsInRole("MANAGER") Then
+                userAgenceId = GetCurrentUser.Personne.AgenceId.Value
+            End If
+            ViewBag.UserAgenceId = userAgenceId
             Return View()
         End Function
 

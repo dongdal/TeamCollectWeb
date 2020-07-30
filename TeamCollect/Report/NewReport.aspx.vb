@@ -93,8 +93,12 @@ Public Class NewReport
     Private Function GetDataParam(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String, ByVal parmValue2 As String, ByVal ParaName2 As String, ByVal parmValue3 As String, ByVal ParaName3 As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
+        Dim cmd As String = ""
 
-        Dim cmd As String = String.Format(" SELECT * FROM {0} Where {1} = @p1 and {2} = @p2 and {3} = @p3 ", viewName, ParaName1, ParaName2, ParaName3)
+        If parmValue1.Equals("0") Or parmValue1.Equals("ALL_ROWS") Then
+            ParaName1 = parmValue1
+        End If
+        cmd = String.Format(" SELECT * FROM {0} Where {1} = @p1 and {2} = @p2 and {3} = @p3 ", viewName, ParaName1, ParaName2, ParaName3)
 
         Using myConnection As New SqlConnection(ConnectionString)
             Using macmd As SqlCommand = New SqlCommand(cmd, myConnection)
@@ -150,8 +154,11 @@ Public Class NewReport
     Private Function GetData3Param(viewName As String, ByVal parmValue1 As String, ByVal ParaName1 As String, ByVal parmValue2 As String, ByVal ParaName2 As String, ByVal parmValue3 As String, ByVal ParaName3 As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
-
-        Dim cmd As String = String.Format(" SELECT * FROM {0} Where {1} = @p1 and {2} = @p2 and {3} = @p3 ", viewName, ParaName1, ParaName2, ParaName3)
+        Dim cmd As String = ""
+        If parmValue1.Equals("0") Or parmValue1.Equals("ALL_ROWS") Then
+            ParaName1 = parmValue1
+        End If
+        cmd = String.Format(" SELECT * FROM {0} Where {1} = @p1 and {2} = @p2 and {3} = @p3 ", viewName, ParaName1, ParaName2, ParaName3)
 
         Using myConnection As New SqlConnection(ConnectionString)
             Using macmd As SqlCommand = New SqlCommand(cmd, myConnection)
@@ -206,7 +213,9 @@ Public Class NewReport
     Private Function GetDataHistorique(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
-
+        If (IdValue.Equals("0") Or IdValue.Equals("ALL_ROWS")) Then
+            IdLechamp = IdValue
+        End If
         Dim datefilter = lechampdate & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & lechampdate & " <= (CONVERT(datetime2, @DateFin, 120))"
         Dim cmd As String = ""
         cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {1} = {2} ) ", viewName, IdLechamp, IdValue)
@@ -238,6 +247,9 @@ Public Class NewReport
     Private Function GetDataOperations(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String, AgenceId As String, AgenceIdField As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
+        If (AgenceId.Equals("0") Or AgenceId.Equals("ALL_ROWS")) Then
+            AgenceIdField = AgenceId
+        End If
 
         Dim datefilter = lechampdate & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & lechampdate & " <= (CONVERT(datetime2, @DateFin, 120))"
         Dim cmd As String = ""
@@ -312,7 +324,9 @@ Public Class NewReport
     Private Function GetData(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
-
+        If IdValue.Equals("0") Or IdValue.Equals("ALL_ROWS") Then
+            IdLechamp = IdValue
+        End If
         Dim datefilter = lechampdate & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & lechampdate & " <= (CONVERT(datetime2, @DateFin, 120))"
         Dim cmd As String = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} = @p3) ", viewName, lechampdate, IdLechamp)
         ' Dim cmd As String = String.Format(" SELECT * FROM {0} Where ({1} = @p1) ", viewName, ParaName1)
@@ -374,8 +388,12 @@ Public Class NewReport
     Private Function LastOperationIntervalDate(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
+        Dim cmd As String = ""
+        If (IdValue.Equals("0") Or IdValue.Equals("ALL_ROWS")) Then
+            IdLechamp = IdValue
+        End If
+        cmd = String.Format(" SELECT * FROM {0} Where ( (({1} <= @p1 OR {1} >= @p2) OR ({1} IS NULL)) AND {2} = @p3 ) ", viewName, lechampdate, IdLechamp)
 
-        Dim cmd As String = String.Format(" SELECT * FROM {0} Where ( (({1} <= @p1 OR {1} >= @p2) OR ({1} IS NULL)) AND {2} = @p3 ) ", viewName, lechampdate, IdLechamp)
         ' Dim cmd As String = String.Format(" SELECT * FROM {0} Where ({1} = @p1) ", viewName, ParaName1)
 
         Using myConnection As New SqlConnection(ConnectionString)
@@ -405,8 +423,11 @@ Public Class NewReport
     Private Function GetDataIntervalDateById(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
-
-        Dim cmd As String = String.Format(" SELECT * FROM {0} Where ({1} >= @p1 AND {1}  <= @p2 AND {2} = @p3  ) ", viewName, lechampdate, IdLechamp)
+        Dim cmd As String = ""
+        If (IdValue.Equals("0") Or IdValue.Equals("ALL_ROWS")) Then
+            IdLechamp = IdValue
+        End If
+        cmd = String.Format(" SELECT * FROM {0} Where ({1} >= @p1 AND {1}  <= @p2 AND {2} = @p3  ) ", viewName, lechampdate, IdLechamp)
         ' Dim cmd As String = String.Format(" SELECT * FROM {0} Where ({1} = @p1) ", viewName, ParaName1)
 
         Using myConnection As New SqlConnection(ConnectionString)
@@ -485,10 +506,15 @@ Public Class NewReport
                     Dim DateFin = ConvertDate(DateFinInter)
                     Dim LeChampDate = "DateCreation"
                     Dim ExtraFilter = "IdCollecteur"
+                    Dim AgenceId = Request("AgenceId")
                     Dim datefilter = LeChampDate & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & LeChampDate & " <= (CONVERT(datetime2, @DateFin, 120)) "
 
                     If Not (User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("MANAGER") Or User.IsInRole("SA")) Then
-                        datefilter = datefilter & " AND AgenceId=" & AppSession.AgenceId.ToString()
+                        If (AgenceId.Equals("0") Or AgenceId.Equals("ALL_ROWS")) Then
+                            datefilter = datefilter & " AND " & AgenceId & "=" & AgenceId
+                        Else
+                            datefilter = datefilter & " AND AgenceId=" & AppSession.AgenceId.ToString()
+                        End If
                     End If
 
                     ShowReportListeClientParCollectrice("ListeClientParCollectrice", GetDataExtraFilter("vListeClientParCollectrice", DateDebut, datefilter, DateFin, ExtraFilter, CollecteurId), DateDebut, DateFin)

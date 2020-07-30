@@ -26,15 +26,19 @@ Namespace TeamCollect
         Function ListeCollecteurGlobal() As ActionResult
             ViewBag.dateDebut = Now.Date.ToString("d")
             ViewBag.dateFin = Now.Date.ToString("d")
-            ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
+            Dim userAgenceId = 0
+            If Not User.IsInRole("ADMINISTRATEUR") And Not User.IsInRole("MANAGER") Then
+                userAgenceId = GetCurrentUser.Personne.AgenceId.Value
+            End If
+            ViewBag.UserAgenceId = userAgenceId
 
             '----------------on recupère la liste des agences pour filtrer---------------
-            Dim listPersonne = db.Agences.OfType(Of Agence)().ToList
-            Dim listPersonne2 As New List(Of SelectListItem)
-            For Each item In listPersonne
-                listPersonne2.Add(New SelectListItem With {.Value = item.Id, .Text = item.Societe.Libelle & ":-- [" & item.Libelle & "] --"})
+            Dim Agences = db.Agences.OfType(Of Agence)().ToList
+            Dim ListeAgences As New List(Of SelectListItem)
+            For Each item In Agences
+                ListeAgences.Add(New SelectListItem With {.Value = item.Id, .Text = item.Societe.Libelle & ":-- [" & item.Libelle & "] --"})
             Next
-            ViewBag.lesagences = listPersonne2.ToList
+            ViewBag.lesagences = ListeAgences.ToList
             Return View()
         End Function
 

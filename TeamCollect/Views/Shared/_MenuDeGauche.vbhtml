@@ -17,54 +17,54 @@
                 <div class="mainnav">
                     <ul>
                         @If User.IsInAnyRole("SA,ADMINISTRATEUR,MANAGER") Then
-                                @If User.IsInAnyRole("SA,ADMINISTRATEUR") Then
-                                    @<li>
-                                        <a href="#"><i class="s16  icomoon-icon-home-2"></i><span class="txt">Votre Structure </span></a>
-                                        <ul class="sub">
+                            @If User.IsInAnyRole("SA,ADMINISTRATEUR") Then
+                                @<li>
+                                    <a href="#"><i class="s16  icomoon-icon-home-2"></i><span class="txt">Votre Structure </span></a>
+                                    <ul class="sub">
 
-                                            <li>
-                                                <a href="@Url.Action("Index", "Societe")" title="Votre Société"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Votre Socièté</span></a>
-                                            </li>
-                                            <li>
-                                                <a href="@Url.Action("Index", "Agence")" title="Vos Agence"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Vos Agences</span></a>
-                                            </li>
-                                            <li>
-                                                <a href="@Url.Action("Index", "Grille")" title="Grille de facturation"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Vos Grilles de Fact...</span></a>
-                                            </li>
-                                            @*<li>
-                                <a href="@Url.Action("Index", "CategorieRemunerations")" title="Grille de rémuneration"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Grille de rémuneration</span></a>
-                            </li>*@
-                                            <li>
-                                                <a href="@Url.Action("Index", "BorneCommission")" title="Borne des Commission"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Borne de Commission</span></a>
-                                            </li>
-                                            <li>
-                                                <a href="@Url.Action("Index", "TypeCarnet")" title="Type de Carnet"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Type de Carnet</span></a>
-                                            </li>
-                                            <li>
-                                                <a href="@Url.Action("Index", "SecteurActivite")" title="Les Professions"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Les Professions</span></a>
-                                            </li>
-                                        </ul>
+                                        <li>
+                                            <a href="@Url.Action("Index", "Societe")" title="Votre Société"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Votre Socièté</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("Index", "Agence")" title="Vos Agence"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Vos Agences</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("Index", "Grille")" title="Grille de facturation"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Vos Grilles de Fact...</span></a>
+                                        </li>
+                                        @*<li>
+                                                <a href="@Url.Action("Index", "CategorieRemunerations")" title="Grille de rémuneration"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Grille de rémuneration</span></a>
+                                            </li>*@
+                                        <li>
+                                            <a href="@Url.Action("Index", "BorneCommission")" title="Borne des Commission"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Borne de Commission</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("Index", "TypeCarnet")" title="Type de Carnet"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Type de Carnet</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("Index", "SecteurActivite")" title="Les Professions"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Les Professions</span></a>
+                                        </li>
+                                    </ul>
 
-                                    </li>
-                                    @<li>
-                                        <a href="@Url.Action("IndexAdmin", "Retrait")"><i class="s16  icomoon-icon-credit"></i><span class="txt">Retrait</span> </a>
-                                    </li>
-                                    @<li>
-                                        <a href="@Url.Action("Index", "Personne")"><i class="s16  icomoon-icon-user-4"></i><span class="txt">Gestion du Personnel</span> </a>
-                                    </li>
-                                    @<li>
+                                </li>
+                                @<li>
+                                    <a href="@Url.Action("IndexAdmin", "Retrait")"><i class="s16  icomoon-icon-credit"></i><span class="txt">Retrait</span> </a>
+                                </li>
+                                @<li>
+                                    <a href="@Url.Action("Index", "Personne")"><i class="s16  icomoon-icon-user-4"></i><span class="txt">Gestion du Personnel</span> </a>
+                                </li>
+                                @<li>
+                                    <a href="@Url.Action("Index", "Account")"><i class="s16  icomoon-icon-lock"></i><span class="txt">Gestion des profils</span> </a>
+                                </li>
+
+                                @*@<li>
                                         <a href="@Url.Action("Index", "Account")"><i class="s16  icomoon-icon-lock"></i><span class="txt">Gestion des profils</span> </a>
-                                    </li>
-
-                                    @<li>
-                                        <a href="@Url.Action("Index", "Account")"><i class="s16  icomoon-icon-lock"></i><span class="txt">Gestion des profils</span> </a>
-                                    </li>
-                                End If
-                                @If User.IsInAnyRole("SA,ADMINISTRATEUR,MANAGER") Then
-                                    @<li>
-                                        <a href="@Url.Action("Index", "CategorieRemunerations")" title="Grille de rémuneration"><i Class="s16 icomoon-icon-grid-2"></i><span Class="txt">Grille de rémuneration</span></a>
-                                    </li>
-                                End If
+                                    </li>*@
+                            End If
+                            @If User.IsInAnyRole("SA,ADMINISTRATEUR,MANAGER") Then
+                                @<li>
+                                    <a href="@Url.Action("Index", "CategorieRemunerations")" title="Grille de rémuneration"><i Class="s16 icomoon-icon-grid-2"></i><span Class="txt">Grille de rémuneration</span></a>
+                                </li>
+                            End If
 
                             @If User.IsInAnyRole("SA,ADMINISTRATEUR") Then
                                 @<li>
@@ -74,42 +74,42 @@
 
 
                             @*@<li>
-                <a href="#"><i class="s16  icomoon-icon-print-2"></i><span class="txt">Gestion des Rapports </span></a>
-                <ul class="sub">
-                    <li>
-                        <a href="@Url.Action("ListeCollecteurGlobal", "Collecteur")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste des Collecteurs </span></a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("ListeClientGlobal", "Client")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste des Clients </span></a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("ListeClientParCollectrice", "Client")" title="Liste Clients enrôlés par une collectrice à une période donnée"> <i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste Clients / Période</span></a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("HistoriqueClientGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Historique Client </span></a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("RecetteClientGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Recette Client </span></a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("HistoriqueCollecteurGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Synthèse Collecteur</span></a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("HistoriqueColParClientGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Collecteur Détails</span></a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("RecetteCollecteurGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Recette Collecteur </span></a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("HistoriqueBank", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Recette de la Banque </span></a>
-                    </li>
-                    <li>
-                        <a href="@Url.Action("CommissionCollectriceAvecGrilleRemunerationGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Fiche rémunération</span></a>
-                    </li>
+                                    <a href="#"><i class="s16  icomoon-icon-print-2"></i><span class="txt">Gestion des Rapports </span></a>
+                                    <ul class="sub">
+                                        <li>
+                                            <a href="@Url.Action("ListeCollecteurGlobal", "Collecteur")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste des Collecteurs </span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("ListeClientGlobal", "Client")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste des Clients </span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("ListeClientParCollectrice", "Client")" title="Liste Clients enrôlés par une collectrice à une période donnée"> <i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste Clients / Période</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("HistoriqueClientGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Historique Client </span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("RecetteClientGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Recette Client </span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("HistoriqueCollecteurGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Synthèse Collecteur</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("HistoriqueColParClientGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Collecteur Détails</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("RecetteCollecteurGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Recette Collecteur </span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("HistoriqueBank", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Recette de la Banque </span></a>
+                                        </li>
+                                        <li>
+                                            <a href="@Url.Action("CommissionCollectriceAvecGrilleRemunerationGlobal", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Fiche rémunération</span></a>
+                                        </li>
 
-                </ul>
+                                    </ul>
 
-            </li>*@
+                                </li>*@
 
                         End If
 
@@ -148,7 +148,66 @@
 
                         End If
 
-                        @If User.IsInAnyRole("SA,ADMINISTRATEUR,MANAGER,CHEFCOLLECTEUR") Then
+                        @If User.IsInAnyRole("SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER") Then
+                            @<li>
+                                <a href="#"><i class="s16  icomoon-icon-print-2"></i><span class="txt">Gestion des Rapports </span></a>
+                                <ul class="sub">
+                                    <li>
+                                        <a href="@Url.Action("ListeClient", "Client")"> <i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste des Clients</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ListeClientParCollectrice", "Client")" title="Liste Clients enrôlés par une collectrice à une période donnée"> <i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste Clients / Période</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("ListeCollecteur", "Collecteur")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste des Collecteurs </span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("HistoriqueClient", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Historique Client </span></a>
+                                    </li>
+                                    @If User.IsInAnyRole("CHEFCOLLECTEUR") Then
+                                        @<li>
+                                            <a href="@Url.Action("FicheCollecteJournaliere", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Fiche Collecte </span></a>
+                                        </li>
+                                    End If
+                                    <li>
+                                        <a href="@Url.Action("FicheCollecteJournaliereParPeriode", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Collectes Périodiques </span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("AgiosParClient", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Agios Par Client </span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("FicheCommissionsCollecteurs", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Fiche de commisisons</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("FicheCommissionsParPorteFeuille", "HistoriqueMouvement")" title="Commissions par portefeuille"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Commis... par portefeuille</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("FicheCommissionsParPorteFeuilleSimplifiee", "HistoriqueMouvement")" title="Commissions par portefeuille simplifiée"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Commissions simplifiées</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("FicheOperationsParPeriode", "HistoriqueMouvement")" title="Historique des opérations"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Historique opérations</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("HistoriqueCollectriceParPeriode", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Etat caise collectrice</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("HistoriqueCollecteur", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Synthèse Collecteur</span></a>
+                                    </li>
+
+                                    @If User.IsInAnyRole("MANAGER") Then
+                                        @<li>
+                                            <a href="@Url.Action("CommissionCollectriceAvecGrilleRemuneration", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Fiche rémunération</span></a>
+                                        </li>
+                                    End If
+
+                                </ul>
+
+                            </li>
+                        End If
+
+
+
+                        @*@If User.IsInAnyRole("MANAGER") Then
                             @<li>
                                 <a href="#"><i class="s16  icomoon-icon-print-2"></i><span class="txt">Gestion des Rapports </span></a>
                                 <ul class="sub">
@@ -189,19 +248,14 @@
                                         <a href="@Url.Action("HistoriqueCollectriceParPeriode", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Etat caise collectrice</span></a>
                                     </li>
                                     <li>
-                                        <a href="@Url.Action("HistoriqueCollecteur", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Synthèse Collecteur</span></a>
+                                        <a href="@Url.Action("CommissionCollectriceAvecGrilleRemuneration", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Fiche rémunération</span></a>
                                     </li>
-
-                                    @If User.IsInAnyRole("MANAGER") Then
-                                        @<li>
-                                            <a href="@Url.Action("CommissionCollectriceAvecGrilleRemuneration", "HistoriqueMouvement")"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Fiche rémunération</span></a>
-                                        </li>
-                                    End If
 
                                 </ul>
 
                             </li>
-                        End If
+                        End If*@
+
 
                     </ul>
                 </div>
