@@ -247,8 +247,11 @@ Public Class NewReport
     Private Function GetDataOperations(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String, AgenceId As String, AgenceIdField As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
-        If (AgenceId.Equals("0") Or AgenceId.Equals("ALL_ROWS")) Then
+        If (AgenceId.Equals("0") Or AgenceId.Equals("ALL_ROWS")) And (User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("MANAGER")) Then
             AgenceIdField = AgenceId
+        Else
+            AgenceIdField = "AgenceClientId"
+            AgenceId = GetCurrentUser.Personne.AgenceId
         End If
 
         Dim datefilter = lechampdate & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & lechampdate & " <= (CONVERT(datetime2, @DateFin, 120))"
@@ -536,7 +539,7 @@ Public Class NewReport
                     Dim ChampFiltre = "LibelleOperation"
                     Dim AgenceId = Request("AgenceId")
                     'Operation = Operation & "%"
-                    ShowReportFicheOperationsParPeriode("FicheOperationsParPeriode", GetDataOperations("FicheOperationsParPeriode", DateDebut, "DateOperation", DateFin, ChampFiltre, Operation, AgenceId, "AgenceId"), DateDebut, DateFin, Operation)
+                    ShowReportFicheOperationsParPeriode("FicheOperationsParPeriode", GetDataOperations("FicheOperationsParPeriode", DateDebut, "DateOperation", DateFin, ChampFiltre, Operation, AgenceId, "AgenceClientId"), DateDebut, DateFin, Operation)
 
 
                 Case "HistoriqueCollectriceParPeriode"
@@ -614,9 +617,9 @@ Public Class NewReport
                     Dim ClientId = Request("ClientId")
 
                     If (String.IsNullOrEmpty(ClientId)) Then
-                        ShowReportClient("HistoCustomers", GetDataIntervalDate("HistoCustomers", DateDebut, "DateOperation", DateFin))
+                        ShowReportHistoClient("HistoCustomers", GetDataIntervalDate("HistoCustomers", DateDebut, "DateOperation", DateFin), DateDebut, DateFin)
                     Else
-                        ShowReportClient("HistoCustomers", GetDataIntervalDateById("HistoCustomers", DateDebut, "DateOperation", DateFin, "Id", ClientId))
+                        ShowReportHistoClient("HistoCustomers", GetDataIntervalDateById("HistoCustomers", DateDebut, "DateOperation", DateFin, "Id", ClientId), DateDebut, DateFin)
                     End If
 
                 Case "HistoCltGlobal"
@@ -802,6 +805,19 @@ Public Class NewReport
     Private Sub ShowReportClient(reportName As String, ds As Object)
         ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
         ReportViewer1.LocalReport.DataSources.Clear()
+        ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("dsData", ds))
+    End Sub
+
+    Private Sub ShowReportHistoClient(reportName As String, ds As Object, DateDebut As String, DateFin As String)
+        ReportViewer1.LocalReport.ReportPath = Path.Combine(Server.MapPath("~/Report/Template"), reportName & ".rdlc")
+        ReportViewer1.LocalReport.DataSources.Clear()
+        'définition des paramètres
+        Dim LaDateDebut As ReportParameter = New ReportParameter("DateDebut", DateDebut)
+        Dim LaDateFin As ReportParameter = New ReportParameter("DateFin", DateFin)
+
+        'Ajout des paramètres
+        ReportViewer1.LocalReport.SetParameters(New ReportParameter() {LaDateDebut})
+        ReportViewer1.LocalReport.SetParameters(New ReportParameter() {LaDateFin})
         ReportViewer1.LocalReport.DataSources.Add(New ReportDataSource("dsData", ds))
     End Sub
 

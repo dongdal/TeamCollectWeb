@@ -660,6 +660,21 @@
     <Content Include="fonts\wpzoom.ttf" />
     <Content Include="fonts\wpzoom.woff" />
     <Content Include="fonts\wpzoomd41d.eot" />
+    <Content Include="Importation\Classeur Test 2.xlsx" />
+    <Content Include="Importation\Classeur Test 3.xlsx" />
+    <Content Include="Importation\Classeur Test.xlsx" />
+    <Content Include="Importation\Classeur1.xlsx" />
+    <Content Include="Importation\Classeur2.xlsx" />
+    <Content Include="Importation\Classeur2Bis.xlsx" />
+    <Content Include="Importation\Classeur2Format.xlsx" />
+    <Content Include="Importation\Classeur2Modif.xlsx" />
+    <Content Include="Importation\EportTotalClientExcel_DU04-05-2017_A191613.xlsx" />
+    <Content Include="Importation\EportTotalClientExcel_DU05-05-2017_A8492.xlsx" />
+    <Content Include="Importation\EportTotalClientExcel_DU09-05-2017_A141618.xlsx" />
+    <Content Include="Importation\EportTotalClientExcel_DU22-05-2017_A17510.xlsx" />
+    <Content Include="Importation\file_ateme - Copie.xlsx" />
+    <Content Include="Importation\file_ateme.xlsx" />
+    <Content Include="Importation\file_ateme_mod.xlsx" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -880,7 +895,7 @@
     <Content Include="Report\Template\AgiosCustomersOld.rdlc" />
     <Content Include="Report\Template\AgiosCustomers.rdlc" />
     <Content Include="Report\Template\HistoCustomersOld3.rdlc" />
-    <Content Include="Report\Template\HistoCustomers.rdlc" />
+    <Content Include="Report\Template\HistoCustomersOld4.rdlc" />
     <Content Include="Report\Template\FicheCollecteJournaliere.rdlc" />
     <Content Include="Report\Template\FicheCollecteJournaliereParPeriode.rdlc" />
     <Content Include="Report\Template\FicheCommissionsCollecteurs.rdlc" />
@@ -889,7 +904,9 @@
     <Content Include="Report\Template\CommissionCollectriceAvecGrilleRemuneration.rdlc" />
     <Content Include="Report\Template\ListeClientParCollectrice.rdlc" />
     <Content Include="Report\Template\HistoriqueCollectriceParPeriode.rdlc" />
-    <Content Include="Report\Template\FicheOperationsParPeriode.rdlc" />
+    <Content Include="Report\Template\FicheOperationsParPeriodeOld.rdlc" />
+    <EmbeddedResource Include="Report\Template\HistoCustomers.rdlc" />
+    <EmbeddedResource Include="Report\Template\FicheOperationsParPeriode.rdlc" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -1120,7 +1137,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Importation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

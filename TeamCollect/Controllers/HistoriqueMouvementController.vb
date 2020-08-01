@@ -162,6 +162,9 @@ Namespace TeamCollect
             '---------------------------
 
             Dim Agences = (From e In db.Agences Select e).ToList
+            If (userAgenceId > 0) Then
+                Agences = Agences.Where(Function(a) a.Id = userAgenceId).ToList()
+            End If
             Dim AgenceList As New List(Of SelectListItem)
             For Each agence In Agences
                 AgenceList.Add(New SelectListItem With {.Value = agence.Id, .Text = agence.Libelle})
@@ -318,9 +321,11 @@ Namespace TeamCollect
             '---------------les collecteurs-----------------
             Dim listcollecteur = db.Personnes.OfType(Of Collecteur).ToList
             Dim userAgenceId = 0
+            Dim listclient = db.Personnes.OfType(Of Client)().Where(Function(i) i.Etat = True).ToList
             If Not User.IsInRole("ADMINISTRATEUR") And Not User.IsInRole("MANAGER") Then
                 userAgenceId = GetCurrentUser.Personne.AgenceId.Value
                 listcollecteur = listcollecteur.Where(Function(i) i.AgenceId = userAgenceId).ToList
+                listclient = listclient.Where(Function(i) i.AgenceId = userAgenceId).ToList
 
             End If
             Dim listPersonne2 As New List(Of SelectListItem)
@@ -331,7 +336,6 @@ Namespace TeamCollect
             '---------------------------
 
             '----------------les clients---------------------
-            Dim listclient = db.Personnes.OfType(Of Client)().Where(Function(i) i.AgenceId = userAgenceId And i.Etat = True).ToList
             Dim listPersonne22 As New List(Of SelectListItem)
             For Each item In listclient
                 listPersonne22.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & " " & item.Prenom})

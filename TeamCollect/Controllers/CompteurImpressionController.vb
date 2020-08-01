@@ -20,6 +20,8 @@ Namespace TeamCollect
         <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR,ADMINISTRATEUR,MANAGER")>
         Function Index(sortOrder As String, currentFilter As String, searchString As String, page As Integer?, dateDebut As String, dateFin As String, CollecteurId As Long?) As ActionResult
             ViewBag.CurrentSort = sortOrder
+            ViewBag.dateDebut = Now.Date.ToString("d")
+            ViewBag.dateFin = Now.Date.ToString("d")
 
             If Not String.IsNullOrEmpty(searchString) Then
                 page = 1
@@ -27,7 +29,8 @@ Namespace TeamCollect
                 searchString = currentFilter
             End If
 
-            Dim entities = From e In db.CompteurImpressions.Include(Function(h) h.Collectrice).Include(Function(h) h.HistoriqueMouvement).ToList
+            Dim entities = From e In db.CompteurImpressions.Include(Function(h) h.Collectrice).Include(Function(h) h.HistoriqueMouvement).
+                               Where(Function(h) h.HistoriqueMouvement.LibelleOperation.Contains("CASH-IN")).ToList
 
             If Not String.IsNullOrEmpty(searchString) Then
                 entities = entities.Where(Function(e) e.Collectrice.UserName.ToUpper.Contains(searchString.ToUpper) Or e.Collectrice.Personne.Nom.ToUpper.Contains(searchString.ToUpper) Or
@@ -37,6 +40,8 @@ Namespace TeamCollect
 
             If Not IsNothing(dateDebut) And Not IsNothing(dateFin) Then
                 entities = entities.Where(Function(h) h.DatePremiereImpression.Date >= dateDebut And h.DatePremiereImpression.Date <= dateFin).ToList
+                ViewBag.dateDebut = dateDebut
+                ViewBag.dateFin = dateFin
             Else
                 If (IsNothing(dateDebut) And IsNothing(dateFin)) Then
                     entities = entities.Where(Function(h) h.DatePremiereImpression.Date = Now.Date Or h.DatePremiereImpression.Date = Now.Date).ToList
@@ -50,14 +55,17 @@ Namespace TeamCollect
                 End If
             End If
 
+            If Not IsNothing(CollecteurId) Then
+                entities = entities.Where(Function(h) h.Collectrice.PersonneId = CollecteurId.Value).ToList()
+            End If
+
             ViewBag.EnregCount = entities.Count
             ViewBag.CollectriceList = LoadComboBox()
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.CollecteurId = CollecteurId
             Dim pageSize As Integer = ConfigurationManager.AppSettings("PageSize")
             Dim pageNumber As Integer = If(page, 1)
 
-            Return View(entities.ToPagedList(pageNumber, pageSize))
+            Return View(entities.ToPagedList(pageNumber, pageSize * 2))
         End Function
 
         Public Function LoadComboBox() As List(Of SelectListItem)
