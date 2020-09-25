@@ -32,7 +32,9 @@ Namespace TeamCollect
             Dim entities = From e In db.CompteurImpressions.Include(Function(h) h.Collectrice).Include(Function(h) h.HistoriqueMouvement).
                                Where(Function(h) h.HistoriqueMouvement.LibelleOperation.Contains("CASH-IN")).ToList
 
-            If User.IsInRole("CHEFCOLLECTEUR") Then
+            Dim IsManagerOrAdmin As Boolean = (User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("MANAGER") Or User.IsInRole("SA"))
+
+            If User.IsInRole("CHEFCOLLECTEUR") And Not IsManagerOrAdmin Then
                 entities = entities.Where(Function(e) e.Collectrice.Personne.AgenceId = AppSession.AgenceId).ToList()
             End If
 
