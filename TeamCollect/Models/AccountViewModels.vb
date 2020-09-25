@@ -195,12 +195,12 @@ Public Class SelectUserRolesViewModel
         'End If
 
         Dim allRoles = (From e In Db.Roles Select e).OrderBy(Function(r) r.Name).ToList
-       
-        If (user.Personne.AgenceId.HasValue) Then
-            allRoles = allRoles.Where(Function(u) u.Name.Contains("CHEFCOLLECTEUR") Or u.Name.Contains("COLLECTEUR")).ToList
-        Else
-            allRoles = allRoles.Where(Function(u) u.Name.Contains("ADMINISTRATEUR") Or u.Name.Contains("MANAGER")).ToList
-        End If
+
+        'If (user.Personne.AgenceId.HasValue) Then
+        '    allRoles = allRoles.Where(Function(u) u.Name.Contains("CHEFCOLLECTEUR") Or u.Name.Contains("COLLECTEUR")).ToList
+        'Else
+        '    allRoles = allRoles.Where(Function(u) u.Name.Contains("ADMINISTRATEUR") Or u.Name.Contains("MANAGER")).ToList
+        'End If
 
         For Each role As IdentityRole In allRoles
             ' An EditorViewModel will be used by Editor Template:
@@ -212,9 +212,14 @@ Public Class SelectUserRolesViewModel
         ' Set the Selected property to true for those roles for 
         ' which the current user is a member:
         For Each userRole As IdentityUserRole In user.Roles
-            Dim checkUserRole = Me.Roles.Find(Function(r) r.RoleName = userRole.Role.Name)
+            Dim LeRoleCourant = (From rol In Db.Roles Where rol.Id = userRole.RoleId Select rol).FirstOrDefault()
+            Dim checkUserRole = Me.Roles.Find(Function(r) r.RoleName = LeRoleCourant.Name)
             checkUserRole.Selected = True
         Next
+        'For Each userRole As IdentityUserRole In user.Roles
+        '    Dim checkUserRole = Me.Roles.Find(Function(r) r.RoleName = userRole.Role.Name)
+        '    checkUserRole.Selected = True
+        'Next
 
 
     End Sub

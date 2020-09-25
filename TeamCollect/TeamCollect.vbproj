@@ -482,6 +482,7 @@
     <EmbeddedResource Include="App_GlobalResources\Resource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201705191515574_mycol.resx">
       <DependentUpon>201705191515574_mycol.vb</DependentUpon>
@@ -901,12 +902,13 @@
     <Content Include="Report\Template\FicheCommissionsCollecteurs.rdlc" />
     <Content Include="Report\Template\FicheCommissionsParPorteFeuille.rdlc" />
     <Content Include="Report\Template\FicheCommissionsParPorteFeuilleSimplifiee.rdlc" />
-    <Content Include="Report\Template\CommissionCollectriceAvecGrilleRemuneration.rdlc" />
+    <Content Include="Report\Template\CommissionCollectriceAvecGrilleRemunerationOld.rdlc" />
     <Content Include="Report\Template\ListeClientParCollectrice.rdlc" />
     <Content Include="Report\Template\HistoriqueCollectriceParPeriode.rdlc" />
     <Content Include="Report\Template\FicheOperationsParPeriodeOld.rdlc" />
     <EmbeddedResource Include="Report\Template\HistoCustomers.rdlc" />
-    <EmbeddedResource Include="Report\Template\FicheOperationsParPeriode.rdlc" />
+    <Content Include="Report\Template\FicheOperationsParPeriode.rdlc" />
+    <Content Include="Report\Template\CommissionCollectriceAvecGrilleRemuneration.rdlc" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

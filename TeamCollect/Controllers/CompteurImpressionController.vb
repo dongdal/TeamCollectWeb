@@ -32,6 +32,10 @@ Namespace TeamCollect
             Dim entities = From e In db.CompteurImpressions.Include(Function(h) h.Collectrice).Include(Function(h) h.HistoriqueMouvement).
                                Where(Function(h) h.HistoriqueMouvement.LibelleOperation.Contains("CASH-IN")).ToList
 
+            If User.IsInRole("CHEFCOLLECTEUR") Then
+                entities = entities.Where(Function(e) e.Collectrice.Personne.AgenceId = AppSession.AgenceId).ToList()
+            End If
+
             If Not String.IsNullOrEmpty(searchString) Then
                 entities = entities.Where(Function(e) e.Collectrice.UserName.ToUpper.Contains(searchString.ToUpper) Or e.Collectrice.Personne.Nom.ToUpper.Contains(searchString.ToUpper) Or
                                                e.Collectrice.Personne.Prenom.ToUpper.Contains(searchString.ToUpper) Or e.HistoriqueMouvement.Client.Nom.ToUpper.Contains(searchString.ToUpper) Or

@@ -247,9 +247,13 @@ Public Class NewReport
     Private Function GetDataOperations(viewName As String, ByVal datedebutValue As String, ByVal lechampdate As String, ByVal datefinValue As String, ByVal IdLechamp As String, ByVal IdValue As String, AgenceId As String, AgenceIdField As String) As DataTable
         Dim matable As DataTable = Nothing
         Dim colonne As String = ""
-        If (AgenceId.Equals("0") Or AgenceId.Equals("ALL_ROWS")) And (User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("MANAGER")) Then
-            AgenceIdField = AgenceId
-        Else
+        Dim IsAdminOrManager As Boolean = (User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("SA") Or User.IsInRole("MANAGER"))
+        Dim IsForAllAgency As Boolean = (String.IsNullOrEmpty(AgenceId) Or AgenceId.Equals("0") Or AgenceId.Equals("ALL_ROWS"))
+
+        If IsForAllAgency And IsAdminOrManager Then
+            AgenceIdField = "0"
+            AgenceId = "0"
+        ElseIf Not IsAdminOrManager Then
             AgenceIdField = "AgenceClientId"
             AgenceId = GetCurrentUser.Personne.AgenceId
         End If
@@ -257,16 +261,22 @@ Public Class NewReport
         Dim datefilter = lechampdate & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & lechampdate & " <= (CONVERT(datetime2, @DateFin, 120))"
         Dim cmd As String = ""
 
-        If Not (String.IsNullOrEmpty(AgenceId)) And Not (User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("SA") Or User.IsInRole("MANAGER")) Then
+        cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} LIKE '" & IdValue & "%'  AND {3} = " & AgenceId & ") ", viewName, lechampdate, IdLechamp, AgenceIdField)
+        If Not IsAdminOrManager Then
+            AgenceId = GetCurrentUser.Personne.AgenceId
             cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} LIKE '" & IdValue & "%'  AND {3} = " & AgenceId & ") ", viewName, lechampdate, IdLechamp, AgenceIdField)
-        Else
-            If User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("SA") Or User.IsInRole("MANAGER") Then
-                cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} LIKE '" & IdValue & "%' ) ", viewName, lechampdate, IdLechamp)
-            Else
-                AgenceId = GetCurrentUser.Personne.AgenceId
-                cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} LIKE '" & IdValue & "%'  AND {3} = " & AgenceId & ") ", viewName, lechampdate, IdLechamp, AgenceIdField)
-            End If
         End If
+
+        'If Not (String.IsNullOrEmpty(AgenceId)) And Not (IsAdminOrManager) Then
+        '    cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} LIKE '" & IdValue & "%'  AND {3} = " & AgenceId & ") ", viewName, lechampdate, IdLechamp, AgenceIdField)
+        'Else
+        '    If IsAdminOrManager Then
+        '        cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} LIKE '" & IdValue & "%'  ) ", viewName, lechampdate, IdLechamp)
+        '    Else
+        '        AgenceId = GetCurrentUser.Personne.AgenceId
+        '        cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} LIKE '" & IdValue & "%'  AND {3} = " & AgenceId & ") ", viewName, lechampdate, IdLechamp, AgenceIdField)
+        '    End If
+        'End If
 
         ' Dim cmd As String = String.Format(" SELECT * FROM {0} Where ({1} = @p1) ", viewName, ParaName1)
         'datefilter = " AND  " & DateFilterFieldName & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & DateFilterFieldName & " <= (CONVERT(datetime2, @DateFin, 120)) "

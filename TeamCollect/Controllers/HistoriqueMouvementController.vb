@@ -495,7 +495,8 @@ Namespace TeamCollect
 
         End Function
 
-        <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
+        '<LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
+        <LocalizedAuthorize(Roles:="TEAMINFOSYSTEM***SARL")>
         Function HistoriqueCollecteur() As ActionResult
 
             Dim entityVM As New StatViewModel

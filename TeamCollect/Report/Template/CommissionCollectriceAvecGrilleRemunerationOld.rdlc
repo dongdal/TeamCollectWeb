@@ -352,21 +352,6 @@
                             <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!NomAgence.Value</Value>
-                              <Style>
-                                <FontFamily>Trebuchet MS</FontFamily>
-                                <FontSize>9pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox80</rd:DefaultName>
                       <Style>
@@ -384,7 +369,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Commission">
+                    <Textbox Name="Textbox82">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -405,7 +390,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Commission</rd:DefaultName>
+                      <rd:DefaultName>Textbox82</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -421,16 +406,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="RemunerationCell">
+                    <Textbox Name="Textbox4">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=IIf(Fields!Commission.Value &lt; Fields!CommissionMinimale.Value, 
-Fields!SalaireDeBase.Value,
-(Fields!SalaireDeBase.Value + Fields!LePourcentageCommission.Value * ( Fields!Commission.Value - Fields!CommissionMinimale.Value)))</Value>
+                              <Value>=IIf(Fields!Commission.Value &lt; Fields!CommissionMinimale.Value, Fields!SalaireDeBase.Value,(Fields!SalaireDeBase.Value + Fields!LePourcentageCommission.Value * ( Fields!Commission.Value - Fields!CommissionMinimale.Value)))</Value>
                               <Style>
                                 <FontFamily>Trebuchet MS</FontFamily>
                                 <FontSize>9pt</FontSize>
@@ -445,6 +428,7 @@ Fields!SalaireDeBase.Value,
                           </Style>
                         </Paragraph>
                       </Paragraphs>
+                      <rd:DefaultName>Textbox4</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -578,25 +562,6 @@ Fields!SalaireDeBase.Value,
                                       <FontSize>9pt</FontSize>
                                       <FontWeight>Bold</FontWeight>
                                       <Format>#,0</Format>
-                                    </Style>
-                                  </TextRun>
-                                  <TextRun>
-                                    <Value> - Commisions Min: </Value>
-                                    <Style>
-                                      <FontFamily>Trebuchet MS</FontFamily>
-                                      <FontSize>9pt</FontSize>
-                                      <FontWeight>Bold</FontWeight>
-                                      <Format>#,0</Format>
-                                    </Style>
-                                  </TextRun>
-                                  <TextRun>
-                                    <Value>=Fields!CommissionMinimale.Value</Value>
-                                    <Style>
-                                      <FontFamily>Trebuchet MS</FontFamily>
-                                      <FontSize>9pt</FontSize>
-                                      <FontWeight>Bold</FontWeight>
-                                      <Format>#,0</Format>
-                                      <Color>Red</Color>
                                     </Style>
                                   </TextRun>
                                 </TextRuns>
@@ -845,6 +810,10 @@ FROM            CommissionCollectriceAvecGrilleRemuneration</CommandText>
           <DataField>LibelleCommission</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="CollecteurId">
+          <DataField>CollecteurId</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
         <Field Name="CNI">
           <DataField>CNI</DataField>
           <rd:TypeName>System.String</rd:TypeName>
@@ -853,9 +822,17 @@ FROM            CommissionCollectriceAvecGrilleRemuneration</CommandText>
           <DataField>NomAgence</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
-        <Field Name="LePourcentageCommission">
-          <DataField>LePourcentageCommission</DataField>
-          <rd:TypeName>System.Double</rd:TypeName>
+        <Field Name="AgenceId">
+          <DataField>AgenceId</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="HistoriqueCollecteurCategorieId">
+          <DataField>HistoriqueCollecteurCategorieId</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="CategorieRemunerationId">
+          <DataField>CategorieRemunerationId</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
         <Field Name="LibelleCategorie">
           <DataField>LibelleCategorie</DataField>
@@ -869,12 +846,16 @@ FROM            CommissionCollectriceAvecGrilleRemuneration</CommandText>
           <DataField>CommissionMinimale</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="CategorieRemunerationId">
-          <DataField>CategorieRemunerationId</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
+        <Field Name="LePourcentageCommission">
+          <DataField>LePourcentageCommission</DataField>
+          <rd:TypeName>System.Double</rd:TypeName>
         </Field>
-        <Field Name="CollecteurId">
-          <DataField>CollecteurId</DataField>
+        <Field Name="StatutExistant">
+          <DataField>StatutExistant</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="HistoriqueCollecteurCategorieCollecteurId">
+          <DataField>HistoriqueCollecteurCategorieCollecteurId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
       </Fields>
