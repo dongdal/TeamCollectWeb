@@ -43,10 +43,13 @@ Namespace TFCenter
 
             ViewBag.CurrentFilter = searchString
 
-            Dim CLT = From e In db.Personnes.OfType(Of Client)().Select(Function(e) e.Id).ToList
-            Dim COL = From e In db.Personnes.OfType(Of Collecteur)().Select(Function(e) e.Id).ToList
+            Dim CLT = (From e In db.Personnes.OfType(Of Client)).ToList()
+            'Dim COL = From e In db.Personnes.OfType(Of Collecteur).ToList
 
-            Dim entities = From e In db.Personnes.OfType(Of Personne).Where(Function(p) p.Id = -1 Or (Not CLT.Contains(p.Id) And Not COL.Contains(p.Id) And p.Nom <> "sa")).ToList
+            'Dim entities = From e In db.Personnes.OfType(Of Personne).Where(Function(p) p.Id = -1 Or (Not CLT.Contains(p.Id) And Not COL.Contains(p.Id) And p.Nom <> "sa")).ToList
+
+            Dim entities = (From e In db.Personnes.Where(Function(p) p.Nom <> "sa")).ToList()
+            entities = entities.Except(CLT).ToList()
 
             If Not String.IsNullOrEmpty(searchString) Then
                 entities = entities.Where(Function(e) e.Nom.ToUpper.Contains(searchString.ToUpper) Or e.Prenom.ToUpper.Contains(searchString.ToUpper) Or e.Sexe.ToUpper.Contains(searchString.ToUpper) Or e.Telephone.ToUpper.Contains(searchString.ToUpper) Or e.Adresse.ToUpper.Contains(searchString.ToUpper) Or e.Quartier.ToUpper.Contains(searchString.ToUpper))
