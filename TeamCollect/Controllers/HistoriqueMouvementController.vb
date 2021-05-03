@@ -322,7 +322,7 @@ Namespace TeamCollect
             Dim listcollecteur = db.Personnes.OfType(Of Collecteur).ToList
             Dim userAgenceId = 0
             Dim listclient = db.Personnes.OfType(Of Client)().Where(Function(i) i.Etat = True).ToList
-            If Not User.IsInRole("ADMINISTRATEUR") And Not User.IsInRole("MANAGER") Then
+            If Not AppSession.IsManagerOrAdmin Then
                 userAgenceId = GetCurrentUser.Personne.AgenceId.Value
                 listcollecteur = listcollecteur.Where(Function(i) i.AgenceId = userAgenceId).ToList
                 listclient = listclient.Where(Function(i) i.AgenceId = userAgenceId).ToList

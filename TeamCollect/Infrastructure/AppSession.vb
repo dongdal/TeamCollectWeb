@@ -46,6 +46,26 @@
         End Set
     End Property
 
+    Shared Property IsManagerOrAdmin As Boolean
+        Get
+            Return HttpContext.Current.Session("IsManagerOrAdmin")
+
+        End Get
+        Set(value As Boolean)
+            HttpContext.Current.Session("IsManagerOrAdmin") = value
+        End Set
+    End Property
+
+    Shared Property IsChefCollecteur As Boolean
+        Get
+            Return HttpContext.Current.Session("IsChefCollecteur")
+
+        End Get
+        Set(value As Boolean)
+            HttpContext.Current.Session("IsChefCollecteur") = value
+        End Set
+    End Property
+
     Shared Property CodeSecret As String
         Get
             Return HttpContext.Current.Session("CodeSecret")

@@ -116,7 +116,8 @@ Public Class AccountController
                     AppSession.AgenceLibelle = appUser.Personne.Agence.Libelle.ToUpper
                     'AppSession.AgenceId = 20003
                 End If
-
+                AppSession.IsManagerOrAdmin = (User.IsInRole("ADMINISTRATEUR") Or User.IsInRole("MANAGER") Or User.IsInRole("SA"))
+                'AppSession.IsChefCollecteur = (User.IsInRole("CHEFCOLLECTEUR"))
                 AppSession.PasswordExpiredDate = appUser.PasswordExpiredDate
                 If (String.IsNullOrEmpty(appUser.Personne.Prenom)) Then
                         AppSession.NomPrenomUser = appUser.Personne.Nom.ToUpper
