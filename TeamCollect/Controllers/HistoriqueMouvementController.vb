@@ -891,7 +891,7 @@ Namespace TeamCollect
             'db.Entry(HistoMvt).State = EntityState.Modified
             'db.SaveChanges()
             Dim Extour As Boolean = True
-            Dim myUpdateQuery As String = "Update HistoriqueMouvement Set Extourner = @Extour Where Id=@Id"
+            Dim myUpdateQuery As String = "UPDATE HistoriqueMouvement SET Extourner = @Extour WHERE Id=@Id"
             Dim parameterList1 As New List(Of SqlParameter) From {
                 New SqlParameter("@Id", HistoMvt.Id),
                 New SqlParameter("@Extour", Extour)
@@ -1601,18 +1601,6 @@ Namespace TeamCollect
 
         End Function
 
-        '' GET: /HistoriqueMouvement/Details/5
-        'Function Details(ByVal id As Long?) As ActionResult
-        '    If IsNothing(id) Then
-        '        Return New HttpStatusCodeResult(HttpStatusCode.BadRequest)
-        '    End If
-        '    Dim historiquemouvement As HistoriqueMouvement = db.HistoriqueMouvements.Find(id)
-        '    If IsNothing(historiquemouvement) Then
-        '        Return HttpNotFound()
-        '    End If
-        '    Return View(historiquemouvement)
-        'End Function
-
         ' GET: /HistoriqueMouvement/Create
         Function Create() As ActionResult
             Dim colVM As New LaCollecteViewModel
@@ -1622,139 +1610,3 @@ Namespace TeamCollect
 
     End Class
 End Namespace
-
-
-'<HttpPost()>
-'<LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
-'<ValidateAntiForgeryToken()>
-'Function Annulation(entityVM As AnnulationViewModel) As ActionResult
-'    'on recupere l'id du collecteur chef collect connecter
-'    Dim HistoriqueMouvementId = entityVM.Id
-'    Dim Motif = entityVM.Motif
-
-'    If IsNothing(HistoriqueMouvementId) Then
-'        Return New HttpStatusCodeResult(HttpStatusCode.BadRequest)
-'    End If
-
-'    Dim HistoMvt As HistoriqueMouvement = db.HistoriqueMouvements.Find(HistoriqueMouvementId)
-
-'    If IsNothing(HistoMvt) Then
-'        Return HttpNotFound()
-'    End If
-
-'    If (HistoMvt.Extourner) Then
-'        ModelState.AddModelError("", "Cette opération a déjà été extournée. Veuillez contacter l'administrateur en cas de problème.")
-'        Return View(entityVM)
-'    End If
-
-'    Dim DateCollect = HistoMvt.DateOperation
-'    Dim clientId = HistoMvt.ClientId
-'    Dim Montant = HistoMvt.Montant
-
-'    'HistoMvt.Extourner = True
-'    'db.Entry(HistoMvt).State = EntityState.Modified
-'    'db.SaveChanges()
-'    Dim Extour As Boolean = True
-'    Dim myUpdateQuery As String = "Update HistoriqueMouvement Set Extourner = @Extour Where Id=@Id"
-'    Dim parameterList1 As New List(Of SqlParameter) From {
-'                New SqlParameter("@Id", HistoMvt.Id),
-'                New SqlParameter("@Extour", Extour)
-'            }
-'    Dim parameters1 As SqlParameter() = parameterList1.ToArray()
-'    db.Database.ExecuteSqlCommand(myUpdateQuery, parameters1)
-'    'If Not (db.Database.ExecuteSqlCommand(myUpdateQuery, parameters1)) Then
-'    '    ModelState.AddModelError("Motif", "Mise à l'jour Impossible de l'historique...")
-'    '    Return View(entityVM)
-'    'End If
-
-'    Dim Annul As New Annulation With {
-'                .DateAnnulation = Now,
-'                .Motif = Motif,
-'                .HistoriqueMouvementId = HistoMvt.Id
-'            }
-
-'    db.Annulation.Add(Annul)
-'    'db.SaveChanges()
-
-'    Dim client = db.Clients.Find(clientId)
-'    Dim UserId = getCurrentUser.Id
-'    If IsNothing(client) Then
-'        ModelState.AddModelError("Motif", "La transaction n'a pas été éffectuer: client introuvable...")
-'        Return View(entityVM)
-'    End If
-
-'    'mise a jour du solde du client
-'    client.Solde -= Montant
-'    db.Entry(client).State = EntityState.Modified
-'    'db.SaveChanges()
-
-
-'    'on testte si le collecter connecter a une caisse ouverte
-'    Dim CollecteurId = HistoMvt.CollecteurId 'entityVM.CollecteurId 'ConfigurationManager.AppSettings("CollecteurSystemeId")
-'    Dim LacaisseConcerner = HistoMvt.JournalCaisseId
-'    Dim LesJournalCaisse = (From J In db.JournalCaisses Where J.CollecteurId = CollecteurId And J.Id = LacaisseConcerner And J.Etat = 0 Select J).ToArray
-'    If (LesJournalCaisse.Count = 0) Then
-'        ModelState.AddModelError("Motif", "La Caisse concernée par l'opération est déjà fermée")
-'        Return View(entityVM)
-'    End If
-
-'    Dim JCID = LacaisseConcerner 'LesJournalCaisse.FirstOrDefault.Id
-'    'on remet credite  la caisse du colleur
-'    'Dim JournalCaisse = db.JournalCaisses.Find(JCID)
-'    'JournalCaisse.PlafondEnCours += Montant
-'    'db.Entry(JournalCaisse).State = EntityState.Modified
-'    'db.SaveChanges()
-
-'    '3- on recupere le journal caisse et on enregistre dans mouvement historique
-
-'    Dim LibOperation As String = "ANNULATION COLLECT- " & HistoMvt.Id & "de " & Montant & "Du " & DateCollect
-
-'    Dim parameterList As New List(Of SqlParameter) From {
-'                New SqlParameter("@ClientId", clientId),
-'                New SqlParameter("@CollecteurId", CollecteurId),
-'                New SqlParameter("@Montant", -Montant),
-'                New SqlParameter("@DateOperation", Now),
-'                New SqlParameter("@Pourcentage", 0),
-'                New SqlParameter("@MontantRetenu", 0),
-'                New SqlParameter("@EstTraiter", 0),
-'                New SqlParameter("@Etat", False),
-'                New SqlParameter("@DateCreation", Now),
-'                New SqlParameter("@UserId", UserId),
-'                New SqlParameter("@JournalCaisseId", JCID),
-'                New SqlParameter("@LibelleOperation", LibOperation)
-'            }
-'    Dim parameters As SqlParameter() = parameterList.ToArray()
-
-'    Try
-'        db.SaveChanges()
-'        'Dim myInsertQuery As String = "INSERT INTO HistoriqueMouvement (ClientId, CollecteurId, Montant, DateOperation, MontantRetenu, Pourcentage, EstTraiter, Etat, DateCreation, UserId, JournalCaisseId) VALUES (@ClientId, @CollecteurId, @Montant, @DateOperation, @MontantRetenu, @Pourcentage, @EstTraiter, @Etat, @DateCreation, @UserId, @JournalCaisseId)"
-'        Dim myInsertQuery As String = "INSERT INTO HistoriqueMouvement (ClientId, CollecteurId, Montant, DateOperation, MontantRetenu, Pourcentage, EstTraiter, Etat, DateCreation, UserId, JournalCaisseId, LibelleOperation) VALUES (@ClientId, @CollecteurId, @Montant, @DateOperation, @MontantRetenu, @Pourcentage, @EstTraiter, @Etat, @DateCreation, @UserId, @JournalCaisseId, @LibelleOperation)"
-'        'Dim laDate As Date = Now
-'        If (db.Database.ExecuteSqlCommand(myInsertQuery, parameters)) Then
-'            Dim historiquesMouvements = (From h In db.HistoriqueMouvements Where (h.UserId = UserId) Select HistoriqueId = h.Id, JournalCaisseId = h.JournalCaisseId,
-'                                        IdClient = h.ClientId, NomClient = h.Client.Nom, PrenomClient = h.Client.Prenom, IdCollecteur = h.CollecteurId, NomCollecteur = h.Collecteur.Nom, PrenomCollecteur = h.Collecteur.Prenom, MontantCollecte = h.Montant,
-'                                        FraisFixes = h.MontantRetenu, Taux = h.Pourcentage, h.DateOperation, h.LibelleOperation).ToList
-
-'            Dim historique = historiquesMouvements.ElementAtOrDefault((historiquesMouvements.Count - 1))
-
-'            'db.SaveChanges()
-
-'            Return RedirectToAction("Index", "HistoriqueMouvement", New With {CollecteurId, entityVM.DateDebut, entityVM.DateFin})
-
-'            'Return Ok(historique)
-'        Else
-'            ModelState.AddModelError("Motif", "Une erreur est survenue pendant l'exécution de la requête: veuillez contacter l'administrateur. ")
-'            Return View(entityVM)
-'        End If
-'    Catch ex As DbEntityValidationException
-'        Util.GetError(ex)
-'        ModelState.AddModelError("Motif", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur.")
-'        Return View(entityVM)
-'    Catch ex As Exception
-'        Util.GetError(ex)
-'        ModelState.AddModelError("Motif", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. ")
-'        Return View(entityVM)
-'    End Try
-
-'    Return View(entityVM)
-'End Function

@@ -1,19 +1,8 @@
-﻿Imports System
-Imports System.Collections.Generic
-Imports System.Data
-Imports System.Data.Entity
-Imports System.Linq
+﻿Imports System.Data.Entity
 Imports System.Net
-Imports System.Web
-Imports System.Web.Mvc
 Imports PagedList
-Imports System.Web.SessionState
-Imports System.Web.Script.Serialization
 Imports Microsoft.AspNet.Identity
-Imports Microsoft.AspNet.Identity.EntityFramework
-Imports TeamCollect.My.Resources
 Imports System.Data.Entity.Validation
-Imports System.IO
 
 Namespace TeamCollect
     Public Class JournalCaisseController
@@ -165,49 +154,6 @@ Namespace TeamCollect
             Return View(journalVM)
         End Function
 
-        ' POST: /JournalCaisse/Edit/5
-        'Afin de déjouer les attaques par sur-validation, activez les propriétés spécifiques que vous voulez lier. Pour 
-        'plus de détails, voir  http://go.microsoft.com/fwlink/?LinkId=317598.
-        '<HttpPost()>
-        '<ValidateAntiForgeryToken()>
-        '<LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
-        'Function Edit(ByVal journalcaisse As JournalCaisseJS) As JsonResult
-        '    If ModelState.IsValid Then
-        '        Dim entity = journalcaisse.getEntity()
-        '        entity.DateCloture = Now.Date
-        '        entity.Etat = 1
-        '        entity.UserId = GetCurrentUser.Id
-
-        '        Dim wherecloseId = entity.Id
-        '        Dim montantTheo = db.HistoriqueMouvements.OfType(Of HistoriqueMouvement).Where(Function(h) h.JournalCaisseId = wherecloseId).Sum(Function(h) h.Montant)
-        '        entity.MontantTheorique = (IIf(montantTheo.HasValue, montantTheo, 0) + entity.FondCaisse)
-        '        entity.MontantReel = entity.MontantReel
-
-        '        db.Entry(entity).State = EntityState.Modified
-
-        '        Try
-        '            db.SaveChanges()
-        '            Return Json(New With {.Result = "OK"})
-        '        Catch ex As DbEntityValidationException
-        '            Util.GetError(ex, ModelState)
-        '            Return Json(New With {.Result = "Error: Une erreur est survenue pendant l'exécution de la requête: veuillez contacter l'administrateur."})
-        '        Catch ex As Exception
-        '            Util.GetError(ex, ModelState)
-        '            Return Json(New With {.Result = "Error: Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur."})
-        '        End Try
-        '    End If
-
-        '    'Dim userAgenceId = GetCurrentUser.Personne.AgenceId
-        '    'Dim listPersonne = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
-        '    'Dim listPersonne2 As New List(Of SelectListItem)
-        '    'For Each item In listPersonne
-        '    '    listPersonne2.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & " " & item.Prenom})
-        '    'Next
-        '    ''journalcaisse.IDsCollecteur = listPersonne2
-
-        '    Return Json(New With {.Result = "Error"})
-        'End Function
-        '<ValidateAntiForgeryToken()>
         <HttpPost()>
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
         Function CloturerCaisse(ByVal journalcaisse As JournalCaisseJSON) As JsonResult
@@ -218,7 +164,8 @@ Namespace TeamCollect
                 entity.UserId = GetCurrentUser.Id
 
                 Dim wherecloseId = entity.Id
-                Dim montantTheo = db.HistoriqueMouvements.OfType(Of HistoriqueMouvement).Where(Function(h) h.JournalCaisseId = wherecloseId).Sum(Function(h) h.Montant)
+                Dim montantTheo = db.HistoriqueMouvements.OfType(Of HistoriqueMouvement).Where(Function(h) h.JournalCaisseId = wherecloseId And
+                                                                                                   Not h.Extourner.HasValue).Sum(Function(h) h.Montant)
                 entity.MontantTheorique = (IIf(montantTheo.HasValue, montantTheo, 0) + entity.FondCaisse)
                 entity.MontantReel = entity.MontantReel
 
@@ -236,41 +183,8 @@ Namespace TeamCollect
                 End Try
             End If
 
-            'Dim userAgenceId = GetCurrentUser.Personne.AgenceId
-            'Dim listPersonne = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
-            'Dim listPersonne2 As New List(Of SelectListItem)
-            'For Each item In listPersonne
-            '    listPersonne2.Add(New SelectListItem With {.Value = item.Id, .Text = item.Nom & " " & item.Prenom})
-            'Next
-            ''journalcaisse.IDsCollecteur = listPersonne2
-
             Return Json(New With {.Result = "Error"})
         End Function
-
-        '' GET: /JournalCaisse/Delete/5
-        '<LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
-        'Function Delete(ByVal id As Long?) As ActionResult
-        '    If IsNothing(id) Then
-        '        Return New HttpStatusCodeResult(HttpStatusCode.BadRequest)
-        '    End If
-        '    Dim journalcaisse As JournalCaisse = db.JournalCaisses.Find(id)
-        '    If IsNothing(journalcaisse) Then
-        '        Return HttpNotFound()
-        '    End If
-        '    Return View(journalcaisse)
-        'End Function
-
-        '' POST: /JournalCaisse/Delete/5
-        '<HttpPost()>
-        '<ActionName("Delete")>
-        '<ValidateAntiForgeryToken()>
-        '<LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
-        'Function DeleteConfirmed(ByVal id As Long) As ActionResult
-        '    Dim journalcaisse As JournalCaisse = db.JournalCaisses.Find(id)
-        '    db.JournalCaisses.Remove(journalcaisse)
-        '    db.SaveChanges()
-        '    Return RedirectToAction("Index")
-        'End Function
 
         Protected Overrides Sub Dispose(ByVal disposing As Boolean)
             If (disposing) Then
