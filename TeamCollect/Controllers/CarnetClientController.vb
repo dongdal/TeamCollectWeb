@@ -6,6 +6,7 @@ Imports System.Data.Entity.Validation
 Imports System.Data.SqlClient
 Imports System.Linq
 Imports System.Net
+Imports System.Threading.Tasks
 Imports System.Web
 Imports System.Web.Mvc
 Imports Microsoft.AspNet.Identity
@@ -37,7 +38,7 @@ Namespace Controllers
             End If
 
             ViewBag.CurrentFilter = searchString
-            Dim CurrentAgenceId = getCurrentUser.Personne.AgenceId
+            Dim CurrentAgenceId = GetCurrentUser.Personne.AgenceId
 
             Dim entities = (From carnet In db.CarnetClients Where carnet.Client.AgenceId = CurrentAgenceId Select carnet).ToList
             entities = entities.OrderByDescending(Function(e) e.DateAffectation).ToList
@@ -64,7 +65,7 @@ Namespace Controllers
         Public Sub LoadCombo(pVM As CarnetClientViewModel)
             Dim listClient = db.Clients.OfType(Of Client)().ToList
             Dim listClient1 As New List(Of SelectListItem)
-            Dim CurrentUser = getCurrentUser()
+            Dim CurrentUser = GetCurrentUser()
 
             If User.IsInRole("CHEFCOLLECTEUR") Then
                 listClient = listClient.Where(Function(e) e.AgenceId = CurrentUser.Personne.AgenceId).ToList()
@@ -113,12 +114,12 @@ Namespace Controllers
         <LocalizedAuthorize(Roles:="CHEFCOLLECTEUR")>
         <HttpPost()>
         <ValidateAntiForgeryToken()>
-        Function Create(<Bind(Include:="Id,ClientId,TypeCarnetId,Etat,DateAffectation")> ByVal carnetClientVM As CarnetClientViewModel) As ActionResult
+        Async Function Create(<Bind(Include:="Id,ClientId,TypeCarnetId,Etat,DateAffectation")> ByVal carnetClientVM As CarnetClientViewModel) As Task(Of ActionResult)
             If ModelState.IsValid Then
                 Dim CollecteurId = ConfigurationManager.AppSettings("CollecteurSystemeId") 'getCurrentUser.PersonneId
                 Dim ClientId = carnetClientVM.ClientId
                 Dim client = db.Clients.Find(ClientId)
-                Dim UserId = getCurrentUser.Id
+                Dim UserId = GetCurrentUser.Id
                 If IsNothing(client) Then
                     ModelState.AddModelError("ClientId", "Le client Selectionner n'a pas de compte ")
                     LoadCombo(carnetClientVM)
@@ -149,72 +150,51 @@ Namespace Controllers
                     Return View(carnetClientVM)
                 End If
 
-                'mise a jour du solde du client
-                client.Solde -= Montant
-                db.Entry(client).State = EntityState.Modified
-                db.SaveChanges()
+                Using transaction = db.Database.BeginTransaction
+                    Try
 
-                'enregistrer le carnet
+                        'mise a jour du solde du client
+                        client.Solde -= Montant
+                        db.Entry(client).State = EntityState.Modified
 
-                Dim ca = carnetClientVM.getEntity
-                ca.UserId = UserId
-                ca.DateAffectation = Now
-                db.CarnetClients.Add(ca)
-                db.SaveChanges()
+                        'enregistrer le carnet
+                        Dim ca = carnetClientVM.getEntity
+                        ca.UserId = UserId
+                        ca.DateAffectation = Now
+                        db.CarnetClients.Add(ca)
 
-                '3- on recupere le journal caisse et on enregistre dans mouvement historique
-                Dim JCID = LesJournalCaisse.FirstOrDefault.Id
-                'Dim LibOperation As String = "Achat Carnet : " & ca.TypeCarnet.Libelle & " - Le -" & DateTime.Now.ToString
-                Dim LibOperation As String = "VENTE CARNET : " & ca.TypeCarnet.Libelle & " - Le -" & DateTime.Now.ToString
+                        '3- on recupere le journal caisse et on enregistre dans mouvement historique
+                        Dim JCID = LesJournalCaisse.FirstOrDefault.Id
+                        'Dim LibOperation As String = "Achat Carnet : " & ca.TypeCarnet.Libelle & " - Le -" & DateTime.Now.ToString
+                        Dim LibOperation As String = "VENTE CARNET : " & ca.TypeCarnet.Libelle & " - Le -" & DateTime.Now.ToString
 
-                Dim parameterList As New List(Of SqlParameter) From {
-                    New SqlParameter("@ClientId", ClientId),
-                    New SqlParameter("@CollecteurId", CollecteurId),
-                    New SqlParameter("@Montant", -Montant),
-                    New SqlParameter("@DateOperation", Now),
-                    New SqlParameter("@Pourcentage", 0),
-                    New SqlParameter("@MontantRetenu", 0),
-                    New SqlParameter("@EstTraiter", 0),
-                    New SqlParameter("@Etat", False),
-                    New SqlParameter("@DateCreation", Now),
-                    New SqlParameter("@UserId", UserId),
-                    New SqlParameter("@JournalCaisseId", JCID),
-                    New SqlParameter("@LibelleOperation", LibOperation)
-                }
-                Dim parameters As SqlParameter() = parameterList.ToArray()
+                        Dim historiqueMouvement As New HistoriqueMouvement With {
+                                        .ClientId = ClientId,
+                                        .CollecteurId = CollecteurId,
+                                        .Montant = -Montant,
+                                        .DateOperation = DateTime.Now,
+                                        .Pourcentage = 0,
+                                        .MontantRetenu = 0,
+                                        .EstTraiter = 0,
+                                        .Etat = False,
+                                        .DateCreation = DateTime.Now,
+                                        .UserId = UserId,
+                                        .JournalCaisseId = JCID,
+                                        .LibelleOperation = LibOperation
+                                    }
 
-                Try
-                    Dim myInsertQuery As String = "INSERT INTO HistoriqueMouvement (ClientId, CollecteurId, Montant, DateOperation, MontantRetenu, Pourcentage, EstTraiter, Etat, DateCreation, 
-UserId, JournalCaisseId, LibelleOperation) VALUES (@ClientId, @CollecteurId, @Montant, @DateOperation, @MontantRetenu, @Pourcentage, @EstTraiter, @Etat, @DateCreation, @UserId, @JournalCaisseId, 
-@LibelleOperation)"
-
-                    'Dim laDate As Date = Now
-                    If (db.Database.ExecuteSqlCommand(myInsertQuery, parameters)) Then
-                        Dim historiquesMouvements = (From h In db.HistoriqueMouvements Where (h.UserId = UserId) Select HistoriqueId = h.Id, JournalCaisseId = h.JournalCaisseId,
-                                        IdClient = h.ClientId, NomClient = h.Client.Nom, PrenomClient = h.Client.Prenom, IdCollecteur = h.CollecteurId, NomCollecteur = h.Collecteur.Nom, PrenomCollecteur = h.Collecteur.Prenom, MontantCollecte = h.Montant,
-                                        FraisFixes = h.MontantRetenu, Taux = h.Pourcentage, h.DateOperation, h.LibelleOperation).ToList
-
-                        Dim historique = historiquesMouvements.ElementAtOrDefault((historiquesMouvements.Count - 1))
+                        db.HistoriqueMouvements.Add(historiqueMouvement)
+                        Await db.SaveChangesAsync()
+                        
+                        transaction.Commit()
                         Return RedirectToAction("Index")
-                        'Return Ok(historique)
-                    Else
-                        ModelState.AddModelError("Monatnt", "Une erreur est survenue pendant l'exécution de la requête: veuillez contacter l'administrateur. ")
+
+                    Catch ex As Exception
+                        transaction.Rollback()
                         LoadCombo(carnetClientVM)
                         Return View(carnetClientVM)
-                    End If
-                Catch ex As DbEntityValidationException
-                    Util.GetError(ex)
-                    ModelState.AddModelError("Monatnt", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur.")
-                    LoadCombo(carnetClientVM)
-                    Return View(carnetClientVM)
-                Catch ex As Exception
-                    Util.GetError(ex)
-                    ModelState.AddModelError("Monatnt", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. ")
-                    LoadCombo(carnetClientVM)
-                    Return View(carnetClientVM)
-                End Try
-
-                Return RedirectToAction("Index")
+                    End Try
+                End Using
             End If
             LoadCombo(carnetClientVM)
             Return View(carnetClientVM)

@@ -2,6 +2,7 @@
 Imports System.Data.Entity.Validation
 Imports System.Data.SqlClient
 Imports System.Net
+Imports System.Threading.Tasks
 Imports Microsoft.AspNet.Identity
 Imports PagedList
 
@@ -217,7 +218,7 @@ Namespace Controllers
             db.SaveChanges()
 
             Dim client = db.Clients.Find(clientId)
-            Dim UserId = getCurrentUser.Id
+            Dim UserId = GetCurrentUser.Id
             If IsNothing(client) Then
                 ModelState.AddModelError("Motif", "La transaction n'a pas été éffectuer: client introuvable...")
                 Return View(entityVM)
@@ -399,7 +400,7 @@ Namespace Controllers
         <HttpPost()>
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
         <ValidateAntiForgeryToken()>
-        Function DemandeDeRetrait(retraitJSON As RetraitJSON) As JsonResult
+        Async Function DemandeDeRetrait(retraitJSON As RetraitJSON) As Task(Of JsonResult)
             Dim retraitVM As New RetraitViewModel(retraitJSON:=retraitJSON)
             'on recupere l'id du collecteur chef collect connecter
             Dim CollecteurId = ConfigurationManager.AppSettings("CollecteurSystemeId") 'getCurrentUser.PersonneId
@@ -435,70 +436,58 @@ Namespace Controllers
                     LoadCombo(retraitVM)
                     Return Json(New With {.Result = "Error"})
                 End If
-                'mise a jour du solde du client
-                client.Solde -= Montant
-                db.Entry(client).State = EntityState.Modified
-                db.SaveChanges()
-                '2- on cree le retrait
-                retraitVM.ClientId = ClientId
-                retraitVM.CollecteurId = CollecteurId
-                retraitVM.SoldeApreOperation = client.Solde
-                retraitVM.DateRetrait = Now
-                retraitVM.DateCreation = Now
-                retraitVM.Montant = -Montant
-                retraitVM.Etat = True
-                Dim retrait = retraitVM.GetEntity
-                retrait.UserId = UserId
-                db.Retraits.Add(retrait)
-                db.SaveChanges()
-                '3- on recupere le journal caisse et on enregistre dans mouvement historique
-                Dim JCID = LesJournalCaisse.FirstOrDefault.Id
-                Dim LibOperation As String = "RETRAIT-" & DateTime.Now.ToString & "-AG-" & GetPositionAgence(GetCurrentUser.Personne.AgenceId, GetCurrentUser.Personne.Agence.SocieteId)
 
-                Dim parameterList As New List(Of SqlParameter) From {
-                    New SqlParameter("@ClientId", ClientId),
-                    New SqlParameter("@CollecteurId", CollecteurId),
-                    New SqlParameter("@Montant", -Montant),
-                    New SqlParameter("@DateOperation", Now),
-                    New SqlParameter("@Pourcentage", 0),
-                    New SqlParameter("@MontantRetenu", 0),
-                    New SqlParameter("@EstTraiter", 0),
-                    New SqlParameter("@Etat", False),
-                    New SqlParameter("@DateCreation", Now),
-                    New SqlParameter("@UserId", UserId),
-                    New SqlParameter("@JournalCaisseId", JCID),
-                    New SqlParameter("@LibelleOperation", LibOperation)
-                }
-                Dim parameters As SqlParameter() = parameterList.ToArray()
+                Using transaction = db.Database.BeginTransaction
+                    Try
 
-                Try
-                    'Dim myInsertQuery As String = "INSERT INTO HistoriqueMouvement (ClientId, CollecteurId, Montant, DateOperation, MontantRetenu, Pourcentage, EstTraiter, Etat, DateCreation, UserId, JournalCaisseId) VALUES (@ClientId, @CollecteurId, @Montant, @DateOperation, @MontantRetenu, @Pourcentage, @EstTraiter, @Etat, @DateCreation, @UserId, @JournalCaisseId)"
-                    Dim myInsertQuery As String = "INSERT INTO HistoriqueMouvement (ClientId, CollecteurId, Montant, DateOperation, MontantRetenu, Pourcentage, EstTraiter, Etat, DateCreation, UserId, JournalCaisseId, LibelleOperation) VALUES (@ClientId, @CollecteurId, @Montant, @DateOperation, @MontantRetenu, @Pourcentage, @EstTraiter, @Etat, @DateCreation, @UserId, @JournalCaisseId, @LibelleOperation)"
-                    'Dim laDate As Date = Now
-                    If (db.Database.ExecuteSqlCommand(myInsertQuery, parameters)) Then
-                        Dim historiquesMouvements = (From h In db.HistoriqueMouvements Where (h.UserId = UserId) Select HistoriqueId = h.Id, JournalCaisseId = h.JournalCaisseId,
-                                        IdClient = h.ClientId, NomClient = h.Client.Nom, PrenomClient = h.Client.Prenom, IdCollecteur = h.CollecteurId, NomCollecteur = h.Collecteur.Nom, PrenomCollecteur = h.Collecteur.Prenom, MontantCollecte = h.Montant,
-                                        FraisFixes = h.MontantRetenu, Taux = h.Pourcentage, h.DateOperation, h.LibelleOperation).ToList
+                        'mise a jour du solde du client
+                        client.Solde -= Montant
+                        db.Entry(client).State = EntityState.Modified
 
-                        Dim historique = historiquesMouvements.ElementAtOrDefault((historiquesMouvements.Count - 1))
+                        Dim LibOperation As String = "RETRAIT-" & DateTime.Now.ToString & "-AG-" & GetPositionAgence(GetCurrentUser.Personne.AgenceId, GetCurrentUser.Personne.Agence.SocieteId)
+
+                        '2- on cree le retrait
+                        retraitVM.ClientId = ClientId
+                        retraitVM.CollecteurId = CollecteurId
+                        retraitVM.SoldeApreOperation = client.Solde
+                        retraitVM.DateRetrait = Now
+                        retraitVM.DateCreation = Now
+                        retraitVM.Montant = -Montant
+                        retraitVM.Etat = True
+                        Dim retrait = retraitVM.GetEntity
+                        retrait.UserId = UserId
+                        db.Retraits.Add(retrait)
+
+                        '3- on recupere le journal caisse et on enregistre dans mouvement historique
+                        Dim JCID = LesJournalCaisse.FirstOrDefault.Id
+
+                        Dim historiqueMouvement As New HistoriqueMouvement With {
+                                        .ClientId = ClientId,
+                                        .CollecteurId = CollecteurId,
+                                        .Montant = -Montant,
+                                        .DateOperation = DateTime.Now,
+                                        .Pourcentage = 0,
+                                        .MontantRetenu = 0,
+                                        .EstTraiter = 0,
+                                        .Etat = False,
+                                        .DateCreation = DateTime.Now,
+                                        .UserId = UserId,
+                                        .JournalCaisseId = JCID,
+                                        .LibelleOperation = LibOperation
+                                    }
+
+                        db.HistoriqueMouvements.Add(historiqueMouvement)
+                        Await db.SaveChangesAsync()
+
+                        transaction.Commit()
                         Return Json(New With {.Result = "OK"})
-                        'Return Ok(historique)
-                    Else
-                        ModelState.AddModelError("Montant", "Une erreur est survenue pendant l'exécution de la requête: veuillez contacter l'administrateur. ")
-                        LoadCombo(retraitVM)
-                        Return Json(New With {.Result = "Error: Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. "})
-                    End If
-                Catch ex As DbEntityValidationException
-                    Util.GetError(ex)
-                    ModelState.AddModelError("Montant", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur.")
-                    LoadCombo(retraitVM)
-                    Return Json(New With {.Result = "Error: Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. "})
-                Catch ex As Exception
-                    Util.GetError(ex)
-                    ModelState.AddModelError("Montant", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. ")
-                    LoadCombo(retraitVM)
-                    Return Json(New With {.Result = "Error: Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. "})
-                End Try
+
+                    Catch ex As Exception
+                        transaction.Rollback()
+                        Return Json(New With {.Result = "Error: " + ex.Message.ToString()})
+                    End Try
+                End Using
+
             End If
             LoadCombo(retraitVM)
             Return Json(New With {.Result = "Error"})
