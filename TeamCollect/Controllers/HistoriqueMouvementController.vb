@@ -906,7 +906,8 @@ Namespace TeamCollect
             Dim Annul As New Annulation With {
                 .DateAnnulation = Now,
                 .Motif = Motif,
-                .HistoriqueMouvementId = HistoMvt.Id
+                .HistoriqueMouvementId = HistoMvt.Id,
+                .UserId = UserId
             }
 
             db.Annulation.Add(Annul)

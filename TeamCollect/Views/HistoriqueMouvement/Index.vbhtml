@@ -78,12 +78,12 @@ Else
             <table class="table table-bordered table-striped table-hover dt-responsive table-responsive" cellspacing="0" width="100%">
                 <thead>
                     <tr>
-                        <th>Numero du client</th>
+                        <th>Opération N°</th>
                         <th>Nom du client</th>
                         <th>Lib Opération</th>
                         <th>Montant</th>
                         <th>Date de l'opération</th>
-                        <th>Le collecteur</th>
+                        <th>Collecteur</th>
                         <th style="text-align:right">.....<i class="fa fa-gears"></i></th>
                     </tr>
                 </thead>

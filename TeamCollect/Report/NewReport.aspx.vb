@@ -440,13 +440,17 @@ Public Class NewReport
         If (IdValue.Equals("0") Or IdValue.Equals("ALL_ROWS")) Then
             IdLechamp = IdValue
         End If
-        cmd = String.Format(" SELECT * FROM {0} Where ({1} >= @p1 AND {1}  <= @p2 AND {2} = @p3  ) ", viewName, lechampdate, IdLechamp)
+
+        Dim datefilter = lechampdate & " >= (CONVERT(datetime2, @DateDebut, 120)) AND  " & lechampdate & " <= (CONVERT(datetime2, @DateFin, 120))"
+        cmd = String.Format(" SELECT * FROM {0} Where (" & datefilter & " AND {2} = @p3) ", viewName, lechampdate, IdLechamp)
+
+        'cmd = String.Format(" SELECT * FROM {0} Where ({1} >= @p1 AND {1}  <= @p2 AND {2} = @p3  ) ", viewName, lechampdate, IdLechamp)
         ' Dim cmd As String = String.Format(" SELECT * FROM {0} Where ({1} = @p1) ", viewName, ParaName1)
 
         Using myConnection As New SqlConnection(ConnectionString)
             Using macmd As SqlCommand = New SqlCommand(cmd, myConnection)
-                macmd.Parameters.AddWithValue("@p1", datedebutValue + " 00:00:00")
-                macmd.Parameters.AddWithValue("@p2", datefinValue + " 23:59:59")
+                macmd.Parameters.AddWithValue("@DateDebut", datedebutValue + " 00:00:00")
+                macmd.Parameters.AddWithValue("@DateFin", datefinValue + " 23:59:59")
                 macmd.Parameters.AddWithValue("@p3", IdValue)
                 macmd.CommandTimeout = 0
                 Try

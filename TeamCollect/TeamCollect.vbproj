@@ -564,9 +564,6 @@
     <Content Include="Report\Template\LastOperationOfCustomers.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Report\Template\HistoCustomersOld.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Report\Template\IncomeByCollectors.rdlc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -883,29 +880,18 @@
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Report\Template\CollectorsOLd.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Report\Template\CustomersOld.rdlc">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <Content Include="Report\Template\Collectors.rdlc" />
     <Content Include="Report\Template\Customers.rdlc" />
-    <Content Include="Report\Template\AgiosCustomersOld.rdlc" />
     <Content Include="Report\Template\AgiosCustomers.rdlc" />
-    <Content Include="Report\Template\HistoCustomersOld3.rdlc" />
-    <Content Include="Report\Template\HistoCustomersOld4.rdlc" />
     <Content Include="Report\Template\FicheCollecteJournaliere.rdlc" />
     <Content Include="Report\Template\FicheCollecteJournaliereParPeriode.rdlc" />
     <Content Include="Report\Template\FicheCommissionsCollecteurs.rdlc" />
     <Content Include="Report\Template\FicheCommissionsParPorteFeuille.rdlc" />
     <Content Include="Report\Template\FicheCommissionsParPorteFeuilleSimplifiee.rdlc" />
-    <Content Include="Report\Template\CommissionCollectriceAvecGrilleRemunerationOld.rdlc" />
     <Content Include="Report\Template\ListeClientParCollectrice.rdlc" />
     <Content Include="Report\Template\HistoriqueCollectriceParPeriode.rdlc" />
-    <Content Include="Report\Template\FicheOperationsParPeriodeOld.rdlc" />
     <EmbeddedResource Include="Report\Template\HistoCustomers.rdlc" />
     <Content Include="Report\Template\FicheOperationsParPeriode.rdlc" />
     <Content Include="Report\Template\CommissionCollectriceAvecGrilleRemuneration.rdlc" />
