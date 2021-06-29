@@ -17,15 +17,15 @@ Namespace TeamCollect
         End Function
         ' GET: /Rapport
         Function ListeCollecteur() As ActionResult
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = GetCurrentUser.Personne.AgenceId
             Return View()
         End Function
 
         Function ListeCollecteurGlobal() As ActionResult
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             Dim userAgenceId = 0
             If Not User.IsInRole("ADMINISTRATEUR") And Not User.IsInRole("MANAGER") Then
                 userAgenceId = GetCurrentUser.Personne.AgenceId.Value

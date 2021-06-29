@@ -96,13 +96,13 @@
         End Set
     End Property
 
-    'Shared Property LastExercices As Dictionary(Of Integer, Integer)
-    '    Get
-    '        Return HttpContext.Current.Session("LastExercices")
-    '    End Get
-    '    Set(value As Dictionary(Of Integer, Integer))
-    '        HttpContext.Current.Session("LastExercices") = value
-    '    End Set
-    'End Property
+    Shared Property DateFormat As String
+        Get
+            Return HttpContext.Current.Session("DateFormat")
+        End Get
+        Set(value As String)
+            HttpContext.Current.Session("DateFormat") = value
+        End Set
+    End Property
 
 End Class

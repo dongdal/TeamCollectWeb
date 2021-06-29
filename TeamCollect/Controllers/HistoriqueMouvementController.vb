@@ -125,8 +125,8 @@ Namespace TeamCollect
             entityVM.IDsCollecteur = LesCollecteurs
             '---------------------------
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -186,8 +186,8 @@ Namespace TeamCollect
             Next
             entityVM.ListeAgence = AgenceList
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -231,8 +231,8 @@ Namespace TeamCollect
             Next
             entityVM.IDsCollecteur = ListeCollectrice
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -261,8 +261,8 @@ Namespace TeamCollect
             '---------------les collecteurs-----------------
             LoadComboStat(entityVM)
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
 
             '----------------on recupère la liste des agences pour filtrer---------------
             Dim Agences = db.Agences.OfType(Of Agence)().ToList
@@ -357,9 +357,8 @@ Namespace TeamCollect
             Next
             entityVM.IDsClient = listPersonne22
             '----------------------------------------------
-
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -399,8 +398,8 @@ Namespace TeamCollect
             Next
             ViewBag.lesagences = listAgence2.ToList
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -433,8 +432,8 @@ Namespace TeamCollect
             entityVM.IDsClient = listPersonne22
             '----------------------------------------------
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -475,8 +474,8 @@ Namespace TeamCollect
             Next
             ViewBag.lesagences = listAgence2.ToList
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -491,8 +490,8 @@ Namespace TeamCollect
             If Not User.IsInRole("ADMINISTRATEUR") And Not User.IsInRole("MANAGER") Then
                 userAgenceId = GetCurrentUser.Personne.AgenceId.Value
             End If
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -504,8 +503,8 @@ Namespace TeamCollect
             Dim entityVM As New StatViewModel
 
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             Return View(entityVM)
 
         End Function
@@ -538,8 +537,8 @@ Namespace TeamCollect
             entityVM.IDsClient = listPersonne22
             '----------------------------------------------
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -580,8 +579,8 @@ Namespace TeamCollect
             Next
             ViewBag.lesagences = listAgence2.ToList
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -614,8 +613,8 @@ Namespace TeamCollect
             entityVM.IDsClient = listPersonne22
             '----------------------------------------------
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -656,8 +655,8 @@ Namespace TeamCollect
             Next
             ViewBag.lesagences = listAgence2.ToList
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -692,8 +691,8 @@ Namespace TeamCollect
 
 
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -734,8 +733,8 @@ Namespace TeamCollect
             Next
             ViewBag.lesagences = listAgence2.ToList
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -744,8 +743,8 @@ Namespace TeamCollect
         ' GET: /Rapport
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function ClientInactif() As ActionResult
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             Dim userAgenceId = 0
             If Not User.IsInRole("ADMINISTRATEUR") And Not User.IsInRole("MANAGER") Then
                 userAgenceId = GetCurrentUser.Personne.AgenceId.Value

@@ -75,8 +75,8 @@ Namespace TeamCollect
             entityVM.IDsCollecteur = LesCollecteurs
             '---------------------------
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             ViewBag.UserAgenceId = userAgenceId
             Return View(entityVM)
 
@@ -121,8 +121,8 @@ Namespace TeamCollect
         ' GET:/Rapport
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER")>
         Function ListeClient() As ActionResult
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
             Dim userAgenceId = 0
             If Not User.IsInRole("ADMINISTRATEUR") And Not User.IsInRole("MANAGER") Then
                 userAgenceId = GetCurrentUser.Personne.AgenceId.Value
@@ -133,8 +133,8 @@ Namespace TeamCollect
 
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,MANAGER")>
         Function ListeClientGlobal() As ActionResult
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
 
             '----------------on recupère la liste des agences pour filtrer---------------
             Dim listPersonne = db.Agences.OfType(Of Agence)().ToList
@@ -179,9 +179,9 @@ Namespace TeamCollect
             'End If
 
 
-            Dim userAgenceId = getCurrentUser.Personne.AgenceId
+            Dim userAgenceId = GetCurrentUser.Personne.AgenceId
             'Dim userId = getCurrentUser.Personne.Id
-            Dim userId = getCurrentUser.Id
+            Dim userId = GetCurrentUser.Id
             If (VientDeForm = True) Then
                 'Try
                 Dim fileExtension As String = System.IO.Path.GetExtension(Request.Files("Fichier").FileName)
@@ -542,8 +542,8 @@ Namespace TeamCollect
             Dim pageNumber As Integer = If(page, 1)
 
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
 
             'Return View("IndexAgence", entities.ToPagedList(pageNumber, pageSize))
 
@@ -577,8 +577,8 @@ Namespace TeamCollect
             Dim pageSize As Integer = ConfigurationManager.AppSettings("PageSize")
             Dim pageNumber As Integer = If(page, 1)
 
-            ViewBag.dateDebut = Now.Date.ToString("d")
-            ViewBag.dateFin = Now.Date.ToString("d")
+            ViewBag.dateDebut = Now.Date.ToString(AppSession.DateFormat)
+            ViewBag.dateFin = Now.Date.ToString(AppSession.DateFormat)
 
             Return View("IndexAgence", entities.ToPagedList(pageNumber, pageSize))
         End Function

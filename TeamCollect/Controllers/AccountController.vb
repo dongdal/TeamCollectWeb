@@ -108,6 +108,7 @@ Public Class AccountController
                 AppSession.UserName = appUser.UserName
                 AppSession.PersonneId = appUser.PersonneId
                 AppSession.CodeSecret = appUser.CodeSecret
+                AppSession.DateFormat = "dd-MM-yyyy"
                 If (IsNothing(appUser.Personne.AgenceId)) Then
                     AppSession.AgenceId = 0
                     AppSession.AgenceLibelle = "TOUTES LES AGENCES"
