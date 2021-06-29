@@ -68,61 +68,61 @@ Public Class HomeController
             End Using
 
             '-----------top agence---------------
-            'Using macmdag As SqlCommand = New SqlCommand(cmdtopagence, myConnection)
-            '    'macmd.Parameters.AddWithValue("@id", id_value)
-            '    macmdag.CommandTimeout = 0
-            '    Try
-            '        Using reader2 As SqlDataReader = macmdag.ExecuteReader
-            '            For Each item In reader2
-            '                Dim mastatagence = New StatAgence
+            Using macmdag As SqlCommand = New SqlCommand(cmdtopagence, myConnection)
+                'macmd.Parameters.AddWithValue("@id", id_value)
+                macmdag.CommandTimeout = 0
+                Try
+                    Using reader2 As SqlDataReader = macmdag.ExecuteReader
+                        For Each item In reader2
+                            Dim mastatagence = New StatAgence
 
-            '                mastatagence.Montant = item("Montant").ToString
-            '                mastatagence.PartBANK = item("PartBANK").ToString
-            '                mastatagence.PartCLIENT = item("PartCLIENT").ToString
-            '                mastatagence.Agence = item("Agence").ToString
+                            mastatagence.Montant = item("Montant").ToString
+                            mastatagence.PartBANK = item("PartBANK").ToString
+                            mastatagence.PartCLIENT = item("PartCLIENT").ToString
+                            mastatagence.Agence = item("Agence").ToString
 
-            '                Listdemastatagence.Add(mastatagence)
-            '            Next
+                            Listdemastatagence.Add(mastatagence)
+                        Next
 
-            '            reader2.Close()
+                        reader2.Close()
 
-            '        End Using
-            '    Catch ex As Exception
-            '        'logMessage(ex.Message)
-            '    End Try
-            'End Using
+                    End Using
+                Catch ex As Exception
+                    'logMessage(ex.Message)
+                End Try
+            End Using
 
             '    '-----------stat genre ---------------
-            '    Using macmdgenre As SqlCommand = New SqlCommand(cmdgenre, myConnection)
-            '        'macmd.Parameters.AddWithValue("@id", id_value)
-            '        macmdgenre.CommandTimeout = 0
-            '        Try
-            '            Using reader3 As SqlDataReader = macmdgenre.ExecuteReader
-            '                Dim i = 0
-            '                For Each item In reader3
-            '                    Dim mastatgenre = New StatGenre
-            '                    If (i = 0) Then
-            '                        mastatgenre.NombreF = item("Nombre").ToString
-            '                        mastatgenre.NombreM = 0
-            '                        mastatgenre.Genre = item("Genre").ToString
-            '                    Else
-            '                        mastatgenre.NombreM = item("Nombre").ToString
-            '                        mastatgenre.NombreF = 0
-            '                        mastatgenre.Genre = item("Genre").ToString
-            '                    End If
+            Using macmdgenre As SqlCommand = New SqlCommand(cmdgenre, myConnection)
+                'macmd.Parameters.AddWithValue("@id", id_value)
+                macmdgenre.CommandTimeout = 0
+                Try
+                    Using reader3 As SqlDataReader = macmdgenre.ExecuteReader
+                        Dim i = 0
+                        For Each item In reader3
+                            Dim mastatgenre = New StatGenre
+                            If (i = 0) Then
+                                mastatgenre.NombreF = item("Nombre").ToString
+                                mastatgenre.NombreM = 0
+                                mastatgenre.Genre = item("Genre").ToString
+                            Else
+                                mastatgenre.NombreM = item("Nombre").ToString
+                                mastatgenre.NombreF = 0
+                                mastatgenre.Genre = item("Genre").ToString
+                            End If
 
 
-            '                    Listdemastatgenre.Add(mastatgenre)
-            '                    i = i + 1
-            '                Next
+                            Listdemastatgenre.Add(mastatgenre)
+                            i = i + 1
+                        Next
 
-            '                reader3.Close()
+                        reader3.Close()
 
-            '            End Using
-            '        Catch ex As Exception
-            '            'logMessage(ex.Message)
-            '        End Try
-            '    End Using
+                    End Using
+                Catch ex As Exception
+                    'logMessage(ex.Message)
+                End Try
+            End Using
 
             myConnection.Close()
         End Using
