@@ -147,6 +147,8 @@ Else
             </div>
         End If
 
+        <br />
+
         @Html.PagedListPager(Model, Function(page) Url.Action("Index", New With {.page = page, .ClientId = ViewBag.ClientId, .CollecteurId = ViewBag.CollecteurId, .dateDebut = ViewBag.dateDebut, .dateFin = ViewBag.dateFin, .sortOrder = ViewBag.CurrentSort, .currentFilter = ViewBag.CurrentFilter, .tab = ViewBag.activeTab}))
         Page @IIf(Model.PageCount < Model.PageNumber, 0, Model.PageNumber) sur @Model.PageCount ( @ViewBag.EnregCount Enregistrement(s))
 

@@ -792,6 +792,8 @@ Namespace TeamCollect
                             entities = entities.Where(Function(h) h.DateOperation.Value.Date >= dateDebut And h.DateOperation.Value.Date <= dateFin).ToList
                         Else
                             If (IsNothing(dateDebut) And IsNothing(dateFin)) Then
+                                dateDebut = Now.Date.ToString(AppSession.DateFormat)
+                                dateFin = Now.Date.ToString(AppSession.DateFormat)
                                 entities = entities.Where(Function(h) h.DateOperation.Value.Date = Now.Date Or h.DateOperation.Value.Date = Now.Date).ToList
                             Else
                                 If (IsNothing(dateFin)) Then
@@ -813,6 +815,8 @@ Namespace TeamCollect
             '    dateDebut = Now.Date
             '    dateFin = Now.Date
             'End If
+
+            entities = entities.OrderByDescending(Function(e) e.DateOperation)
 
             ViewBag.EnregCount = entities.Count
             Dim pageSize As Integer = ConfigurationManager.AppSettings("PageSize")

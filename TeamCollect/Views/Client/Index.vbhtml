@@ -67,7 +67,8 @@
                 @For Each item In Model
                     @<tr role="row" class="odd parent">
                         <td style="text-align:left">
-                            <a class="btn btn-default btn-xs right" data-toggle="tooltip" data-placement="left" title="HISTORIQUE" href="@Url.Action("Index", "HistoriqueMouvement", New With {.ClientId = item.Id, .dateDebut = Now.Date.ToString("d"), .dateFin = Now.Date.ToString("d")})">
+                            <a class="btn btn-default btn-xs right" data-toggle="tooltip" data-placement="left" title="HISTORIQUE" href="@Url.Action("Index", "HistoriqueMouvement",
+New With {.ClientId = item.Id, .dateDebut = Now.Date.ToString(AppSession.DateFormat), .dateFin = Now.Date.ToString(AppSession.DateFormat)})">
                                 <i class="fa fa-tasks"></i> Historique
                                 <span class="sr-only">@Resource.Btn_Edit</span>
                             </a>
