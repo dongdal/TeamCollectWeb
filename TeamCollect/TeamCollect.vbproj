@@ -892,7 +892,7 @@
     <Content Include="Report\Template\FicheCommissionsParPorteFeuilleSimplifiee.rdlc" />
     <Content Include="Report\Template\ListeClientParCollectrice.rdlc" />
     <Content Include="Report\Template\HistoriqueCollectriceParPeriode.rdlc" />
-    <EmbeddedResource Include="Report\Template\HistoCustomers.rdlc" />
+    <Content Include="Report\Template\HistoCustomers.rdlc" />
     <Content Include="Report\Template\FicheOperationsParPeriode.rdlc" />
     <Content Include="Report\Template\CommissionCollectriceAvecGrilleRemuneration.rdlc" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
