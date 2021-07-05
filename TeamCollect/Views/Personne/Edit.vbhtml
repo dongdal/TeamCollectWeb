@@ -75,8 +75,8 @@
                                             <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.Sexe) </label>
                                             <select id="Sexe" name="Sexe" class="fancy-select1 form-control">
                                                 <option data-icon="" value=""> Choix du genre</option>
-                                                <option data-icon="fa fa-male" value="M">Masculin</option>
-                                                <option data-icon="fa fa-female" value="F">Féminin</option>
+                                                <option data-icon="fa fa-male" value="M" @IIf(Model.Sexe.Equals("M"), "selected", "")>Masculin</option>
+                                                <option data-icon="fa fa-female" value="F" @IIf(Model.Sexe.Equals("F"), "selected", "")>Féminin</option>
                                             </select>
                                         </div>
                                     </div>

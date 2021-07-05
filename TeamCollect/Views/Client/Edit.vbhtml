@@ -77,6 +77,11 @@
                                              <label>Genre </label>
                                              <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.Sexe) </label>
                                              <select id="Sexe" name="Sexe" class="fancy-select1 form-control">
+                                                 <option data-icon="" value=""> Choix du genre</option>
+                                                 <option data-icon="fa fa-male" value="M" @IIf(Model.Sexe.Equals("M"), "selected", "")>Masculin</option>
+                                                 <option data-icon="fa fa-female" value="F" @IIf(Model.Sexe.Equals("F"), "selected", "")>Féminin</option>
+                                             </select>
+                                             @*<select id="Sexe" name="Sexe" class="fancy-select1 form-control">
                                                  @If (Model.Sexe = "M") Then
                                                      @<option data-icon="fa fa-thumbs-up" value="M"> Masculin </option>
                                                      @<option data-icon="fa fa-thumbs-down" value="F"> Feminin </option>
@@ -85,7 +90,7 @@
                                                      @<option data-icon="fa fa-thumbs-down" value="F"> Feminin </option>
                                                      @<option data-icon="fa fa-thumbs-up" value="M"> Masculin </option>
                                                  End If
-                                             </select>
+                                             </select>*@
                                          </div>
                                      </div>
                                  </div>
