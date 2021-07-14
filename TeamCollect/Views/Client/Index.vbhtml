@@ -58,9 +58,9 @@
                     <th>CNI.</th>
                     <th>Tel</th>
                     <th>Quartier</th>
-                    <th>Adresse</th>
                     <th>Agence</th>
                     <th>Solde</th>
+                    <th>Solde Dispo</th>
                 </tr>
             </thead>
             <tbody>
@@ -80,9 +80,9 @@ New With {.ClientId = item.Id, .dateDebut = Now.Date.ToString(AppSession.DateFor
                         <td>@item.CNI</td>
                         <td>@item.Telephone</td>
                         <td>@item.Quartier</td>
-                        <td>@item.Adresse</td>
                          <td>@item.Agence.Libelle</td>
                         <td>@item.Solde </td>
+                        <td>@item.SoldeDisponible </td>
                     </tr>
                 Next
 

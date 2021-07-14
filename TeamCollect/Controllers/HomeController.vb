@@ -37,95 +37,95 @@ Public Class HomeController
         Dim Listdemastatagence = New List(Of StatAgence)
         Dim Listdemastatgenre = New List(Of StatGenre)
 
-        Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)
-            Using macmd As SqlCommand = New SqlCommand(cmd, myConnection)
-                'macmd.Parameters.AddWithValue("@id", id_value)
-                macmd.CommandTimeout = 0
-                Try
-                    myConnection.Open()
-                    Using reader As SqlDataReader = macmd.ExecuteReader
+        'Using myConnection As New SqlConnection(ConfigurationManager.ConnectionStrings("DefaultConnection").ConnectionString)
+        '    Using macmd As SqlCommand = New SqlCommand(cmd, myConnection)
+        '        'macmd.Parameters.AddWithValue("@id", id_value)
+        '        macmd.CommandTimeout = 0
+        '        Try
+        '            myConnection.Open()
+        '            Using reader As SqlDataReader = macmd.ExecuteReader
 
-                        For Each item In reader
-                            Dim mastat = New StatCollecteur
+        '                For Each item In reader
+        '                    Dim mastat = New StatCollecteur
 
-                            mastat.Montant = item("Montant").ToString
-                            mastat.PartBANK = item("PartBANK").ToString
-                            mastat.PartCLIENT = item("PartCLIENT").ToString
-                            mastat.Agence = item("Agence").ToString
-                            mastat.Nom = item("Nom").ToString
-                            mastat.Prenom = item("Prenom").ToString
-                            mastat.Sexe = item("Sexe").ToString
+        '                    mastat.Montant = item("Montant").ToString
+        '                    mastat.PartBANK = item("PartBANK").ToString
+        '                    mastat.PartCLIENT = item("PartCLIENT").ToString
+        '                    mastat.Agence = item("Agence").ToString
+        '                    mastat.Nom = item("Nom").ToString
+        '                    mastat.Prenom = item("Prenom").ToString
+        '                    mastat.Sexe = item("Sexe").ToString
 
-                            Listdemastat.Add(mastat)
-                        Next
+        '                    Listdemastat.Add(mastat)
+        '                Next
 
-                        reader.Close()
+        '                reader.Close()
 
-                    End Using
-                Catch ex As Exception
-                    'logMessage(ex.Message)
-                End Try
-            End Using
+        '            End Using
+        '        Catch ex As Exception
+        '            'logMessage(ex.Message)
+        '        End Try
+        '    End Using
 
-            '-----------top agence---------------
-            Using macmdag As SqlCommand = New SqlCommand(cmdtopagence, myConnection)
-                'macmd.Parameters.AddWithValue("@id", id_value)
-                macmdag.CommandTimeout = 0
-                Try
-                    Using reader2 As SqlDataReader = macmdag.ExecuteReader
-                        For Each item In reader2
-                            Dim mastatagence = New StatAgence
+        '    '-----------top agence---------------
+        '    Using macmdag As SqlCommand = New SqlCommand(cmdtopagence, myConnection)
+        '        'macmd.Parameters.AddWithValue("@id", id_value)
+        '        macmdag.CommandTimeout = 0
+        '        Try
+        '            Using reader2 As SqlDataReader = macmdag.ExecuteReader
+        '                For Each item In reader2
+        '                    Dim mastatagence = New StatAgence
 
-                            mastatagence.Montant = item("Montant").ToString
-                            mastatagence.PartBANK = item("PartBANK").ToString
-                            mastatagence.PartCLIENT = item("PartCLIENT").ToString
-                            mastatagence.Agence = item("Agence").ToString
+        '                    mastatagence.Montant = item("Montant").ToString
+        '                    mastatagence.PartBANK = item("PartBANK").ToString
+        '                    mastatagence.PartCLIENT = item("PartCLIENT").ToString
+        '                    mastatagence.Agence = item("Agence").ToString
 
-                            Listdemastatagence.Add(mastatagence)
-                        Next
+        '                    Listdemastatagence.Add(mastatagence)
+        '                Next
 
-                        reader2.Close()
+        '                reader2.Close()
 
-                    End Using
-                Catch ex As Exception
-                    'logMessage(ex.Message)
-                End Try
-            End Using
+        '            End Using
+        '        Catch ex As Exception
+        '            'logMessage(ex.Message)
+        '        End Try
+        '    End Using
 
-            '    '-----------stat genre ---------------
-            Using macmdgenre As SqlCommand = New SqlCommand(cmdgenre, myConnection)
-                'macmd.Parameters.AddWithValue("@id", id_value)
-                macmdgenre.CommandTimeout = 0
-                Try
-                    Using reader3 As SqlDataReader = macmdgenre.ExecuteReader
-                        Dim i = 0
-                        For Each item In reader3
-                            Dim mastatgenre = New StatGenre
-                            If (i = 0) Then
-                                mastatgenre.NombreF = item("Nombre").ToString
-                                mastatgenre.NombreM = 0
-                                mastatgenre.Genre = item("Genre").ToString
-                            Else
-                                mastatgenre.NombreM = item("Nombre").ToString
-                                mastatgenre.NombreF = 0
-                                mastatgenre.Genre = item("Genre").ToString
-                            End If
+        '    '    '-----------stat genre ---------------
+        '    Using macmdgenre As SqlCommand = New SqlCommand(cmdgenre, myConnection)
+        '        'macmd.Parameters.AddWithValue("@id", id_value)
+        '        macmdgenre.CommandTimeout = 0
+        '        Try
+        '            Using reader3 As SqlDataReader = macmdgenre.ExecuteReader
+        '                Dim i = 0
+        '                For Each item In reader3
+        '                    Dim mastatgenre = New StatGenre
+        '                    If (i = 0) Then
+        '                        mastatgenre.NombreF = item("Nombre").ToString
+        '                        mastatgenre.NombreM = 0
+        '                        mastatgenre.Genre = item("Genre").ToString
+        '                    Else
+        '                        mastatgenre.NombreM = item("Nombre").ToString
+        '                        mastatgenre.NombreF = 0
+        '                        mastatgenre.Genre = item("Genre").ToString
+        '                    End If
 
 
-                            Listdemastatgenre.Add(mastatgenre)
-                            i = i + 1
-                        Next
+        '                    Listdemastatgenre.Add(mastatgenre)
+        '                    i = i + 1
+        '                Next
 
-                        reader3.Close()
+        '                reader3.Close()
 
-                    End Using
-                Catch ex As Exception
-                    'logMessage(ex.Message)
-                End Try
-            End Using
+        '            End Using
+        '        Catch ex As Exception
+        '            'logMessage(ex.Message)
+        '        End Try
+        '    End Using
 
-            myConnection.Close()
-        End Using
+        '    myConnection.Close()
+        'End Using
 
         mondashbord.StatCollecteurListObject = Listdemastat.ToList
         mondashbord.StatAgenceListObject = Listdemastatagence.ToList

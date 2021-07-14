@@ -57,13 +57,7 @@
                         @Html.ActionLink("Tel", "IndexAgence", New With {.sortOrder = ViewBag.TelParm, .currentFilter = ViewBag.CurrentFilter, .tab = ViewBag.activeTab})
                     </th>
                     <th>
-                        @Html.ActionLink("Tel2", "IndexAgence", New With {.sortOrder = ViewBag.Tel2Parm, .currentFilter = ViewBag.CurrentFilter, .tab = ViewBag.activeTab})
-                    </th>
-                    <th>
                         @Html.ActionLink("Quartier", "IndexAgence", New With {.sortOrder = ViewBag.QuartierParm, .currentFilter = ViewBag.CurrentFilter, .tab = ViewBag.activeTab})
-                    </th>
-                    <th>
-                        @Html.ActionLink("Adresse", "IndexAgence", New With {.sortOrder = ViewBag.AdresseParm, .currentFilter = ViewBag.CurrentFilter, .tab = ViewBag.activeTab})
                     </th>
                     <th>
                         @Html.ActionLink("Solde", "IndexAgence", New With {.sortOrder = ViewBag.SoldeParm, .currentFilter = ViewBag.CurrentFilter, .tab = ViewBag.activeTab})
@@ -92,9 +86,7 @@ New With {.ClientId = item.Id, .dateDebut = Now.Date.ToString(AppSession.DateFor
                         <td>@item.Sexe</td>
                         <td>@item.CNI</td>
                         <td>@item.Telephone</td>
-                        <td>@item.Telephone2</td>
                         <td>@item.Quartier</td>
-                        <td>@item.Adresse</td>
                         <td>@item.Solde </td>
                         <td>@item.SoldeDisponible </td>
                         @If (item.Etat = True) Then

@@ -81,7 +81,7 @@ Namespace TeamCollect
             End If
             'Dim listcollecteur = db.Personnes.OfType(Of Collecteur).Where(Function(i) i.AgenceId = userAgenceId).ToList
 
-            Dim LesJournauxCaisse = db.JournalCaisses.ToList
+            Dim LesJournauxCaisse = db.JournalCaisses.OrderByDescending(Function(e) e.DateCreation).ToList
 
             Dim LesJournauxCaisse2 As New List(Of SelectListItem)
             For Each item In LesJournauxCaisse
@@ -856,7 +856,7 @@ Namespace TeamCollect
             End If
 
             If IsNothing(HistoMvt.Client) Then 'On se rassure que le client existe bel et bien. Dans le cas échéant, on retourne un erreur.
-                ErrorMsg = "La transaction n'a pas été éffectuée: client introuvable..."
+                ErrorMsg = "L'opération n'a pas été éffectuée: client introuvable..."
                 ModelState.AddModelError("", ErrorMsg)
                 Return Json(New With {.Result = "Error: " + ErrorMsg})
 
@@ -883,18 +883,31 @@ Namespace TeamCollect
                         .UserId = ChefCollecteur.Id}
                         )
 
-                    'mise a jour du solde du client
-                    HistoMvt.Client.Solde -= HistoMvt.Montant
-                    db.Entry(HistoMvt.Client).State = EntityState.Modified
-
                     Dim LibOperation As String = ""
                     If (operationType = OperationType.AnnulationCollecte) Then
                         LibOperation = "ANNULATION COLLECT- " & HistoMvt.Id & "de " & HistoMvt.Montant & "Du " & HistoMvt.DateOperation
+
+                        'mise a jour du solde du client
+                        HistoMvt.Client.Solde = HistoMvt.Client.Solde.Value - HistoMvt.Montant.Value
                     ElseIf (operationType = OperationType.AnnulationRetrait) Then
                         LibOperation = "ANNULATION RETRAIT- " & HistoMvt.Id & "de " & HistoMvt.Montant & "Du " & HistoMvt.DateOperation
+
+                        'mise a jour du solde du client
+                        HistoMvt.Client.Solde = HistoMvt.Client.Solde.Value + Math.Abs(HistoMvt.Montant.Value)
+
                     Else
                         LibOperation = "ANNULATION VENTE DE CARNET- " & HistoMvt.Id & "de " & HistoMvt.Montant & "Du " & HistoMvt.DateOperation
+
+                        'mise a jour du solde du client
+                        HistoMvt.Client.Solde = HistoMvt.Client.Solde.Value + Math.Abs(HistoMvt.Montant.Value)
                     End If
+
+                    'avant de valider la mise à jour du solde, on vérifie que le solde du client est toujours positif. Dans le cas contraire on lève une exception et on arrête la transaction
+                    If (HistoMvt.Client.Solde.Value < 0) Then
+                        Throw New Exception("Le solde de ce client ne permet pas d'effectuer cette opération. Solde client disponible = " &
+                                            HistoMvt.Client.SoldeDisponible.ToString("{0:0,0.00}") & " Fcfa.")
+                    End If
+                    db.Entry(HistoMvt.Client).State = EntityState.Modified
 
                     Dim historiqueMouvement As New HistoriqueMouvement With {
                                         .ClientId = HistoMvt.Client.Id,
@@ -922,8 +935,6 @@ Namespace TeamCollect
                     Return Json(New With {.Result = "Error: " + ErrorMsg})
                 End Try
             End Using
-
-            Return Json(New With {.Result = "Error"})
         End Function
 
         'Get/Annulation/5
