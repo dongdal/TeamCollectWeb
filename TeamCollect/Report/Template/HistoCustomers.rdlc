@@ -17,7 +17,8 @@
       <Query>
         <DataSourceName>DataSource1</DataSourceName>
         <CommandText>SELECT        HistoCustomers.*
-FROM            HistoCustomers</CommandText>
+FROM            HistoCustomers
+ORDER BY DateOperation DESC</CommandText>
       </Query>
       <Fields>
         <Field Name="Id">
@@ -624,7 +625,6 @@ FROM            HistoCustomers</CommandText>
             </ReportItems>
             <KeepTogether>true</KeepTogether>
             <Top>1.27715cm</Top>
-            <Left>0cm</Left>
             <Height>2.48708cm</Height>
             <Width>18.66604cm</Width>
             <Style>
@@ -745,7 +745,9 @@ FROM            HistoCustomers</CommandText>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox4</rd:DefaultName>
@@ -777,7 +779,9 @@ FROM            HistoCustomers</CommandText>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox12</rd:DefaultName>
@@ -809,7 +813,9 @@ FROM            HistoCustomers</CommandText>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox17</rd:DefaultName>
@@ -841,7 +847,9 @@ FROM            HistoCustomers</CommandText>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox21</rd:DefaultName>
@@ -873,7 +881,9 @@ FROM            HistoCustomers</CommandText>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox25</rd:DefaultName>
@@ -908,7 +918,9 @@ FROM            HistoCustomers</CommandText>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>DateOperation</rd:DefaultName>
@@ -923,6 +935,7 @@ FROM            HistoCustomers</CommandText>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -938,7 +951,9 @@ FROM            HistoCustomers</CommandText>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>LibelleOperation1</rd:DefaultName>
@@ -968,7 +983,9 @@ FROM            HistoCustomers</CommandText>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Montant1</rd:DefaultName>
@@ -998,7 +1015,9 @@ FROM            HistoCustomers</CommandText>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Montant2</rd:DefaultName>
@@ -1028,7 +1047,9 @@ FROM            HistoCustomers</CommandText>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>NomCollecteur1</rd:DefaultName>
@@ -1063,7 +1084,9 @@ FROM            HistoCustomers</CommandText>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox27</rd:DefaultName>
@@ -1093,7 +1116,9 @@ FROM            HistoCustomers</CommandText>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox28</rd:DefaultName>
@@ -1120,10 +1145,14 @@ FROM            HistoCustomers</CommandText>
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Sum(CDbl(IIf(CDbl(Fields!Montant.Value) &lt; 0, Fields!Montant.Value, 0)))</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox29</rd:DefaultName>
@@ -1150,10 +1179,14 @@ FROM            HistoCustomers</CommandText>
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Sum(CDbl(IIf(CDbl(Fields!Montant.Value) &gt; 0, Fields!Montant.Value, 0)))</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox30</rd:DefaultName>
@@ -1183,7 +1216,9 @@ FROM            HistoCustomers</CommandText>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox31</rd:DefaultName>
@@ -1220,6 +1255,11 @@ FROM            HistoCustomers</CommandText>
                 </TablixMember>
                 <TablixMember>
                   <Group Name="Détails" />
+                  <SortExpressions>
+                    <SortExpression>
+                      <Value>=Fields!DateOperation.Value</Value>
+                    </SortExpression>
+                  </SortExpressions>
                 </TablixMember>
                 <TablixMember>
                   <KeepWithGroup>Before</KeepWithGroup>
@@ -1229,7 +1269,7 @@ FROM            HistoCustomers</CommandText>
             <DataSetName>dsData</DataSetName>
             <Top>1.60698in</Top>
             <Height>0.75in</Height>
-            <Width>7.28133in</Width>
+            <Width>7.28134in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -1252,7 +1292,6 @@ FROM            HistoCustomers</CommandText>
               <Source>Embedded</Source>
               <Value>logo</Value>
               <Sizing>FitProportional</Sizing>
-              <Left>0cm</Left>
               <Height>1.5cm</Height>
               <Width>1.5cm</Width>
               <Style>
@@ -1398,7 +1437,7 @@ BP : 4531 Yaoundé</Value>
     <ReportParameter Name="DateFin">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
+      <Prompt>DateFin</Prompt>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
