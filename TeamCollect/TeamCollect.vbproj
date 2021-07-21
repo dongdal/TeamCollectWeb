@@ -308,6 +308,10 @@
       <DependentUpon>201912300754013_Add_Table_CompteurImpression.vb</DependentUpon>
     </Compile>
     <Compile Include="Migrations\201912300754013_Add_Table_CompteurImpression.vb" />
+    <Compile Include="Migrations\202107211546254_alter_tables_CategRemu_DetCommis_HistoMvt_JournCaiss_Retrait_Set_Decimal_as_money_Field.Designer.vb">
+      <DependentUpon>202107211546254_alter_tables_CategRemu_DetCommis_HistoMvt_JournCaiss_Retrait_Set_Decimal_as_money_Field.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107211546254_alter_tables_CategRemu_DetCommis_HistoMvt_JournCaiss_Retrait_Set_Decimal_as_money_Field.vb" />
     <Compile Include="Models\CompteurImpression.vb" />
     <Compile Include="Models\HistoriqueCollecteurCategorie.vb" />
     <Compile Include="Models\CommissionColecteur.vb" />
@@ -543,6 +547,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912300754013_Add_Table_CompteurImpression.resx">
       <DependentUpon>201912300754013_Add_Table_CompteurImpression.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107211546254_alter_tables_CategRemu_DetCommis_HistoMvt_JournCaiss_Retrait_Set_Decimal_as_money_Field.resx">
+      <DependentUpon>202107211546254_alter_tables_CategRemu_DetCommis_HistoMvt_JournCaiss_Retrait_Set_Decimal_as_money_Field.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

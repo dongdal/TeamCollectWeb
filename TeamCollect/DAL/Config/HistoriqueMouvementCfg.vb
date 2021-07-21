@@ -8,6 +8,7 @@ Public Class HistoriqueMouvementCfg
         Me.Property(Function(p) p.Montant).IsOptional()
         Me.Property(Function(p) p.DateOperation).IsOptional()
         Me.Property(Function(p) p.Pourcentage).IsOptional()
+        Me.Property(Function(p) p.Montant).HasColumnType("Money")
         Me.Property(Function(p) p.MontantRetenu).IsOptional()
         Me.Property(Function(p) p.PartBANK).IsOptional()
         Me.Property(Function(p) p.PartCLIENT).IsOptional()

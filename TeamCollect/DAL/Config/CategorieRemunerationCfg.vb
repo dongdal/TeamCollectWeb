@@ -11,5 +11,6 @@ Public Class CategorieRemunerationCfg
         Me.Property(Function(p) p.SalaireDeBase).IsRequired()
         Me.Property(Function(p) p.StatutExistant).IsRequired()
         Me.Property(Function(p) p.DateCreation).IsRequired()
+        Me.Property(Function(p) p.SalaireDeBase).HasColumnType("Money")
     End Sub
 End Class

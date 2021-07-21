@@ -11,5 +11,9 @@ Public Class JournalCaisseCfg
         Me.Property(Function(p) p.Date).IsOptional()
         Me.Property(Function(p) p.Etat).IsRequired()
         Me.Property(Function(p) p.DateCreation).IsRequired()
+        Me.Property(Function(p) p.MontantTheorique).HasColumnType("Money")
+        Me.Property(Function(p) p.MontantReel).HasColumnType("Money")
+        Me.Property(Function(p) p.PlafondEnCours).HasColumnType("Money")
+        Me.Property(Function(p) p.PlafondDeDebat).HasColumnType("Money")
     End Sub
 End Class
