@@ -11,6 +11,7 @@ Namespace Controllers
         Inherits BaseController
 
         Private db As New ApplicationDbContext
+        Private errorMsg As New StringBuilder()
 
         Private Function GetCurrentUser() As ApplicationUser
             Dim id = User.Identity.GetUserId
@@ -44,7 +45,7 @@ Namespace Controllers
 
         ' GET: Retrait
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
-        Function IndexAdmin(sortOrder As String, currentFilter As String, searchString As String, page As Integer?) As ActionResult
+        Function Index(sortOrder As String, currentFilter As String, searchString As String, page As Integer?) As ActionResult
             ViewBag.CurrentSort = sortOrder
 
             If Not String.IsNullOrEmpty(searchString) Then
@@ -56,7 +57,7 @@ Namespace Controllers
             ViewBag.CurrentFilter = searchString
             'Dim entities = db.Retraits.ToList.Where(Function(m) m.Etat = True)
             Dim CurrentAgenceId = GetCurrentUser.Personne.AgenceId
-            Dim entities = (From retrait In db.Retraits Where retrait.Client.AgenceId = CurrentAgenceId Select retrait).ToList
+            Dim entities = (From retrait In db.Retraits Where retrait.Client.AgenceId = CurrentAgenceId Order By retrait.DateRetrait Descending Select retrait).ToList
 
             If Not String.IsNullOrEmpty(searchString) Then
                 entities = entities.Where(Function(e) e.Client.Nom.ToUpper.Equals(searchString.ToUpper) Or e.Client.Prenom.ToUpper.Equals(searchString.ToUpper))
@@ -70,8 +71,9 @@ Namespace Controllers
             Return View(entities.ToPagedList(pageNumber, pageSize))
         End Function
 
+        ' GET: Retrait/IndexAdmin
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
-        Function Index(sortOrder As String, currentFilter As String, searchString As String, page As Integer?) As ActionResult
+        Function IndexAdmin(sortOrder As String, currentFilter As String, searchString As String, page As Integer?) As ActionResult
             ViewBag.CurrentSort = sortOrder
 
             If Not String.IsNullOrEmpty(searchString) Then
@@ -235,8 +237,9 @@ Namespace Controllers
 
                     'avant de valider la mise à jour du solde, on vérifie que le solde du client est toujours positif. Dans le cas contraire on lève une exception et on arrête la transaction
                     If (HistMvt.Client.Solde.Value < 0) Then
-                        Throw New Exception("Le solde de ce client ne permet pas d'effectuer cette opération. Solde client disponible = " &
+                        errorMsg.AppendLine("Le solde de ce client ne permet pas d'effectuer cette opération. Solde client disponible = " &
                                             HistMvt.Client.SoldeDisponible.ToString("{0:0,0.00}") & " Fcfa.")
+                        Throw New Exception(errorMsg.ToString(), New Exception(errorMsg.ToString()))
                     End If
                     db.Entry(HistMvt.Client).State = EntityState.Modified
 
@@ -261,15 +264,15 @@ Namespace Controllers
                     Await db.SaveChangesAsync()
 
                     transaction.Commit()
-                    Return RedirectToAction("IndexAdmin")
+                    Return RedirectToAction("Index")
                 Catch ex As DbEntityValidationException
                     Util.GetError(ex)
                     transaction.Rollback()
-                    ModelState.AddModelError("Motif", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur.")
+                    ModelState.AddModelError("", ex.InnerException.Message.ToString())
                 Catch ex As Exception
                     Util.GetError(ex)
                     transaction.Rollback()
-                    ModelState.AddModelError("Motif", "Une erreur est survenue pendant le traitement: veuillez contacter l'administrateur. ")
+                    ModelState.AddModelError("", ex.InnerException.Message.ToString())
                 End Try
             End Using
 
@@ -280,18 +283,18 @@ Namespace Controllers
         ' GET: Retrait/Create
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
         Function Create() As ActionResult
-            Dim pVM As New RetraitViewModel
+            Dim retraitVM As New RetraitViewModel
 
-            LoadCombo(pVM)
-            Return View(pVM)
+            LoadCombo(retraitVM)
+            Return View(retraitVM)
         End Function
 
-        ' POST: Retrait/DemandeDeRetrait
+        ' POST: Retrait/Create
         <HttpPost()>
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
         <ValidateAntiForgeryToken()>
-        Async Function DemandeDeRetrait(retraitJSON As RetraitJSON) As Task(Of JsonResult)
-            Dim retraitVM As New RetraitViewModel(retraitJSON:=retraitJSON)
+        Async Function Create(retraitVM As RetraitViewModel) As Task(Of ActionResult)
+            'Dim retraitVM As New RetraitViewModel(retraitJSON:=RetraitJSON)
             'on recupere l'id du collecteur chef collect connecter
             Dim CollecteurId = ConfigurationManager.AppSettings("CollecteurSystemeId") 'getCurrentUser.PersonneId
             retraitVM.CollecteurId = CollecteurId
@@ -303,89 +306,89 @@ Namespace Controllers
             If ModelState.IsValid Then
                 '1 on recupere le client on teste son solde et on le modifi
 
-                Dim ClientId = retraitVM.ClientId
                 Dim Montant = Math.Abs(retraitVM.Montant)
-                Dim client = db.Clients.Find(ClientId)
+                Dim client = db.Clients.Find(retraitVM.ClientId)
                 Dim UserId = GetCurrentUser.Id
 
                 'On vérifie si le client existe
                 If IsNothing(client) Then
                     ModelState.AddModelError("ClientId", "Le client Selectionné n'existe pas ou a été supprimé.")
-                    LoadCombo(retraitVM)
-                    Return Json(New With {.Result = "Error"})
+                    'LoadCombo(retraitVM)
+                    'Return Json(New With {.Result = "Error"})
                 End If
 
                 'on teste si le collecter connecter a une caisse ouverte
                 Dim LesJournalCaisse = (From J In db.JournalCaisses Where J.CollecteurId = CollecteurId Select J).ToList()
                 If (LesJournalCaisse.Count = 0) Then
                     ModelState.AddModelError("Montant", "Vous n'avez pas de caisse ouverte pour effectuer cette opération ")
-                    LoadCombo(retraitVM)
-                    Return Json(New With {.Result = "Error"})
+                    'LoadCombo(retraitVM)
+                    'Return Json(New With {.Result = "Error"})
                 End If
 
                 'On teste si le client a un solde valide, c'est-à-dire on vérifie si le solde disponible du client permet d'effectuer l'opération
                 If client.SoldeDisponible.Value < Montant Then
-                    Dim errorMsg = String.Format("Le solde disponible du client ({0} Fcfa) est insuiffisant pour un retrait de {1} Fcfa",
-                                             String.Format("{0:0,0.00}", client.SoldeDisponible.ToString()), String.Format("{0:0,0.00}", Montant.ToString()))
-                    ModelState.AddModelError("Montant", errorMsg)
-                    LoadCombo(retraitVM)
-                    Return Json(New With {.Result = errorMsg})
+                    errorMsg.AppendLine(String.Format("Le solde disponible du client ({0} Fcfa) est insuiffisant pour un retrait de {1} Fcfa",
+                                             String.Format("{0:0,0.00}", client.SoldeDisponible.ToString()), String.Format("{0:0,0.00}", Montant.ToString())))
+                    ModelState.AddModelError("Montant", errorMsg.ToString())
+                    'LoadCombo(retraitVM)
+                    'Return Json(New With {.Result = errorMsg})
                 End If
 
-                Using transaction = db.Database.BeginTransaction
-                    Try
+                If (ModelState.IsValid) Then
+                    Using transaction = db.Database.BeginTransaction
+                        Try
 
-                        'mise a jour du solde du client
-                        client.Solde -= Montant
-                        db.Entry(client).State = EntityState.Modified
+                            'mise a jour du solde du client
+                            client.Solde -= Montant
+                            db.Entry(client).State = EntityState.Modified
 
-                        Dim LibOperation As String = "RETRAIT-" & DateTime.Now.ToString & "-AG-" & GetPositionAgence(GetCurrentUser.Personne.AgenceId, GetCurrentUser.Personne.Agence.SocieteId)
+                            Dim LibOperation As String = "RETRAIT-" & DateTime.Now.ToString & "-AG-" & GetPositionAgence(GetCurrentUser.Personne.AgenceId, GetCurrentUser.Personne.Agence.SocieteId)
 
-                        '2- on cree le retrait
-                        retraitVM.ClientId = ClientId
-                        retraitVM.CollecteurId = CollecteurId
-                        retraitVM.SoldeApreOperation = client.Solde
-                        retraitVM.DateRetrait = Now
-                        retraitVM.DateCreation = Now
-                        retraitVM.Montant = -Montant
-                        retraitVM.Etat = True
-                        Dim retrait = retraitVM.GetEntity
-                        retrait.UserId = UserId
-                        db.Retraits.Add(retrait)
+                            '2- on complète les informations liées au retrait
+                            retraitVM.SoldeApreOperation = client.Solde
+                            retraitVM.DateRetrait = Now
+                            retraitVM.DateCreation = Now
+                            retraitVM.Montant = -Montant
 
-                        '3- on recupere le journal caisse et on enregistre dans mouvement historique
-                        Dim JCID = LesJournalCaisse.FirstOrDefault.Id
+                            Dim retrait = retraitVM.GetEntity
+                            retrait.UserId = UserId
+                            db.Retraits.Add(retrait)
 
-                        Dim historiqueMouvement As New HistoriqueMouvement With {
-                                        .ClientId = ClientId,
-                                        .CollecteurId = CollecteurId,
-                                        .Montant = -Montant,
-                                        .DateOperation = DateTime.Now,
-                                        .Pourcentage = 0,
-                                        .MontantRetenu = 0,
-                                        .EstTraiter = 0,
-                                        .Etat = False,
-                                        .DateCreation = DateTime.Now,
-                                        .UserId = UserId,
-                                        .JournalCaisseId = JCID,
-                                        .LibelleOperation = LibOperation
-                                    }
+                            '3- on recupere le journal caisse et on enregistre dans mouvement historique
+                            Dim JCID = LesJournalCaisse.FirstOrDefault.Id
 
-                        db.HistoriqueMouvements.Add(historiqueMouvement)
-                        Await db.SaveChangesAsync()
+                            Dim historiqueMouvement As New HistoriqueMouvement With {
+                                            .ClientId = retraitVM.ClientId,
+                                            .CollecteurId = CollecteurId,
+                                            .Montant = retraitVM.Montant,
+                                            .DateOperation = DateTime.Now,
+                                            .Pourcentage = 0,
+                                            .MontantRetenu = 0,
+                                            .EstTraiter = 0,
+                                            .Etat = False,
+                                            .DateCreation = DateTime.Now,
+                                            .UserId = UserId,
+                                            .JournalCaisseId = JCID,
+                                            .LibelleOperation = LibOperation
+                                        }
 
-                        transaction.Commit()
-                        Return Json(New With {.Result = "OK"})
+                            db.HistoriqueMouvements.Add(historiqueMouvement)
+                            Await db.SaveChangesAsync()
 
-                    Catch ex As Exception
-                        transaction.Rollback()
-                        Return Json(New With {.Result = "Error: " + ex.Message.ToString()})
-                    End Try
-                End Using
+                            transaction.Commit()
+                            Return RedirectToAction("Index")
+
+                        Catch ex As Exception
+                            transaction.Rollback()
+                            ModelState.AddModelError("", ex.Message.ToString())
+                        End Try
+                    End Using
+                End If
 
             End If
             LoadCombo(retraitVM)
-            Return Json(New With {.Result = "Error"})
+            'errorMsg = Util.GetModelStateError(ModelState)
+            Return View(retraitVM)
         End Function
 
 

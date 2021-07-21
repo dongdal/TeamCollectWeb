@@ -86,7 +86,7 @@
             var token = $('input[name="__RequestVerificationToken"]', form).val();
 
             if (typeof $(FondCaisse).val() == "undefined" || $(FondCaisse).val() == "" ||typeof $(Id).val() == "undefined" || $(Id).val() == "" || typeof $(CollecteurId).val() == "undefined" || $(CollecteurId).val() == "" || typeof $(Etat).val() == "undefined" || $(Etat).val() == "" || typeof $(DateCreation).val() == "undefined" || $(DateCreation).val() == "" || typeof $(DateOuverture).val() == "undefined" || $(DateOuverture).val() == "" || typeof $(PlafondDebat).val() == "undefined" || $(PlafondDebat).val() == "" || typeof $(PlafondEnCours).val() == "undefined" || $(PlafondEnCours).val() == "" || typeof $(MontantReel).val() == "undefined" || $(MontantReel).val() == "") {
-                $.alert('"Veuillez renseigner tous les champs obligatoires."');
+                alert('"Veuillez renseigner tous les champs obligatoires."');
             } else {
             $.confirm({
                 title: '@Resource.CloturerCaisse',

@@ -42,7 +42,7 @@
 
                                 </div>
                                 <div class="box-footer" style="text-align:center">
-                                    <input type="button" onclick="AnnulerVente();" value="Enregistrer" class="btn btn-primary btn-sm" />
+                                    <input type="submit" onclick="Alert();" id="BtnSubmit" value="Enregistrer" class="btn btn-primary btn-sm" />
                                     <a class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="left" title="Retour" href="@Url.Action("Index", "HistoriqueMouvement", New With {.ClientId = Model.Id, .dateDebut = Now.Date.ToString("d"), .dateFin = Now.Date.ToString("d")})">
                                         <i class=""></i> Retour
                                     </a>
@@ -60,6 +60,8 @@
 </div>
 @Section Scripts
     @Scripts.Render("~/bundles/jqueryval")
+
+
 
     <script>
         function AnnulerVente() {
@@ -80,7 +82,7 @@
 
             //$.alert("Identifiant= " + Type);
             if (typeof $(Id).val() == "undefined" || $(Id).val() == "" || typeof $(CollecteurId).val() == "undefined" || $(CollecteurId).val() == "" || typeof $(DateDebut).val() == "undefined" || $(DateDebut).val() == "" || typeof $(DateFin).val() == "undefined" || $(DateFin).val() == "" || typeof $(Motif).val() == "undefined" || $(Motif).val() == "") {
-                $.alert('"Veuillez renseigner tous les champs obligatoires."');
+                alert('"Veuillez renseigner tous les champs obligatoires."');
             } else {
             $.confirm({
                 title: '@Resource.AnnulerOperationTitle',

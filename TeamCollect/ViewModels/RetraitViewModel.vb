@@ -24,8 +24,8 @@ Public Class RetraitViewModel
 
 
     Public Property SoldeApreOperation As Decimal
-    Public Property DateRetrait As Date?
-    Public Property DateCloture As Date?
+    Public Property DateRetrait As Date? = Now
+    Public Property DateCloture As Date? = Now
 
     Public Property Etat As Boolean = True
     Public Property DateCreation As DateTime = Now

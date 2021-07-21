@@ -18,7 +18,7 @@
             </div>
             <div class="panel-body pt0 pb0">
                 <div id="wizard" class="bwizard">
-                    @Using (Html.BeginForm("Ajouter", "Retrait", FormMethod.Post, New With {.role = "form", .id = "__AjaxAntiForgeryForm"}))
+                    @Using (Html.BeginForm("Create", "Retrait", FormMethod.Post, New With {.role = "form", .id = "__AjaxAntiForgeryForm"}))
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(True)
                         @<div class="box box-warning">
@@ -30,21 +30,20 @@
 
                                             @Html.DropDownListFor(Function(model) model.ClientId,
 New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New With {.class = "form-control select2"})
-                                            @Html.ValidationMessageFor(Function(model) model.ClientId)
+                                            @Html.ValidationMessageFor(Function(model) model.ClientId, Nothing, New With {.style = "color: #fdcd23"})
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>Montant </label>
-                                            <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.Montant) </label>
                                             @Html.EditorFor(Function(model) model.Montant)
-                                            @Html.ValidationMessageFor(Function(model) model.Montant)
+                                            @Html.ValidationMessageFor(Function(model) model.Montant, Nothing, New With {.style = "color: #fdcd23"})
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
 
-                                    <Label id="MessageAlerte" style="color: #fdcd23" >  </Label>
+                                    <Label id="MessageAlerte" style="color: #fdcd23">  </Label>
 
 
                                     @*<div Class="col-md-6">
@@ -54,18 +53,20 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New 
                                                 @Html.EditorFor(Function(model) model.Etat)
                                             </div>
                                         </div>*@
+
                                 </div>
 
+                                <div class="box-footer" style="text-align:center">
+                                    <input type="submit" onclick="Alert();" id="BtnSave" value="Enregistrer" class="btn btn-primary btn-sm" />
+                                    @*<input type="button" onclick="DemandeDeRetrait();" value="Enregistrer" class="btn btn-primary btn-sm" />*@
+                                    @Html.ActionLink("Retour", "Index", "Retrait", Nothing, New With {.class = "btn btn-default btn-sm"})
+                                </div>
+
+                                <br />
                             </div>
-                            <br />
                         </div>
 
                     End Using
-
-                    <div class="box-footer" style="text-align:center">
-                        <input type="button" onclick="DemandeDeRetrait();" value="Enregistrer" class="btn btn-primary btn-sm" />
-                        @Html.ActionLink("Retour", "Index", "Retrait", Nothing, New With {.class = "btn btn-default btn-sm"})
-                    </div>
 
                 </div>
             </div>
@@ -117,18 +118,44 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New 
         })
     </script>
 
+
+    <script>
+        function Alert() {
+            $.confirm({
+                title: 'Information',
+                content: 'L\'opération est encours de traitement. Vous serez redirigé vers une autre page à la fin de son exécution.',
+                theme: 'dark',
+                icon: 'fa fa-info',
+                buttons: {
+                    buttonA: {
+                        text: ' ',
+                        action: function () {
+                            this.buttons.buttonA.hide();
+                            return false;
+                        }
+                    }
+                }
+            });
+            //document.getElementById('BtnSave').setAttribute("disabled", "disabled");
+            document.getElementById('BtnSave').style.display = "none";
+
+        }
+    </script>
+
     <script>
         function DemandeDeRetrait() {
-            var ClientId = '#ClientId';
-            var Montant = '#Montant';
+            var ClientId = $('#ClientId').val();
+            var Montant = $('#Montant').val();
+            document.getElementById('Montant').value = "";
+
             var MessageAlert = document.getElementById('MessageAlerte').innerHTML;
 
             var form = $('#__AjaxAntiForgeryForm');
             var token = $('input[name="__RequestVerificationToken"]', form).val();
 
             var retraitJSON = {
-                'ClientId': $(ClientId).val(),
-                'Montant': $(Montant).val(),
+                'ClientId': ClientId,
+                'Montant': Montant,
             }
 
             //$.alert("Identifiant= " + Type);
@@ -147,8 +174,8 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New 
                             type: 'POST',
                             data: {
                                 __RequestVerificationToken: token,
-                                ClientId: $(ClientId).val(),
-                                Montant: $(Montant).val()
+                                ClientId: ClientId,
+                                Montant: Montant
                             },
                         }).done(function (data) {
                             if (data.Result == "OK") {
@@ -221,6 +248,4 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New 
             });
         }
     </script>
-
-
 End Section

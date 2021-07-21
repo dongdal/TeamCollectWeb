@@ -42,7 +42,7 @@
 
                                 </div>
                                 <div class="box-footer" style="text-align:center">
-                                    <input type="button" onclick="AnnulerRetrait();" value="Enregistrer" class="btn btn-primary btn-sm" />
+                                    <input type="submit" onclick="Alert();" id="BtnSave" value="Enregistrer" class="btn btn-primary btn-sm" />
                                     <a class="btn btn-default btn-sm" data-toggle="tooltip" data-placement="left" title="Retour" href="@Url.Action("Index", "HistoriqueMouvement", New With {.ClientId = Model.Id, .dateDebut = Now.Date.ToString("d"), .dateFin = Now.Date.ToString("d")})">
                                         <i class=""></i> Retour
                                     </a>
@@ -61,26 +61,43 @@
 @Section Scripts
     @Scripts.Render("~/bundles/jqueryval")
 
+    @*<script>
+        function Alert() {
+            $.confirm({
+                title: 'Information',
+                content: 'L\'opération est encours de traitement. Vous serez redirigé vers une autre page à la fin de son exécution.',
+                theme: 'dark',
+                icon: 'fa fa-info',
+                buttons: {
+                    buttonA: {
+                        text: ' ',
+                        action: function () {
+                            this.buttons.buttonA.hide();
+                            return false;
+                        }
+                    }
+                }
+            });
+            //document.getElementById('BtnSave').setAttribute("disabled", "disabled");
+            document.getElementById('BtnSave').style.display = "none";
+
+        }
+    </script>*@
+
     <script>
         function AnnulerRetrait() {
-            var Id = '#Id';
-            var CollecteurId = '#CollecteurId';
-            var DateDebut = '#DateDebut';
-            var DateFin = '#DateFin';
-            var Motif = '#Motif';
-            //var MessageAlert = document.getElementById('MessageAlerte').innerHTML;
+            var Id = $('#Id').val();
+            var CollecteurId = $('#CollecteurId').val();
+            var DateDebut = $('#DateDebut').val();
+            var DateFin = $('#DateFin').val();
+            var Motif = $('#Motif').val();
+            document.getElementById('Motif').value = "";
 
             var form = $('#__AjaxAntiForgeryForm');
             var token = $('input[name="__RequestVerificationToken"]', form).val();
 
-            //var retraitJSON = {
-            //    'ClientId': $(ClientId).val(),
-            //    'Montant': $(Montant).val(),
-            //}
-
-            //$.alert("Identifiant= " + Type);
-            if (typeof $(Id).val() == "undefined" || $(Id).val() == "" || typeof $(CollecteurId).val() == "undefined" || $(CollecteurId).val() == "" || typeof $(DateDebut).val() == "undefined" || $(DateDebut).val() == "" || typeof $(DateFin).val() == "undefined" || $(DateFin).val() == "" || typeof $(Motif).val() == "undefined" || $(Motif).val() == "") {
-                $.alert('"Veuillez renseigner tous les champs obligatoires."');
+            if (typeof Id == "undefined" || Id == "" || CollecteurId == "undefined" || CollecteurId == "" || DateDebut == "undefined" || DateDebut == "" || DateFin == "undefined" || DateFin == "" || Motif == "undefined" || Motif == "") {
+                alert('"Veuillez renseigner tous les champs obligatoires."');
             } else {
                         $.confirm({
                 title: '@Resource.AnnulerOperationTitle',
@@ -97,11 +114,11 @@
                             type: 'POST',
                             data: {
                                 __RequestVerificationToken: token,
-                                Id: $(Id).val(),
-                                CollecteurId: $(CollecteurId).val(),
-                                DateDebut: $(DateDebut).val(),
-                                DateFin: $(DateFin).val(),
-                                Motif: $(Motif).val()
+                                Id: Id,
+                                CollecteurId: CollecteurId,
+                                DateDebut: DateDebut,
+                                DateFin: DateFin,
+                                Motif: Motif
                             },
                         }).done(function (data) {
                             if (data.Result == "OK") {
@@ -116,7 +133,7 @@
                                     theme: 'supervan',
                                     buttons: {
                                         OK: function () {
-                                            window.location.href = '@Url.Action("IndexAgence", "Collecteur")';
+                                            window.location.href = '@Url.Action("IndexAgence", "Client")';
                                             //window.location.reload();
                                         }
                                     }

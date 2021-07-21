@@ -75,14 +75,26 @@ Public Class Util
         Return strError
     End Function
 
-    Shared Function GetModelStateError(ms As ModelStateDictionary) As Object
+    'Shared Function GetModelStateError(ms As ModelStateDictionary) As Object
+    '    Dim query = From state In ms.Values
+    '                From erreur In state.Errors
+    '                Select erreur.ErrorMessage
+
+    '    Dim strError As String = ""
+    '    For Each val_error In query
+    '        strError &= val_error & vbCrLf
+    '    Next
+    '    Return strError
+    'End Function
+
+    Shared Function GetModelStateError(ms As ModelStateDictionary) As StringBuilder
         Dim query = From state In ms.Values
                     From erreur In state.Errors
                     Select erreur.ErrorMessage
 
-        Dim strError As String = ""
+        Dim strError As New StringBuilder()
         For Each val_error In query
-            strError &= val_error & vbCrLf
+            strError.AppendLine(val_error)
         Next
         Return strError
     End Function

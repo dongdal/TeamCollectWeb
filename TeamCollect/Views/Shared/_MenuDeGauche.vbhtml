@@ -29,7 +29,7 @@
                                             <a href="@Url.Action("Index", "Agence")" title="Vos Agence"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Vos Agences</span></a>
                                         </li>
                                         <li>
-                                            <a href="@Url.Action("Index", "Grille")" title="Grille de facturation"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Vos Grilles de Fact...</span></a>
+                                            <a href="@Url.Action("Index", "Grille")" title="Grille de facturation"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Grilles de Facturation</span></a>
                                         </li>
                                         @*<li>
                                                 <a href="@Url.Action("Index", "CategorieRemunerations")" title="Grille de rémuneration"><i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Grille de rémuneration</span></a>
@@ -47,13 +47,13 @@
 
                                 </li>
                                 @<li>
-                                    <a href="@Url.Action("IndexAdmin", "Retrait")"><i class="s16  icomoon-icon-credit"></i><span class="txt">Retrait</span> </a>
+                                    <a href="@Url.Action("IndexAdmin", "Retrait")"><i class="s16  icomoon-icon-coin"></i><span class="txt">Retrait</span> </a>
                                 </li>
                                 @<li>
                                     <a href="@Url.Action("Index", "Personne")"><i class="s16  icomoon-icon-user-4"></i><span class="txt">Gestion du Personnel</span> </a>
                                 </li>
                                 @<li>
-                                    <a href="@Url.Action("Index", "Account")"><i class="s16  icomoon-icon-lock"></i><span class="txt">Gestion des profils</span> </a>
+                                    <a href="@Url.Action("Index", "Account")"><i class="s16  icomoon-icon-profile"></i><span class="txt">Gestion des profils</span> </a>
                                 </li>
 
                                 @*@<li>
@@ -121,17 +121,17 @@
                                 <a href="@Url.Action("Index", "CalculAjout")"><i class="s16  icomoon-icon-lock"></i><span class="txt">Calcul des Agios</span> </a>
                             </li>
                             @<li>
-                                <a href="@Url.Action("Index", "Retrait")"><i class="s16  icomoon-icon-credit"></i><span class="txt">Retrait</span> </a>
+                                <a href="@Url.Action("Index", "Retrait")"><i class="s16  icomoon-icon-coin"></i><span class="txt">Retrait</span> </a>
                             </li>
                             @<li>
-                                <a href="@Url.Action("Index", "CarnetClient")"><i class="s16  icomoon-icon-users"></i><span class="txt">Gestion des Carnets</span> </a>
+                                <a href="@Url.Action("Index", "CarnetClient")"><i class="s16  icomoon-icon-book-2"></i><span class="txt">Gestion des Carnets</span> </a>
                             </li>
                             @<li>
                                 <a href="@Url.Action("IndexAgence", "Client")"><i class="s16  icomoon-icon-users"></i><span class="txt">Vos Clients</span> </a>
                             </li>
 
                             @<li>
-                                <a href="@Url.Action("Import", "Client")"><i class="s16  icomoon-icon-users"></i><span class="txt">Importer un Fichier Client</span> </a>
+                                <a href="@Url.Action("Import", "Client")"><i class="s16  icomoon-icon-download-4"></i><span class="txt">Importer un Fichier Client</span> </a>
                             </li>
                             @<li>
                                 <a href="@Url.Action("IndexAgence", "Collecteur")"><i class="s16  icomoon-icon-users-2"></i><span class="txt">Vos Collecteurs</span> </a>
@@ -150,7 +150,7 @@
 
                         @If User.IsInAnyRole("SA,ADMINISTRATEUR,CHEFCOLLECTEUR,MANAGER") Then
                             @<li>
-                                <a href="#"><i class="s16  icomoon-icon-print-2"></i><span class="txt">Gestion des Rapports </span></a>
+                                <a href="#"><i class="s16  icomoon-icon-stats"></i><span class="txt">Gestion des Rapports </span></a>
                                 <ul class="sub">
                                     <li>
                                         <a href="@Url.Action("ListeClient", "Client")"> <i class="s16 icomoon-icon-arrow-right-3"></i><span class="txt">Liste des Clients</span></a>

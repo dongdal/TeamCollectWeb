@@ -115,43 +115,37 @@ Namespace Controllers
         <HttpPost()>
         <ValidateAntiForgeryToken()>
         Async Function Create(<Bind(Include:="Id,ClientId,TypeCarnetId,Etat,DateAffectation")> ByVal carnetClientVM As CarnetClientViewModel) As Task(Of ActionResult)
+            Dim CollecteurId = ConfigurationManager.AppSettings("CollecteurSystemeId") 'getCurrentUser.PersonneId
+            Dim ClientId = carnetClientVM.ClientId
+            Dim client = db.Clients.Find(ClientId)
+            Dim UserId = GetCurrentUser.Id
+            If IsNothing(client) Then
+                ModelState.AddModelError("ClientId", "Le client Selectionner n'a pas de compte ")
+            End If
+
+            Dim LesJournalCaisse = (From J In db.JournalCaisses Where J.CollecteurId = CollecteurId Select J).ToArray
+            If (LesJournalCaisse.Count = 0) Then
+                ModelState.AddModelError("ClientId", "Vous n'avez pas de caisse ouverte pour effectuer cette opération ")
+            End If
+
+            Dim TypeCarnetId = carnetClientVM.TypeCarnetId
+
+            Dim typecarnet = db.TypeCarnets.Find(TypeCarnetId)
+
+            If IsNothing(typecarnet) Then
+                ModelState.AddModelError("TypeCarnetId", "Le Carnet que vous avez selectionner n'existe pas! ")
+            End If
+
             If ModelState.IsValid Then
-                Dim CollecteurId = ConfigurationManager.AppSettings("CollecteurSystemeId") 'getCurrentUser.PersonneId
-                Dim ClientId = carnetClientVM.ClientId
-                Dim client = db.Clients.Find(ClientId)
-                Dim UserId = GetCurrentUser.Id
-                If IsNothing(client) Then
-                    ModelState.AddModelError("ClientId", "Le client Selectionner n'a pas de compte ")
-                    LoadCombo(carnetClientVM)
-                    Return View(carnetClientVM)
-                End If
-
-                Dim LesJournalCaisse = (From J In db.JournalCaisses Where J.CollecteurId = CollecteurId Select J).ToArray
-                If (LesJournalCaisse.Count = 0) Then
-                    ModelState.AddModelError("ClientId", "Vous n'avez pas de caisse ouverte pour effectuer cette opération ")
-                    LoadCombo(carnetClientVM)
-                    Return View(carnetClientVM)
-                End If
-
-                Dim TypeCarnetId = carnetClientVM.TypeCarnetId
-
-                Dim typecarnet = db.TypeCarnets.Find(TypeCarnetId)
-
-                If IsNothing(typecarnet) Then
-                    ModelState.AddModelError("TypeCarnetId", "Le Carnet que vous avez selectionner n'existe pas! ")
-                    LoadCombo(carnetClientVM)
-                    Return View(carnetClientVM)
-                End If
-
-                Dim Montant = typecarnet.Prix
-                If Not (client.Solde - Montant >= 0) Then
-                    ModelState.AddModelError("Monatnt", "Le solde du client est insuiffisant pour un retrait de " & Montant)
-                    LoadCombo(carnetClientVM)
-                    Return View(carnetClientVM)
-                End If
-
                 Using transaction = db.Database.BeginTransaction
                     Try
+
+                        Dim Montant = typecarnet.Prix
+                        If Not (client.Solde - Montant >= 0) Then
+                            Dim ErrorMsg = String.Format("Le solde de ce client ne permet pas d'effectuer cette opération. Solde client disponible = {0} Fcfa",
+                                                     String.Format("{0:0,0.00}", client.SoldeDisponible.ToString()))
+                            Throw New Exception(ErrorMsg, New Exception(ErrorMsg))
+                        End If
 
                         'mise a jour du solde du client
                         client.Solde -= Montant
@@ -185,17 +179,17 @@ Namespace Controllers
 
                         db.HistoriqueMouvements.Add(historiqueMouvement)
                         Await db.SaveChangesAsync()
-                        
+
                         transaction.Commit()
                         Return RedirectToAction("Index")
 
                     Catch ex As Exception
                         transaction.Rollback()
-                        LoadCombo(carnetClientVM)
-                        Return View(carnetClientVM)
+                        ModelState.AddModelError("", ex.InnerException.Message.ToString())
                     End Try
                 End Using
             End If
+
             LoadCombo(carnetClientVM)
             Return View(carnetClientVM)
         End Function

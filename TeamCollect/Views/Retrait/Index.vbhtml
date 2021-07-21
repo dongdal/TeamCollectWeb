@@ -40,7 +40,7 @@
                     <th>Effectuer par</th>
                     <th>Montant</th>
                     <th>Date Retrait</th>
-                    <th style="text-align:right">.....<i class="fa fa-gears"></i></th>
+                    <th>Etat</th>
                 </tr>
             </thead>
             <tbody>
@@ -61,30 +61,9 @@
                             @Html.DisplayFor(Function(modelItem) item.DateRetrait)
                         </td>
 
-                        <td style="text-align:right">
-                            @*<a class="btn btn-primary btn-xs right" data-toggle="tooltip" data-placement="left" title="Annuler" href="@Url.Action("Annulation", New With {.id = item.Id})">
-                                <i class="fa fa-recycle"></i>
-                                <span class="sr-only">Annuler</span>
-                            </a>*@
+                        <td>
+                            @IIf(item.Etat, "Non Extournée", "Extournée")
                         </td>
-
-                        @*<td>
-                                @Html.DisplayFor(Function(modelItem) item.Etat)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(Function(modelItem) item.DateCloture)
-                            </td>*@
-                        @*<td style="text-align:right">
-                                <a class="btn btn-primary btn-xs right" data-toggle="tooltip" data-placement="left" title="@Resource.Btn_Edit" href="@Url.Action("Edit", New With {.id = item.Id})">
-                                    <i class="fa fa-pencil"></i>
-                                    <span class="sr-only">@Resource.Btn_Edit</span>
-                                </a>
-                                <a class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="left" title="@Resource.Delete" href="@Url.Action("Delete", New With {.id = item.Id})">
-                                    <i class="fa fa-remove"></i>
-                                    <span class="sr-only">@Resource.Delete</span>
-                                </a>
-
-                            </td>*@
                     </tr>
                 Next
 

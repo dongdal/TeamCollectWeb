@@ -833,108 +833,106 @@ Namespace TeamCollect
             Return View(entities.ToPagedList(pageNumber, pageSize))
         End Function
 
-        Private Async Function CancelFunction(entityVM As AnnulationViewModel, operationType As OperationType) As Task(Of JsonResult)
-            ErrorMsg = ""
+        Private Async Function CancelFunction(entityVM As AnnulationViewModel, operationType As OperationType) As Task(Of ActionResult)
             Dim ChefCollecteur = GetCurrentUser() 'Récupération de l'utilisateur connecté (chef collecteur)
 
             'on se rassure que l'objet envoyé depuis le formulaire possède bien un identifiant non null et différent de zéro. Dans le cas échéant, on retourne un erreur.
             If IsNothing(entityVM.Id) Or entityVM.Id = 0 Then
-                Return Json(New With {.Result = "Error " & DirectCast(HttpStatusCode.BadRequest, Integer).ToString()})
+                ModelState.AddModelError("", "Un problème est survenu durant le traitement. L'opération sélectionnée ne correspond à aucune opération valide.")
             End If
 
             'on cherche en base de données l'opération à annuler, puis on se rassure que l'objet retourné n'est pas vide. Dans le cas échéant, on retourne un erreur.
             Dim HistoMvt As HistoriqueMouvement = db.HistoriqueMouvements.Find(entityVM.Id)
             If IsNothing(HistoMvt) Then
-                Return Json(New With {.Result = "Error " & HttpNotFound().StatusCode.ToString()})
+                ModelState.AddModelError("", "Un problème est survenu durant le traitement. L'opération sélectionnée n'existe pas.")
+            End If
+
+            'On se rassure qu'un motif a été entré
+            If String.IsNullOrEmpty(entityVM.Motif) Then
+                ModelState.AddModelError("Motif", Resource.champ_Manquant)
             End If
 
             'On se rassure qu'il ne s'agit pas d'une opération déjà extournée. Dans le cas échéant, on retourne un erreur.
             If (HistoMvt.Extourner) Then
-                ErrorMsg = "Cette opération a déjà été extournée. Veuillez contacter l'administrateur en cas de problème."
-                ModelState.AddModelError("", ErrorMsg)
-                Return Json(New With {.Result = "Error: " + ErrorMsg})
+                ModelState.AddModelError("", "Cette opération a déjà été extournée. Veuillez contacter l'administrateur en cas de problème.")
             End If
 
             If IsNothing(HistoMvt.Client) Then 'On se rassure que le client existe bel et bien. Dans le cas échéant, on retourne un erreur.
-                ErrorMsg = "L'opération n'a pas été éffectuée: client introuvable..."
-                ModelState.AddModelError("", ErrorMsg)
-                Return Json(New With {.Result = "Error: " + ErrorMsg})
-
+                ModelState.AddModelError("", "Un problème est survenu durant le traitement. Le client sélectionné n'existe pas.")
             End If
 
             'On vérifie si la caisse utilisée pour l'opération est encore ouverte.
             If IsNothing(HistoMvt.JournalCaisse) Then
                 ErrorMsg = "La Caisse concernée par l'opération est déjà fermée."
-                ModelState.AddModelError("", ErrorMsg)
-                Return Json(New With {.Result = "Error: " + ErrorMsg})
+                ModelState.AddModelError("", "Un problème est survenu durant le traitement. La Caisse concernée par l'opération est déjà fermée ou n'existe pas.")
+            End If
+            If (ModelState.IsValid) Then
+                Using transaction = db.Database.BeginTransaction
+                    Try
+
+                        'On passe l'opération à l'état "opération extournée
+                        HistoMvt.Extourner = True
+                        db.Entry(HistoMvt).State = EntityState.Modified
+
+                        db.Annulation.Add(
+                            New Annulation With {.DateAnnulation = Now,
+                            .Motif = entityVM.Motif,
+                            .HistoriqueMouvementId = HistoMvt.Id,
+                            .UserId = ChefCollecteur.Id}
+                            )
+
+                        Dim LibOperation As String = ""
+                        If (operationType = OperationType.AnnulationCollecte) Then
+                            LibOperation = "ANNULATION COLLECT- " & HistoMvt.Id & "de " & HistoMvt.Montant & "Du " & HistoMvt.DateOperation
+                            'mise a jour du solde du client
+                            HistoMvt.Client.Solde = HistoMvt.Client.Solde.Value - HistoMvt.Montant.Value
+                        ElseIf (operationType = OperationType.AnnulationRetrait) Then
+                            LibOperation = "ANNULATION RETRAIT- " & HistoMvt.Id & "de " & HistoMvt.Montant & "Du " & HistoMvt.DateOperation
+                            'mise a jour du solde du client
+                            HistoMvt.Client.Solde = HistoMvt.Client.Solde.Value + Math.Abs(HistoMvt.Montant.Value)
+                        Else
+                            LibOperation = "ANNULATION VENTE DE CARNET- " & HistoMvt.Id & "de " & HistoMvt.Montant & "Du " & HistoMvt.DateOperation
+                            'mise a jour du solde du client
+                            HistoMvt.Client.Solde = HistoMvt.Client.Solde.Value + Math.Abs(HistoMvt.Montant.Value)
+                        End If
+
+                        'avant de valider la mise à jour du solde, on vérifie que le solde du client est toujours positif. Dans le cas contraire on lève une exception et on arrête la transaction
+                        If (HistoMvt.Client.Solde.Value < 0) Then
+                            ErrorMsg = String.Format("Le solde de ce client ne permet pas d'effectuer cette opération. Solde client disponible = {0} Fcfa",
+                                                     String.Format("{0:0,0.00}", HistoMvt.Client.SoldeDisponible.ToString()))
+
+                            Throw New Exception(ErrorMsg, New Exception(ErrorMsg))
+                        End If
+                        db.Entry(HistoMvt.Client).State = EntityState.Modified
+
+                        Dim historiqueMouvement As New HistoriqueMouvement With {
+                                            .ClientId = HistoMvt.Client.Id,
+                                            .CollecteurId = HistoMvt.CollecteurId,
+                                            .Montant = -HistoMvt.Montant,
+                                            .DateOperation = DateTime.Now,
+                                            .Pourcentage = 0,
+                                            .MontantRetenu = 0,
+                                            .EstTraiter = 0,
+                                            .Etat = False,
+                                            .DateCreation = DateTime.Now,
+                                            .UserId = ChefCollecteur.Id,
+                                            .JournalCaisseId = HistoMvt.JournalCaisseId,
+                                            .LibelleOperation = LibOperation
+                                        }
+
+                        db.HistoriqueMouvements.Add(historiqueMouvement)
+                        Await db.SaveChangesAsync()
+
+                        transaction.Commit()
+                        Return RedirectToAction("IndexAgence", "Client")
+                    Catch ex As Exception
+                        transaction.Rollback()
+                        ModelState.AddModelError("", ex.InnerException.Message.ToString())
+                    End Try
+                End Using
             End If
 
-            Using transaction = db.Database.BeginTransaction
-                Try
-
-                    'On passe l'opération à l'état "opération extournée
-                    HistoMvt.Extourner = True
-                    db.Entry(HistoMvt).State = EntityState.Modified
-
-                    db.Annulation.Add(
-                        New Annulation With {.DateAnnulation = Now,
-                        .Motif = entityVM.Motif,
-                        .HistoriqueMouvementId = HistoMvt.Id,
-                        .UserId = ChefCollecteur.Id}
-                        )
-
-                    Dim LibOperation As String = ""
-                    If (operationType = OperationType.AnnulationCollecte) Then
-                        LibOperation = "ANNULATION COLLECT- " & HistoMvt.Id & "de " & HistoMvt.Montant & "Du " & HistoMvt.DateOperation
-
-                        'mise a jour du solde du client
-                        HistoMvt.Client.Solde = HistoMvt.Client.Solde.Value - HistoMvt.Montant.Value
-                    ElseIf (operationType = OperationType.AnnulationRetrait) Then
-                        LibOperation = "ANNULATION RETRAIT- " & HistoMvt.Id & "de " & HistoMvt.Montant & "Du " & HistoMvt.DateOperation
-
-                        'mise a jour du solde du client
-                        HistoMvt.Client.Solde = HistoMvt.Client.Solde.Value + Math.Abs(HistoMvt.Montant.Value)
-
-                    Else
-                        LibOperation = "ANNULATION VENTE DE CARNET- " & HistoMvt.Id & "de " & HistoMvt.Montant & "Du " & HistoMvt.DateOperation
-
-                        'mise a jour du solde du client
-                        HistoMvt.Client.Solde = HistoMvt.Client.Solde.Value + Math.Abs(HistoMvt.Montant.Value)
-                    End If
-
-                    'avant de valider la mise à jour du solde, on vérifie que le solde du client est toujours positif. Dans le cas contraire on lève une exception et on arrête la transaction
-                    If (HistoMvt.Client.Solde.Value < 0) Then
-                        Throw New Exception("Le solde de ce client ne permet pas d'effectuer cette opération. Solde client disponible = " &
-                                            HistoMvt.Client.SoldeDisponible.ToString("{0:0,0.00}") & " Fcfa.")
-                    End If
-                    db.Entry(HistoMvt.Client).State = EntityState.Modified
-
-                    Dim historiqueMouvement As New HistoriqueMouvement With {
-                                        .ClientId = HistoMvt.Client.Id,
-                                        .CollecteurId = HistoMvt.CollecteurId,
-                                        .Montant = -HistoMvt.Montant,
-                                        .DateOperation = DateTime.Now,
-                                        .Pourcentage = 0,
-                                        .MontantRetenu = 0,
-                                        .EstTraiter = 0,
-                                        .Etat = False,
-                                        .DateCreation = DateTime.Now,
-                                        .UserId = ChefCollecteur.Id,
-                                        .JournalCaisseId = HistoMvt.JournalCaisseId,
-                                        .LibelleOperation = LibOperation
-                                    }
-
-                    db.HistoriqueMouvements.Add(historiqueMouvement)
-                    Await db.SaveChangesAsync()
-
-                    transaction.Commit()
-                    Return Json(New With {.Result = "OK"})
-                Catch ex As Exception
-                    transaction.Rollback()
-                    ErrorMsg = ex.Message.ToString()
-                    Return Json(New With {.Result = "Error: " + ErrorMsg})
-                End Try
-            End Using
+            Return View(entityVM)
         End Function
 
         'Get/Annulation/5
@@ -965,7 +963,7 @@ Namespace TeamCollect
         'plus de détails, voir  https://go.microsoft.com/fwlink/?LinkId=317598.
         <HttpPost()>
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
-        Async Function Annulation(entityVM As AnnulationViewModel) As Task(Of JsonResult)
+        Async Function Annulation(entityVM As AnnulationViewModel) As Task(Of ActionResult)
             Return Await CancelFunction(entityVM, OperationType.AnnulationCollecte)
         End Function
 
@@ -994,7 +992,7 @@ Namespace TeamCollect
         'POST/AnnulationRetrait/5
         <HttpPost()>
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
-        Async Function AnnulationRetrait(entityVM As AnnulationViewModel) As Task(Of JsonResult)
+        Async Function AnnulationRetrait(entityVM As AnnulationViewModel) As Task(Of ActionResult)
             Return Await CancelFunction(entityVM, OperationType.AnnulationRetrait)
         End Function
 
@@ -1023,7 +1021,7 @@ Namespace TeamCollect
         'POST/AnnulationVente/5
         <HttpPost()>
         <LocalizedAuthorize(Roles:="SA,ADMINISTRATEUR,CHEFCOLLECTEUR")>
-        Async Function AnnulationVente(entityVM As AnnulationViewModel) As Task(Of JsonResult)
+        Async Function AnnulationVente(entityVM As AnnulationViewModel) As Task(Of ActionResult)
             Return Await CancelFunction(entityVM, OperationType.AnnulationVente)
         End Function
 

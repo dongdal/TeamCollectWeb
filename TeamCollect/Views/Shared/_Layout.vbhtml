@@ -57,6 +57,29 @@
             window.jQuery || document.write('<script src="@Styles.Url("~/js/libs/jquery-migrate-1.2.1.min.js")">\x3C/script>')
     </script>
 
+    <script>
+        function Alert() {
+            $.confirm({
+                title: 'Information',
+                content: 'L\'opération est encours de traitement. Vous serez redirigé vers une autre page à la fin de son exécution.',
+                theme: 'dark',
+                icon: 'fa fa-info',
+                buttons: {
+                    buttonA: {
+                        text: ' ',
+                        action: function () {
+                            this.buttons.buttonA.hide();
+                            return false;
+                        }
+                    }
+                }
+            });
+            //document.getElementById('BtnSave').setAttribute("disabled", "disabled");
+            document.getElementById('BtnSave').style.display = "none";
+
+        }
+    </script>
+
     @Scripts.Render("~/bundles/JsDeBase")
     @Scripts.Render("~/bundles/JsAvancedForms")
     @Scripts.Render("~/bundles/JsDataTable")

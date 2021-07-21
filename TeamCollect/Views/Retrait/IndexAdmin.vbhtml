@@ -11,10 +11,10 @@
             <i class="fa fa-archive"></i> Retrait
         </h3>
         @*<div style="float:right; color:black">
-            <a href="@Url.Action("Create")" class="btn btn-primary mr5 mb10" style="margin-top: 5px; color:#353535">
-                <i class="glyphicon glyphicon-plus mr5"></i> Nouveau Retrait
-            </a>
-        </div>*@
+                <a href="@Url.Action("Create")" class="btn btn-primary mr5 mb10" style="margin-top: 5px; color:#353535">
+                    <i class="glyphicon glyphicon-plus mr5"></i> Nouveau Retrait
+                </a>
+            </div>*@
     </div>
     <!-- End  / heading-->
     <!-- Start .row -->
@@ -39,6 +39,7 @@
                     <th>Effectuer par</th>
                     <th>Montant</th>
                     <th>Date Retrait</th>
+                    <th>Etat</th>
                     <th style="text-align:right">.....<i class="fa fa-gears"></i></th>
                 </tr>
             </thead>
@@ -60,32 +61,18 @@
                             @Html.DisplayFor(Function(modelItem) item.DateRetrait)
                         </td>
 
+                        <td>
+                            @IIf(item.Etat, "Non Extournée", "Extournée")
+                        </td>
+
                         <td style="text-align:right">
                             @if (item.Etat = True And item.DateRetrait.Value.Date = Now.Date) Then
                                 @<a class="btn btn-primary btn-xs right" data-toggle="tooltip" data-placement="left" title="Annuler" href="@Url.Action("Annulation", New With {.id = item.Id})">
                                     <i class="fa fa-recycle"></i>
                                     <i class="fa fa-remove"> Extourner</i>
                                 </a>
-                            End If                           
+                            End If
                         </td>
-
-                        @*<td>
-                                @Html.DisplayFor(Function(modelItem) item.Etat)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(Function(modelItem) item.DateCloture)
-                            </td>*@
-                        @*<td style="text-align:right">
-                                <a class="btn btn-primary btn-xs right" data-toggle="tooltip" data-placement="left" title="@Resource.Btn_Edit" href="@Url.Action("Edit", New With {.id = item.Id})">
-                                    <i class="fa fa-pencil"></i>
-                                    <span class="sr-only">@Resource.Btn_Edit</span>
-                                </a>
-                                <a class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="left" title="@Resource.Delete" href="@Url.Action("Delete", New With {.id = item.Id})">
-                                    <i class="fa fa-remove"></i>
-                                    <span class="sr-only">@Resource.Delete</span>
-                                </a>
-
-                            </td>*@
                     </tr>
                 Next
 

@@ -31,6 +31,7 @@
 
                                             @Html.DropDownListFor(Function(model) model.ClientId,
 New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez un client", New With {.class = "form-control select2"})
+                                            @Html.ValidationMessageFor(Function(model) model.ClientId, Nothing, New With {.style = "color: #fdcd23"})
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -38,22 +39,23 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez un client", New 
                                             <label>Type Carnet </label>
                                             @Html.DropDownListFor(Function(model) model.TypeCarnetId,
 New SelectList(Model.IDsTypeCarnet, "Value", "Text"), "Selectionnez un Type de carnet", New With {.class = "form-control select2"})
+                                            @Html.ValidationMessageFor(Function(model) model.TypeCarnetId, Nothing, New With {.style = "color: #fdcd23"})
                                         </div>
                                     </div>
                                     <div class="row">
                                         @*<div class="col-md-6">
-                                            <div class="form-group">
-                                                <label>Etat </label>
-                                                <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.Etat) </label>
-                                                @Html.EditorFor(Function(model) model.Etat)
-                                            </div>
-                                        </div>*@
+                                                <div class="form-group">
+                                                    <label>Etat </label>
+                                                    <label style="color: #fdcd23"> @Html.ValidationMessageFor(Function(model) model.Etat) </label>
+                                                    @Html.EditorFor(Function(model) model.Etat)
+                                                </div>
+                                            </div>*@
                                         <div class="box-footer" style="text-align:center">
-                                            <input type="submit" value="Enregistrer" class="btn btn-primary btn-sm" />
+                                            <input type="submit" id="BtnSave" onclick="Alert();" value="Enregistrer" class="btn btn-primary btn-sm" />
                                             @Html.ActionLink("Retour", "Index", "CarnetClient", Nothing, New With {.class = "btn btn-default btn-sm"})
                                         </div>
                                     </div>
-                                    
+
                                     <br />
                                 </div>
                             </div>
