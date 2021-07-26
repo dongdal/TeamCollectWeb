@@ -833,24 +833,45 @@ Namespace TeamCollect
             Return View(entities.ToPagedList(pageNumber, pageSize))
         End Function
 
+        ''' <summary>
+        ''' Méthode permettant de rechercher un enregistrement de retrait dans la table Retrait en fonction d'un historique de mouvement.
+        ''' </summary>
+        ''' <remarks>
+        ''' Si l'opération est liée à un retrait (via clé étrangère), alors on retourne le seul retrait de la liste.
+        ''' Si l'opération n'est pas liée à un retrait (via clé étrangère), alors on retourne le seul retrait dont les informations (date et montant) se rapprochent le plus de la date d'opération.
+        ''' </remarks>
+        ''' <param name="historiqueMouvement">Opération concernée par l'annulation</param>
+        ''' <returns>Retrait concerné par l'annulation</returns>
         Private Function GetRetraitByHistoriqueMouvement(historiqueMouvement As HistoriqueMouvement) As Retrait
             Dim Retrait As New Retrait()
             If (historiqueMouvement.Retrait.Count = 1) Then
                 Retrait = historiqueMouvement.Retrait.FirstOrDefault()
             Else
                 Retrait = (From e In db.Retraits Where Math.Abs(e.Montant) = Math.Abs(historiqueMouvement.Montant.Value) And
-                                                     e.DateRetrait.Value.Date = historiqueMouvement.DateOperation.Value.Date Select e).FirstOrDefault()
+                                                     DbFunctions.TruncateTime(e.DateRetrait.Value) = DbFunctions.TruncateTime(historiqueMouvement.DateOperation.Value) And
+                                                     e.Etat = True Select e).FirstOrDefault()
             End If
             Return Retrait
         End Function
 
+
+        ''' <summary>
+        ''' Méthode permettant de rechercher un enregistrement de vente de carnet dans la table CarnetClient en fonction d'un historique de mouvement.
+        ''' </summary>
+        ''' <remarks>
+        ''' Si l'opération est liée à un retrait (via clé étrangère), alors on retourne la ligne de vente de carnet de la table CarnetClient.
+        ''' Si l'opération n'est pas liée à un retrait (via clé étrangère), alors on retourne la ligne de vente de carnet de la table CarnetClient dont les informations (date et montant) se rapprochent le plus de la date d'opération.
+        ''' </remarks>
+        ''' <param name="historiqueMouvement">Opération concernée par l'annulation</param>
+        ''' <returns>Ligne de vente du carnet concernée par l'annulation</returns>
         Private Function GetCarnetClientByHistoriqueMouvement(historiqueMouvement As HistoriqueMouvement) As CarnetClient
             Dim CarnetClient As New CarnetClient()
             If (historiqueMouvement.CarnetClient.Count = 1) Then
                 CarnetClient = historiqueMouvement.CarnetClient.FirstOrDefault()
             Else
                 CarnetClient = (From e In db.CarnetClients Where Math.Abs(e.TypeCarnet.Prix.Value) = Math.Abs(historiqueMouvement.Montant.Value) And
-                                                     e.DateAffectation.Value.Date = historiqueMouvement.DateOperation.Value.Date Select e).FirstOrDefault()
+                                                      DbFunctions.TruncateTime(e.DateAffectation.Value) = DbFunctions.TruncateTime(historiqueMouvement.DateOperation.Value) And
+                                                               e.Etat = True Select e).FirstOrDefault()
             End If
             Return CarnetClient
         End Function
