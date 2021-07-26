@@ -20,7 +20,7 @@ Partial Public Class HistoriqueMouvement
     Public Property DateTraitement As Date?
 
     Public Property Etat As Boolean = False
-    Public Property Extourner As Boolean? = False
+    Public Property Extourner As Boolean?
     Public Property DateCreation As DateTime = Now
 
     Public Property UserId As String
@@ -37,4 +37,8 @@ Partial Public Class HistoriqueMouvement
 
     'Public Property CoordoneeGeographiqueId As Long?
     'Public Overridable Property CoordoneeGeographique As CoordonneeGeographique
+
+    Public Overridable Property Retrait As ICollection(Of Retrait) = New HashSet(Of Retrait)
+    Public Overridable Property CarnetClient As ICollection(Of CarnetClient) = New HashSet(Of CarnetClient)
+
 End Class

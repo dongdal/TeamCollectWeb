@@ -54,13 +54,13 @@ End Code
                             @Html.DisplayFor(Function(modelItem) item.Libelle)
                         </td>
                         <td>
-                            @String.Format("{0:0,0.00}", item.SalaireDeBase)
+                            @String.Format("{0:#,#.00#######}", item.SalaireDeBase)
                         </td>
                         <td>
-                            @String.Format("{0:0,0.00}", item.CommissionMinimale)
+                            @String.Format("{0:#,#.00#######}", item.CommissionMinimale)
                         </td>
                         <td>
-                            @String.Format("{0:0,0.00}", item.PourcentageCommission)
+                            @String.Format("{0:#,#.00#######}", item.PourcentageCommission)
                         </td>
 
                         <td>

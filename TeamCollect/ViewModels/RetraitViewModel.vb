@@ -7,10 +7,16 @@ Public Class RetraitViewModel
     Public Overridable Property IDsCollecteur As List(Of SelectListItem)
     Public Overridable Property Collecteur As Collecteur
 
-    <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    '<Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
     Public Property ClientId As Long
     Public Overridable Property IDsClient As List(Of SelectListItem)
     Public Overridable Property Client As Client
+
+
+    '<Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    Public Property HistoriqueMouvementId As Long?
+    Public Overridable Property LesHistoriqueMouvements As List(Of SelectListItem)
+    Public Overridable Property HistoriqueMouvement As HistoriqueMouvement
 
     '<Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
     '<RegularExpression("^(\d+(((\,))\d+)?)$", ErrorMessageResourceName:="decimalType_error", ErrorMessageResourceType:=GetType(Resource))>
@@ -54,6 +60,7 @@ Public Class RetraitViewModel
             .Id = entity.Id
             .CollecteurId = entity.CollecteurId
             .ClientId = entity.ClientId
+            .HistoriqueMouvementId = entity.HistoriqueMouvementId
             .Montant = entity.Montant
             .Etat = entity.Etat
             .SoldeApreOperation = entity.SoldeApreOperation
@@ -70,6 +77,7 @@ Public Class RetraitViewModel
             .Id = Me.Id
             .CollecteurId = Me.CollecteurId
             .ClientId = Me.ClientId
+            .HistoriqueMouvementId = Me.HistoriqueMouvementId
             .Montant = Me.Montant
             .Etat = Me.Etat
             .SoldeApreOperation = Me.SoldeApreOperation

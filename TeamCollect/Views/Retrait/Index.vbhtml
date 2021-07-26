@@ -54,7 +54,8 @@
                             @Html.DisplayFor(Function(modelItem) item.User.Personne.Nom)
                         </td>
                         <td>
-                            @String.Format("{0:0,0.00}", item.Montant)
+                            @*@String.Format("{0:0,0.00}", item.Montant) <br />*@
+                            @String.Format("{0:#,#.#########}", item.Montant)
                         </td>
 
                         <td>

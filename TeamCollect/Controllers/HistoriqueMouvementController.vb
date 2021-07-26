@@ -833,6 +833,28 @@ Namespace TeamCollect
             Return View(entities.ToPagedList(pageNumber, pageSize))
         End Function
 
+        Private Function GetRetraitByHistoriqueMouvement(historiqueMouvement As HistoriqueMouvement) As Retrait
+            Dim Retrait As New Retrait()
+            If (historiqueMouvement.Retrait.Count = 1) Then
+                Retrait = historiqueMouvement.Retrait.FirstOrDefault()
+            Else
+                Retrait = (From e In db.Retraits Where Math.Abs(e.Montant) = Math.Abs(historiqueMouvement.Montant.Value) And
+                                                     e.DateRetrait.Value.Date = historiqueMouvement.DateOperation.Value.Date Select e).FirstOrDefault()
+            End If
+            Return Retrait
+        End Function
+
+        Private Function GetCarnetClientByHistoriqueMouvement(historiqueMouvement As HistoriqueMouvement) As CarnetClient
+            Dim CarnetClient As New CarnetClient()
+            If (historiqueMouvement.CarnetClient.Count = 1) Then
+                CarnetClient = historiqueMouvement.CarnetClient.FirstOrDefault()
+            Else
+                CarnetClient = (From e In db.CarnetClients Where Math.Abs(e.TypeCarnet.Prix.Value) = Math.Abs(historiqueMouvement.Montant.Value) And
+                                                     e.DateAffectation.Value.Date = historiqueMouvement.DateOperation.Value.Date Select e).FirstOrDefault()
+            End If
+            Return CarnetClient
+        End Function
+
         Private Async Function CancelFunction(entityVM As AnnulationViewModel, operationType As OperationType) As Task(Of ActionResult)
             Dim ChefCollecteur = GetCurrentUser() 'Récupération de l'utilisateur connecté (chef collecteur)
 
@@ -853,7 +875,7 @@ Namespace TeamCollect
             End If
 
             'On se rassure qu'il ne s'agit pas d'une opération déjà extournée. Dans le cas échéant, on retourne un erreur.
-            If (HistoMvt.Extourner) Then
+            If (HistoMvt.Extourner.HasValue) Then
                 ModelState.AddModelError("", "Cette opération a déjà été extournée. Veuillez contacter l'administrateur en cas de problème.")
             End If
 
@@ -890,16 +912,24 @@ Namespace TeamCollect
                             LibOperation = "ANNULATION RETRAIT- " & HistoMvt.Id & "de " & HistoMvt.Montant & "Du " & HistoMvt.DateOperation
                             'mise a jour du solde du client
                             HistoMvt.Client.Solde = HistoMvt.Client.Solde.Value + Math.Abs(HistoMvt.Montant.Value)
+
+                            Dim Retrait = GetRetraitByHistoriqueMouvement(HistoMvt)
+                            Retrait.Etat = False
+                            db.Entry(Retrait).State = EntityState.Modified
                         Else
                             LibOperation = "ANNULATION VENTE DE CARNET- " & HistoMvt.Id & "de " & HistoMvt.Montant & "Du " & HistoMvt.DateOperation
                             'mise a jour du solde du client
                             HistoMvt.Client.Solde = HistoMvt.Client.Solde.Value + Math.Abs(HistoMvt.Montant.Value)
+
+                            Dim CarnetClient = GetCarnetClientByHistoriqueMouvement(HistoMvt)
+                            CarnetClient.Etat = False
+                            db.Entry(CarnetClient).State = EntityState.Modified
                         End If
 
                         'avant de valider la mise à jour du solde, on vérifie que le solde du client est toujours positif. Dans le cas contraire on lève une exception et on arrête la transaction
                         If (HistoMvt.Client.Solde.Value < 0) Then
                             ErrorMsg = String.Format("Le solde de ce client ne permet pas d'effectuer cette opération. Solde client disponible = {0} Fcfa",
-                                                     String.Format("{0:0,0.00}", HistoMvt.Client.SoldeDisponible.ToString()))
+                                                     String.Format("{0:#,#.00#######}", HistoMvt.Client.SoldeDisponible.ToString()))
 
                             Throw New Exception(ErrorMsg, New Exception(ErrorMsg))
                         End If

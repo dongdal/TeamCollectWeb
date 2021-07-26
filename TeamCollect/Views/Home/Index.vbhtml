@@ -39,7 +39,7 @@
                                         For Each item2 In item.StatCollecteurListObject
                                             @<tr>
                                             <th>@item2.Nom @item2.Prenom <br />[@item2.Agence]</th>
-                                            <td>@String.Format("{0:0,0.00}", item2.Montant.Replace(",", "."))</td>
+                                            <td>@String.Format("{0:#,#.00#######}", item2.Montant.Replace(",", "."))</td>
                                           </tr>
                                         Next
 
@@ -66,7 +66,7 @@
                                     <span class="s32 icomoon-icon-home-4 color-gray"></span>
                                 </div>
                                 <span class="number" style="font-size:20px">@itemag2.Agence.ToString</span>
-                                <span class="txt" style="font-size:18px;"><b> Montant Collecté: [@String.Format("{0:0,0.00}", itemag2.Montant) Fcfa]</b></span>
+                                <span class="txt" style="font-size:18px;"><b> Montant Collecté: [@String.Format("{0:#,#.00#######}", itemag2.Montant) Fcfa]</b></span>
                            </li>
                       Next
 

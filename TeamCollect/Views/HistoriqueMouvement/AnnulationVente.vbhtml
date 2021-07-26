@@ -18,7 +18,7 @@
             </div>
             <div class="panel-body pt0 pb0">
                 <div id="wizard" class="bwizard">
-                    @Using (Html.BeginForm("AnnulationRetrait", "HistoriqueMouvement", FormMethod.Post, New With {.role = "form", .id = "__AjaxAntiForgeryForm"}))
+                    @Using (Html.BeginForm("AnnulationVente", "HistoriqueMouvement", FormMethod.Post, New With {.role = "form", .id = "__AjaxAntiForgeryForm"}))
                         @Html.AntiForgeryToken()
                         @Html.ValidationSummary(True)
                         @Html.HiddenFor(Function(model) model.Id)

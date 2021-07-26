@@ -143,7 +143,7 @@ Namespace Controllers
                         Dim Montant = typecarnet.Prix
                         If Not (client.Solde - Montant >= 0) Then
                             Dim ErrorMsg = String.Format("Le solde de ce client ne permet pas d'effectuer cette opération. Solde client disponible = {0} Fcfa",
-                                                     String.Format("{0:0,0.00}", client.SoldeDisponible.ToString()))
+                                                     String.Format("{0:#,#.00#######}", client.SoldeDisponible.ToString()))
                             Throw New Exception(ErrorMsg, New Exception(ErrorMsg))
                         End If
 
@@ -151,16 +151,12 @@ Namespace Controllers
                         client.Solde -= Montant
                         db.Entry(client).State = EntityState.Modified
 
-                        'enregistrer le carnet
-                        Dim ca = carnetClientVM.getEntity
-                        ca.UserId = UserId
-                        ca.DateAffectation = Now
-                        db.CarnetClients.Add(ca)
 
                         '3- on recupere le journal caisse et on enregistre dans mouvement historique
                         Dim JCID = LesJournalCaisse.FirstOrDefault.Id
+
                         'Dim LibOperation As String = "Achat Carnet : " & ca.TypeCarnet.Libelle & " - Le -" & DateTime.Now.ToString
-                        Dim LibOperation As String = "VENTE CARNET : " & ca.TypeCarnet.Libelle & " - Le -" & DateTime.Now.ToString
+                        Dim LibOperation As String = "VENTE CARNET : " & typecarnet.Libelle & " - Le -" & DateTime.Now.ToString
 
                         Dim historiqueMouvement As New HistoriqueMouvement With {
                                         .ClientId = ClientId,
@@ -178,6 +174,15 @@ Namespace Controllers
                                     }
 
                         db.HistoriqueMouvements.Add(historiqueMouvement)
+
+
+                        'enregistrer le carnet (création d'une ligne pour l'opération de vente du carnet) en renseignant l'HistoMvtId concerné par la vente
+                        Dim ca = carnetClientVM.getEntity
+                        ca.UserId = UserId
+                        ca.DateAffectation = Now
+                        ca.HistoriqueMouvementId = historiqueMouvement.Id
+                        db.CarnetClients.Add(ca)
+
                         Await db.SaveChangesAsync()
 
                         transaction.Commit()

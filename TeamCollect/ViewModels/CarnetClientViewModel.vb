@@ -9,12 +9,17 @@ Public Class CarnetClientViewModel
     Public Overridable Property IDsClient As List(Of SelectListItem)
     Public Overridable Property client As Client
 
+    '<Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
+    Public Property HistoriqueMouvementId As Long?
+    Public Overridable Property LesHistoriqueMouvements As List(Of SelectListItem)
+    Public Overridable Property HistoriqueMouvement As HistoriqueMouvement
+
     <Required(ErrorMessageResourceType:=GetType(Resource), ErrorMessageResourceName:="champ_Manquant")>
     Public Property TypeCarnetId As Long
     Public Overridable Property IDsTypeCarnet As List(Of SelectListItem)
     Public Overridable Property typeCarnet As TypeCarnet
 
-    Public Property Etat As Boolean = False
+    Public Property Etat As Boolean = True
     Public Property DateAffectation As DateTime? = Now
 
 
@@ -26,6 +31,7 @@ Public Class CarnetClientViewModel
             .Id = entity.Id
             .ClientId = entity.ClientId
             .TypeCarnetId = entity.TypeCarnetId
+            .HistoriqueMouvementId = entity.HistoriqueMouvementId
             .Etat = entity.Etat
             .DateAffectation = entity.DateAffectation
         End With
@@ -38,6 +44,7 @@ Public Class CarnetClientViewModel
             .Id = Me.Id
             .ClientId = Me.ClientId
             .TypeCarnetId = Me.TypeCarnetId
+            .HistoriqueMouvementId = Me.HistoriqueMouvementId
             .Etat = Me.Etat
             .DateAffectation = Me.DateAffectation
         End With

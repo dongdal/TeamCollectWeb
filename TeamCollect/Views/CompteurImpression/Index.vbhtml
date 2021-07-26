@@ -101,7 +101,7 @@ Else
                         <td>@item.HistoriqueMouvementId</td>
                         <td>@item.HistoriqueMouvement.Client.Nom &nbsp; @item.HistoriqueMouvement.Client.Prenom</td>
                         <td>@item.HistoriqueMouvement.LibelleOperation</td>
-                        <td>@String.Format("{0:0,0.00}", item.HistoriqueMouvement.Montant) Fcfa</td>
+                        <td>@String.Format("{0:#,#.00#######}", item.HistoriqueMouvement.Montant) Fcfa</td>
                         <td>@item.Collectrice.Personne.Nom &nbsp; @item.Collectrice.Personne.Prenom </td>
                         <td>@item.DatePremiereImpression</td>
                     </tr>

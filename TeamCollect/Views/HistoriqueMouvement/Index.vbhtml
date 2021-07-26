@@ -93,7 +93,7 @@ Else
                             <td>@item.Id</td>
                             <td>@item.Client.Nom &nbsp; @item.Client.Prenom</td>
                             <td>@item.LibelleOperation</td>
-                            <td>@String.Format("{0:0,0.00}", item.Montant) Fcfa</td>
+                            <td>@String.Format("{0:#,#.00#######}", item.Montant) Fcfa</td>
                             <td>@item.DateOperation</td>
                             @*<td>@ConfigurationManager.AppSettings("CollecteurSystemeId")</td>*@
                             <td>@item.Collecteur.Nom &nbsp; @item.Collecteur.Prenom </td>
@@ -101,19 +101,19 @@ Else
                                 @if (item.Extourner = True Or item.JournalCaisse.Etat = 1) Then
                                     'ElseIf (item.DateOperation.Value.Date = Now.Date) Then
                                 Else
-                                    If (item.LibelleOperation.Contains("CASH-IN") And item.JournalCaisse.Etat = 0) Then
+                                    If (item.LibelleOperation.StartsWith("CASH-IN") And item.JournalCaisse.Etat = 0) Then
                                         @<a class="btn btn-primary btn-xs right" data-toggle="tooltip" data-placement="left" title="Annuler une collecte" href="@Url.Action("Annulation", New With {.id = item.Id, .CollecteurId = item.CollecteurId, .dateDebut = ViewBag.dateDebut.ToString, .dateFin = ViewBag.dateFin.ToString})">
                                             <i class="fa fa-remove"> Extourner</i>
                                             <span class="sr-only">Annuler</span>
                                         </a>
                                     End If
-                                    If (item.LibelleOperation.Contains("RETRAIT") And item.JournalCaisse.Etat = 0) Then
+                                    If (item.LibelleOperation.StartsWith("RETRAIT") And (item.JournalCaisse.Etat = 0) And Not item.Extourner.HasValue And (item.DateOperation.Value.Date = Now.Date)) Then
                                         @<a class="btn btn-primary btn-xs right" data-toggle="tooltip" data-placement="left" title="Annuler un retrait" href="@Url.Action("AnnulationRetrait", New With {.id = item.Id, .CollecteurId = item.CollecteurId, .dateDebut = ViewBag.dateDebut.ToString, .dateFin = ViewBag.dateFin.ToString})">
                                             <i class="fa fa-remove"> Extourner</i>
                                             <span class="sr-only">Annuler</span>
                                         </a>
                                     End If
-                                    If (item.LibelleOperation.Contains("VENTE") And item.JournalCaisse.Etat = 0) Then
+                                    If (item.LibelleOperation.StartsWith("VENTE") And item.JournalCaisse.Etat = 0) Then
                                         @<a class="btn btn-primary btn-xs right" data-toggle="tooltip" data-placement="left" title="Annuler une vente de carnet" href="@Url.Action("AnnulationVente", New With {.id = item.Id, .CollecteurId = item.CollecteurId, .dateDebut = ViewBag.dateDebut.ToString, .dateFin = ViewBag.dateFin.ToString})">
                                             <i class="fa fa-remove"> Extourner</i>
                                             <span class="sr-only">Annuler</span>
@@ -130,7 +130,7 @@ Else
                         <td></td>
                         <td style="color: #304a85; font-size:large">TOTAL</td>
                         <td></td>
-                        <td style="background-color: #304a85; font-size: large">@String.Format("{0:0,0.00}", ViewBag.masom.ToString) Fcfa</td>
+                        <td style="background-color: #304a85; font-size: large">@String.Format("{0:#,#.00#######}", ViewBag.masom.ToString) Fcfa</td>
 
                         <td style="color: #304a85; font-size:large"></td>
                         <td style="background-color: #304a85; font-size: large"></td>

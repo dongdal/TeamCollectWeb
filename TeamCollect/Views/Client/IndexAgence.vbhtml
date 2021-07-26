@@ -45,9 +45,6 @@
                         @Html.ActionLink("Nom", "IndexAgence", New With {.sortOrder = ViewBag.NomParm, .currentFilter = ViewBag.CurrentFilter, .tab = ViewBag.activeTab})
                     </th>
                     <th>
-                        @Html.ActionLink("Prénom", "IndexAgence", New With {.sortOrder = ViewBag.PrenomParm, .currentFilter = ViewBag.CurrentFilter, .tab = ViewBag.activeTab})
-                    </th>
-                    <th>
                         @Html.ActionLink("Sexe", "IndexAgence", New With {.sortOrder = ViewBag.SexeParm, .currentFilter = ViewBag.CurrentFilter, .tab = ViewBag.activeTab})
                     </th>
                     <th>
@@ -81,14 +78,13 @@ New With {.ClientId = item.Id, .dateDebut = Now.Date.ToString(AppSession.DateFor
                             </a>
                         </td>
                         <td>@item.CodeSecret</td>
-                        <td>@item.Nom</td>
-                        <td>@item.Prenom</td>
+                        <td>@item.Nom @item.Prenom</td>
                         <td>@item.Sexe</td>
                         <td>@item.CNI</td>
                         <td>@item.Telephone</td>
                         <td>@item.Quartier</td>
-                        <td>@item.Solde </td>
-                        <td>@item.SoldeDisponible </td>
+                        <td>@String.Format("{0:#,0.00########################}", item.Solde) </td>
+                        <td>@String.Format("{0:#,0.00########################}", item.SoldeDisponible) </td>
                         @If (item.Etat = True) Then
                             @<td style="background-color: green">
 

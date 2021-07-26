@@ -312,6 +312,10 @@
       <DependentUpon>202107211546254_alter_tables_CategRemu_DetCommis_HistoMvt_JournCaiss_Retrait_Set_Decimal_as_money_Field.vb</DependentUpon>
     </Compile>
     <Compile Include="Migrations\202107211546254_alter_tables_CategRemu_DetCommis_HistoMvt_JournCaiss_Retrait_Set_Decimal_as_money_Field.vb" />
+    <Compile Include="Migrations\202107260903181_Alter_Tables_CarnetClient_And_Retrait_Add_Column_HistoriqueMouvementId_As_ForeignKey.Designer.vb">
+      <DependentUpon>202107260903181_Alter_Tables_CarnetClient_And_Retrait_Add_Column_HistoriqueMouvementId_As_ForeignKey.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202107260903181_Alter_Tables_CarnetClient_And_Retrait_Add_Column_HistoriqueMouvementId_As_ForeignKey.vb" />
     <Compile Include="Models\CompteurImpression.vb" />
     <Compile Include="Models\HistoriqueCollecteurCategorie.vb" />
     <Compile Include="Models\CommissionColecteur.vb" />
@@ -550,6 +554,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202107211546254_alter_tables_CategRemu_DetCommis_HistoMvt_JournCaiss_Retrait_Set_Decimal_as_money_Field.resx">
       <DependentUpon>202107211546254_alter_tables_CategRemu_DetCommis_HistoMvt_JournCaiss_Retrait_Set_Decimal_as_money_Field.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202107260903181_Alter_Tables_CarnetClient_And_Retrait_Add_Column_HistoriqueMouvementId_As_ForeignKey.resx">
+      <DependentUpon>202107260903181_Alter_Tables_CarnetClient_And_Retrait_Add_Column_HistoriqueMouvementId_As_ForeignKey.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>

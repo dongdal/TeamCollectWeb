@@ -6,5 +6,6 @@ Public Class CarnetClientCfg
     Public Sub New()
         Me.ToTable("CarnetClient")
         Me.Property(Function(p) p.Id).IsRequired()
+        Me.Property(Function(p) p.HistoriqueMouvementId).IsOptional()
     End Sub
 End Class
