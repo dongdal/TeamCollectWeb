@@ -25,7 +25,7 @@
                         @<div class="box box-warning">
                             <div class="box-header with-border">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-8">
                                         <div class="form-group">
                                             <label>Client </label>
 
@@ -34,7 +34,7 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez un client", New 
                                             @Html.ValidationMessageFor(Function(model) model.ClientId, Nothing, New With {.style = "color: #fdcd23"})
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label>Type Carnet </label>
                                             @Html.DropDownListFor(Function(model) model.TypeCarnetId,

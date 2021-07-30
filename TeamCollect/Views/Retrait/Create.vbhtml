@@ -24,7 +24,7 @@
                         @<div class="box box-warning">
                             <div class="box-header with-border">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    <div class="col-md-9">
                                         <div class="form-group">
                                             <label>Client</label>
 
@@ -33,7 +33,7 @@ New SelectList(Model.IDsClient, "Value", "Text"), "Selectionnez le client", New 
                                             @Html.ValidationMessageFor(Function(model) model.ClientId, Nothing, New With {.style = "color: #fdcd23"})
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Montant </label>
                                             @Html.EditorFor(Function(model) model.Montant)
